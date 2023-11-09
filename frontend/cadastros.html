@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/frontend/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Cadastros</title>
+    <link rel="shortcut icon" type="image/ico" href="/frontend/imagem/logo.png" />
+</head>
+<body id="painel">
+    <nav>
+        <div class="menu">
+            <div class="menu-item">
+                <img src="/frontend/imagem/logo-nome.png" alt="logo">
+            </div>
+            <div class="menu-item">
+                <a href="telaPrincipal.html"><button class="btn"><i class="fas fa-home"></i><br>Dashboard</button></a>
+            </div>
+            <div class="menu-item">
+                <button class="btn"><i class="fa-solid fa-cash-register"></i><br>Venda</button>
+            </div>
+            <div class="menu-item">
+                <button class="btn"><i class="fa-solid fa-truck"></i><br>Entrega</button>
+            </div>
+            <div class="menu-item">
+                <button class="btn"><i class="fa-solid fa-bell-concierge"></i><br>Salão</button>
+            </div>
+            <div class="menu-item">
+                <a href="painel.html"><button class="btn"><i class="fa-solid fa-gears"></i><br>Painel</button></a>
+            </div>
+        </div> 
+    </nav>
+    <main id="painel-main">
+        <div id="btn-painel">
+            <nav id="painel-1">
+                <h1></h1>
+                <button id="btn-cadastrarCliente"><i class="fa-solid fa-user" style="color: #000000;"></i><br>Cliente</button>
+                <button id="btn-cadastrarProduto"><i class="fa-solid fa-cash-register" style="color: #000000;"></i><br>Produto</button>
+            </nav>   
+                
+            <nav id="painel-2">
+                <button id="btn-cadastrarAtendente"><i class="fa-solid fa-people-group" style="color: #000000;"></i><br>Atendente</button>
+                <button id="btn-cadastrarMotoboy"><i class="fa-solid fa-motorcycle" style="color: #000000;"></i><br>Motoboy</button> 
+            </nav>
+        </div>
+        <div id="cadastrar-cliente">
+            <span id="fecharPopupCli" onclick="fecharPopupCli()">X</span>
+            <h2>Cadastro de Cliente</h2><br>
+            <form action="processar_dados" method="post"><!--ALTERAR AQUI PARA PROCESSAR OS DADOS COM O BANCO-->
+                <div id="form-cliente1">
+                    <label for="nome-cliente">Nome:</label><br>
+                    <input type="text" id="nome-cliente" name="nome-cliente" required size="25"><br>
+
+                    <label for="email-cliente">E-mail:</label><br>
+                    <input type="text" id="email-cliente" name="email-cliente" placeholder="email@email.com" size="25"><br>
+
+                    <label for="cpf-cliente">CPF:</label><br>
+                    <input type="text" id="cpf-cliente" name="cpf-cliente" placeholder="xxx.xxx.xxx.xx"><br>
+
+                    <label for="telefone">Telefone:</label><br>
+                    <input type="tel" id="telefone-cliente" name="telefone" placeholder="(99) 90000-0000" required size="20" maxlength="11"><br>
+                </div>
+                <br>
+                <h3>Endereço</h3><br>
+                <div id="form-cliente2">
+                    <label for="logradouro">Logradouro:</label>
+                    <input type="text" id="logradouro-cliente" name="logradouro" size="25">
+
+                    <label for="cidade-cliente">Cidade:</label>
+                    <input type="text" id="cidade-cliente" name="cidade-cliente" size="25">
+
+                    <label for="complemento-cliente">Complemento:</label>
+                    <input type="text" id="complemento-cliente" name="complemento-cliente" placeholder="Apt / Bloco / Quadra" size="25">
+
+                    <label for="numero">Nº:</label>
+                    <input type="text" id="numero-cliente" name="numero" style="width: 50px;">
+
+                    <label for="estado">Estado:</label>
+                    <input type="text" id="estado-cliente" name="estado" style="width: 100px;">
+
+                    <label for="cep">CEP:</label><br>
+                    <input type="text" id="cep-cliente" name="cep" style="width: 100px;">
+                </div>
+                <div>
+                    <br>
+                    <button type="button" id="btn-submitCliente">Cadastrar</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="cadastrar-atendente">
+            <span id="fecharPopupAtd" onclick="fecharPopupAtd()">X</span>
+            <h2>Cadastro de Atendentes</h2><br>
+            <form action="processar_dados" method="post"><!--ALTERAR AQUI PARA PROCESSAR OS DADOS COM O BANCO-->
+                <div id="form-atendente">
+                    <label for="nome-atendente">Nome:</label><br>
+                    <input type="text" id="nome-atendente" name="nome-atendente" required size="25"><br>
+
+                    <label for="email-atendente">E-mail:</label><br>
+                    <input type="text" id="email-atendente" name="email-atendente" placeholder="email@email.com" size="25"><br>
+
+                    <label for="obs-atendente">Observações:</label><br>
+                    <input type="text" id="obs-atendente" name="obs-atendente" style="width: 83%; height: 35px;"><br>
+                </div>
+                
+                <div>
+                    <br>
+                    <button type="button" id="btn-submitAtendente">Cadastrar</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="cadastrar-motoboy">
+            <span id="fecharPopupBoy" onclick="fecharPopupBoy()">X</span>
+            <h2>Cadastro de Motoboy</h2><br>
+            <form action="processar_dados" method="post"><!--ALTERAR AQUI PARA PROCESSAR OS DADOS COM O BANCO-->
+                <div id="form-Motoboy">
+                    <label for="nome-Motoboy">Nome:</label><br>
+                    <input type="text" id="nome-Motoboy" name="nome-Motoboy" required size="25"><br>
+
+                    <label for="email-Motoboy">E-mail:</label><br>
+                    <input type="text" id="email-Motoboy" name="email-Motoboy" placeholder="email@email.com" size="25"><br>
+
+                    <label for="obs-Motoboy">Observações:</label><br>
+                    <input type="text" id="obs-Motoboy" name="obs-Motoboy" style="width: 83%; height: 35px;"><br>
+                </div>
+                
+                <div>
+                    <br>
+                    <button type="button" id="btn-submitMotoboy">Cadastrar</button>
+                </div>
+            </form>
+        </div>
+        <div id="cadastrar-produto">
+            <span id="fecharPopupProduto" onclick="fecharPopupProduto()">X</span>
+            <h2>Cadastro de Produto</h2><br>
+            <form action="processar_dados" method="post"><!--ALTERAR AQUI PARA PROCESSAR OS DADOS COM O BANCO-->
+                <div id="form-Produto1">
+                    <p>
+                        <label for="id-Produto">Identificação</label><br>
+                        <input type="text" id="id-Produto" name="id-Produto" required size="20"><br>
+                    </p>
+                    <p>
+                        <label for="valor-Produto">Valor R$</label><br>
+                        <input type="text" id="valor-Produto" name="valor-Produto" required size="20"><br>
+                    </p>
+                    <p>
+                        <label for="descricao-Produto">Descrição</label><br>
+                        <input type="text" id="descricao-Produto" name="descricao-Produto" style="width: 100%; height: 55px;"><br>
+                    </p>
+                </div>
+                <div id="form-Produto2">
+                    <p>
+                        <label for="estoque-Produto">Estoque</label><br>
+                        <input type="text" id="estoque-Produto" name="estoque-Produto" required size="20">   
+                    </p>
+                    <p>
+                        <label for="categoria-Produto">Categoria</label><br>
+                        <input type="text" id="categoria-Produto" name="categoria-Produto" required size="20">
+                    </p>
+                    <p>
+                        <label for="fornecedor-Produto">Fornecedor</label><br>
+                        <input type="text" id="categoria-Produto" name="categoria-Produto" required size="25"><br>
+                    </p>      
+                </div>
+                <br>
+                <div>
+                    <button type="button" id="btn-submitProduto">Cadastrar</button>
+                </div>
+                
+            </form>
+
+        </div>
+    </main>
+    <footer>
+        <!-- <h4>rodapé</h4> -->
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

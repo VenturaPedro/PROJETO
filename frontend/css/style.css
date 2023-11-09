@@ -1,0 +1,316 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#container-principal{
+    display: flex;
+}
+
+.fundo-login{
+    background-color: #750D37;
+}
+
+#tituloLogin{
+    font-family: Arial;
+    color: #210124;
+    text-align: center;
+    padding: 5%;
+    font-size: 40px;
+}
+
+.login-container {
+    font-family: Arial, Verdana, Tahoma, Sans-Serif;
+    position: block;
+    margin: 40px 250px;
+    padding: 35px;
+    text-align: left;
+    box-sizing: border-box;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: #ebebeb;
+    color: #210124;
+    font-size: 15px;
+}
+
+#login-form input{
+    font-size: 15px;
+    padding: 5px;
+}
+  
+#button-login{
+    font-size: 15px;
+    padding: 10px 20px;
+    margin: 10% 0% 0% 30%;
+    border-radius: 20px;
+    background-color: #210124;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    cursor:pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#caixa-container{
+    font-family: Arial, Verdana, Tahoma, Sans-Serif;
+    position: relative;
+    margin: 10% 25% 0% 25%;
+    padding: 25px;
+    text-align: center;
+    box-sizing: border-box;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: #ebebeb;
+    color: #210124;
+    font-size: 20px;
+}
+
+#abrirCaixa, #fecharCaixa{
+    font-size: 15px;
+    padding: 5px 20px;
+    margin: 20px 0px 1px;
+    border-radius: 20px;
+    background-color: #210124;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    cursor:pointer;
+}
+
+.rodape{
+    text-align: center;
+    font-size: 15px;
+    color: #a0a0a065;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+input[type="number"]{
+    padding: 2%;
+    font-size: 25px;
+    margin-top: 3%;
+}
+
+.menu{
+    height: 100%;
+    width: 85px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #210124;
+    overflow-x: hidden;
+}
+
+.menu-item {
+    display: inline-block; /* Isso garante que os itens do menu fiquem um ao lado do outro */
+}
+
+.menu-item img{
+    height: 40px;
+    margin: 8vh 2vh 4vh 2vh;
+    background-color:#fff;
+    padding: 1px; 
+    border: 0.1px solid #fff;
+    border-radius: 10px;
+}
+
+.menu-item button{
+    font-size: 2.5vh;
+    color: #000000;
+    height: 12vh;
+    width: 17vh;
+} 
+
+.menu-item i{
+    font-size: 2.5vh;
+    color: #000000;
+} 
+.menu-item button:hover {
+    background-color: #750D37; /* Altere a cor de fundo para o que desejar no hover */
+    color: #FFFFFF; /* Altere a cor do texto para o que desejar no hover */
+    transform: scale(1.1); /* Um exemplo de transformação de escala no hover */
+}
+
+.menu-item i:hover {
+    color: #fff; /* Altere a cor para o que desejar no hover */
+}
+
+nav{
+    margin-left: 35%;   
+}
+
+#painel{
+    background-color: #53323f
+}
+
+#painel-1{
+    margin-top: 11%;
+}
+
+nav button{
+    height: 25vh;
+    width: 35vh;
+    margin: 5px;
+    font-size: 18px;
+    border: 1px solid black;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#btn-painel button:hover {
+    background-color: #210124; /* Altere a cor de fundo para o que desejar no hover */
+    color: #FFFFFF; /* Altere a cor do texto para o que desejar no hover */
+    transform: scale(1.1); /* Um exemplo de transformação de escala no hover */
+    font-size: 20px;
+}
+
+#cadastrar-cliente{
+    font-size: 13px;
+    margin: 0% 5%;
+    display: none;
+    position: fixed;
+    width: 120vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 5px 15px 15px;
+    background: #fff;
+    border: 1px solid #000000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    border-radius: 25px;
+}
+#fecharPopupCli, #fecharPopupAtd, #fecharPopupBoy, #fecharPopupProduto {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+#form-cliente1{
+    display: block;
+    columns: 100px 2;
+    
+    
+}
+
+#form-cliente1 input{
+    margin: 0px;  
+    font-size: 12px;
+    padding: 1.5px; 
+    
+}
+
+#form-cliente2{
+    display: block;
+    columns: 200px 2;
+    
+    
+}
+
+#form-cliente2 input{
+    font-size: 12px;
+    padding: 1.5px;
+    display: flex;
+    margin: 0px;   
+}
+
+#btn-submitCliente, #btn-submitAtendente, #btn-submitMotoboy, #btn-submitProduto{
+    font-size: 15px;
+    padding: 5px 15px;
+    border-radius: 12px;
+    border: 1px solid #7c7c7c;
+}
+
+#btn-submitCliente:hover, #btn-submitAtendente:hover, #btn-submitMotoboy:hover, #btn-submitProduto:hover{
+    /* Altere a cor de fundo para o que desejar no hover */
+    
+    cursor: pointer;
+    transition: all 0.5s ease;
+    background-color: #210124; /* Altere a cor de fundo para o que desejar no hover */
+    color: #FFFFFF; /* Altere a cor do texto para o que desejar no hover */
+    transform: scale(1.1); /* Um exemplo de transformação de escala no hover */
+    font-size: 15px;
+}
+
+#cadastrar-atendente{
+    font-size: 13px;
+    margin: 0% 4%;
+    display: none;
+    position: fixed;
+    width:80vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px 30px 30px 40px;
+    background: #fff;
+    border: 1px solid #000000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    border-radius: 25px;
+}
+
+
+#cadastrar-motoboy{
+    
+    font-size: 13px;
+    margin: 0% 4%;
+    display: none;
+    position: fixed;
+    width:80vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px 30px 30px 40px;
+    background: #fff;
+    border: 1px solid #000000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    border-radius: 25px;
+}
+#cadastrar-produto{
+    font-size: 13px;
+    margin: 1% 5%;
+    display: none;
+    position: fixed;
+    width: 120vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px;
+    background: #fff;
+    border: 1px solid #000000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    border-radius: 25px;
+}
+#form-Produto1{
+    display: block;
+    columns: 100px 2;
+    
+    
+}
+
+#form-Produto1 input{
+    margin: 0px;  
+    font-size: 12px;
+    padding: 1.5px; 
+    
+}
+
+#form-Produto2{
+    display: block;
+    columns: 100px 2;
+   
+    
+}
+
+#form-Produto2 input{
+    font-size: 12px;
+    padding: 1.5px;
+    display: flex;
+    margin: 0px;   
+}
