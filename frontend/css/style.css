@@ -95,7 +95,7 @@ input[type="number"]{
 
 .menu{
     height: 100%;
-    width: 85px;
+    width: 145px;
     position: fixed;
     z-index: 1;
     top: 0;
@@ -105,7 +105,7 @@ input[type="number"]{
 }
 
 .menu-item {
-    display: inline-block; /* Isso garante que os itens do menu fiquem um ao lado do outro */
+    display: inline-block; /* Isso garante que os itens do menu fiquem um em baixo  do outro */
 }
 
 .menu-item img{
