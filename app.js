@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -21,14 +21,20 @@ db.connect(err => {
 });
 
 app.get("/", (req, res) => {
-  res.send("Página Inicial");
+  res.send("Pagina Inicial");
 });
 
-app.post("/cadastrar", (req, res) => {
-  const { nome, email, cpf, telefone } = req.body;
+app.get("/cadastrar", (req, res) => {
+  res.sendFile(__dirname + "/frontend/cadastros.html");
+});
+
+app.use(express.static('public'))
+
+app.post("/processar-cadastro-cliente", (req, res) => {
+  const { nomeCliente, emailCliente, cpfCliente, telefoneCliente } = req.body;
 
   const sql = 'INSERT INTO clientes (nome, email, cpf, telefone) VALUES (?, ?, ?, ?)';
-  db.query(sql, [nome, email, cpf, telefone], (err, result) => {
+  db.query(sql, [ nomeCliente, emailCliente, cpfCliente, telefoneCliente], (err, result) => {
     if (err) {
       console.error('Erro ao inserir dados:', err);
       res.send('Erro ao cadastrar dados no banco de dados');
@@ -42,3 +48,6 @@ app.post("/cadastrar", (req, res) => {
 app.listen(8080, () => {
   console.log("Servidor Iniciado na porta 8080: http://localhost:8080");
 });
+
+
+// ------------------------------------------------------------------

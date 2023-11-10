@@ -1,7 +1,7 @@
 {
-    "server": "SQLEXPRESS",
-    "database": "WAVECASH",
-    "user": "ADMINISTRADOR",
-    "password": "546879"
+    "server": "localhost",
+    "database": "projeto",
+    "user": "root",
+    "password": "123456"
 }
   
