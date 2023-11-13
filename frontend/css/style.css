@@ -122,6 +122,8 @@ input[type="number"]{
     color: #000000;
     height: 12vh;
     width: 17vh;
+    background-color: #ffffff;
+    border-radius: 25px;
 } 
 
 .menu-item i{
@@ -159,6 +161,9 @@ nav button{
     border-radius: 25px;
     cursor: pointer;
     transition: all 0.3s ease;
+}
+#painel-principal{
+    margin: 150px 20px 20px 150px;
 }
 
 #btn-painel button:hover {
@@ -225,14 +230,12 @@ nav button{
     border: 1px solid #7c7c7c;
 }
 
-#btn-submitCliente:hover, #btn-submitAtendente:hover, #btn-submitMotoboy:hover, #btn-submitProduto:hover{
-    /* Altere a cor de fundo para o que desejar no hover */
-    
+#btn-submitCliente:hover, #btn-submitAtendente:hover, #btn-submitMotoboy:hover, #btn-submitProduto:hover{    
     cursor: pointer;
     transition: all 0.5s ease;
-    background-color: #210124; /* Altere a cor de fundo para o que desejar no hover */
-    color: #FFFFFF; /* Altere a cor do texto para o que desejar no hover */
-    transform: scale(1.1); /* Um exemplo de transformação de escala no hover */
+    background-color: #210124; 
+    color: #FFFFFF; 
+    transform: scale(1.1); 
     font-size: 15px;
 }
 
@@ -313,4 +316,30 @@ nav button{
     padding: 1.5px;
     display: flex;
     margin: 0px;   
+}
+
+#tabela-clientes{
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px;
+    background-color: #ccc;
+    padding: 10px;
+}
+  
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+  
+th {
+    background-color: #f2f2f2;
+}
+  
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+  
+tr:hover {
+    background-color: #f1f1f1;
 }

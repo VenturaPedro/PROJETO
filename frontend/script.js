@@ -25,3 +25,10 @@ document.getElementById("btn-cadastrarProduto").addEventListener("click", functi
 function fecharPopupProduto() {
     document.getElementById("cadastrar-produto").style.display = "none";
 }
+
+document.getElementById("btn-editarCliente").addEventListener("click", function(){
+    document.getElementById("editar-cliente").style.display = "block";
+});
+
+
+

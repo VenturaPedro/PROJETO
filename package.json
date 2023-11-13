@@ -41,6 +41,7 @@
     "destroy": "^1.2.0",
     "ecdsa-sig-formatter": "^1.0.11",
     "ee-first": "^1.1.1",
+    "ejs": "^3.1.9",
     "encodeurl": "^1.0.2",
     "es-abstract": "^1.22.3",
     "es-aggregate-error": "^1.0.11",
