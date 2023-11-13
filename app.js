@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json())
 
 const path = require('path');
 
@@ -75,12 +76,9 @@ app.use(express.static('frontend'))
 
 //ROTAS POST
 
-
-// Adicione ao seu código do servidor
 app.post("/excluir-cliente", (req, res) => {
-    const clienteId = req.body.clienteId; // Certifique-se de enviar o ID do cliente do frontend
-    
-    const sql = 'DELETE FROM clientes WHERE id = "13"';
+    const clienteId = req.body.clienteId; 
+    const sql = 'DELETE FROM clientes WHERE id = ?';
     db.query(sql, [clienteId], (err, result) => {
         if (err) {
             console.error('Erro ao excluir cliente:', err);

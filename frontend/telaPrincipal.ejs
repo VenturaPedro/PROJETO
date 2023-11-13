@@ -84,17 +84,17 @@
     
     
     <script>
-        function excluirCliente(clienteId) {
+        async function excluirCliente(clienteId) {
             console.log(`Excluir cliente com ID ${clienteId}`);
             const confirmacao = confirm(`Tem certeza que deseja excluir o cliente com ID ${clienteId}?`);
             if (confirmacao) {
                 // Enviar uma solicitação ao servidor para excluir o cliente
-                fetch('/excluir-cliente', {
+                await fetch('/excluir-cliente', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ clienteId: clienteId }),
+                    body: JSON.stringify({clienteId}),
                 })
                 .then(response => response.text())
                 .then(data => {
