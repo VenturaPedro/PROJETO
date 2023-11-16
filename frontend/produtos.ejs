@@ -41,43 +41,35 @@
             <a href="/listar-motoboy"><button class="btn-listas">Motoboy</button></a> 
             <a href="/listar-produtos"><button class="btn-listas">Produtos</button></a> 
         </div>
-        <div id="tabela-clientes">
-            <h1>Lista de Clientes</h1>
+        <div id="tabela-produto">
+            <h1>Lista de Produtos</h1>
             <table>
                 <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
-                    <th>Email</th>
-                    <th>CPF</th>
-                    <th>Telefone</th>
-                    <th>Logradouro</th>
-                    <th>Cidade</th>
-                    <th>Complemento</th>
-                    <th>Numero</th>
-                    <th>Estado</th>
-                    <th>CEP</th>
+                    <th>Valor</th>
+                    <th>Descrição</th>
+                    <th>Estoque</th>
+                    <th>Categoria</th>
+                    <th>Fornecedor</th>
                     <th>Editar</th>
                     <th>Excluir</th>
                     
                 </tr>
                 </thead>    
                 <tbody>
-                    <% clientes.forEach(function(clientes) { %>
+                    <% produto.forEach(function(produto) { %>
                         <tr>                            
-                            <td><%= clientes.id %></td>
-                            <td><%= clientes.nome %></td>
-                            <td><%= clientes.email %></td>
-                            <td><%= clientes.cpf %></td>
-                            <td><%= clientes.telefone %></td>
-                            <td><%= clientes.logradouro %></td>
-                            <td><%= clientes.cidade %></td>
-                            <td><%= clientes.complemento %></td>
-                            <td><%= clientes.numero %></td>
-                            <td><%= clientes.estado %></td>
-                            <td><%= clientes.cep %></td>
-                            <td><button id="btn-editarCliente" onclick="editarCliente('<%= clientes.id %>')">Editar</button></td>
-                            <td><button id="btn-excluirCliente" onclick="excluirCliente('<%= clientes.id %>')">Excluir</button></td>
+                            <td><%= produto.id %></td>
+                            <td><%= produto.nome %></td>
+                            <td><%= produto.valor %></td>
+                            <td><%= produto.descricao %></td>
+                            <td><%= produto.estoque %></td>
+                            <td><%= produto.categoria %></td>
+                            <td><%= produto.fornecedor %></td>
+                            <td><button id="btn-editarProduto" onclick="editarProduto('<%= produto.id %>')">Editar</button></td>
+                            <td><button id="btn-excluirProduto" onclick="excluirProduto('<%= produto.id %>')">Excluir</button></td>
                         
                         </tr>
                     <% }); %>
@@ -85,36 +77,28 @@
             </table>
         </div>
     </section>
-    
-    
     <script>
-        async function excluirCliente(clienteId) {
-            console.log(`Excluir cliente com ID ${clienteId}`);
-            const confirmacao = confirm(`Tem certeza que deseja excluir o cliente com ID ${clienteId}?`);
+        async function excluirProduto(produtoId) {
+            console.log(`Excluir produto com ID ${produtoId}`);
+            const confirmacao = confirm(`Tem certeza que deseja excluir o produto com ID ${produtoId}?`);
             if (confirmacao) {
-                // Enviar uma solicitação ao servidor para excluir o cliente
-                await fetch('/excluir-cliente', {
+                await fetch('/excluir-produto', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({clienteId}),
+                    body: JSON.stringify({produtoId}),
                 })
                 .then(response => response.text())
                 .then(data => {
                     alert(data); // Exibir mensagem de sucesso ou tratamento de erro
-                    window.location.reload()// Recarregar a página ou atualizar a lista de clientes
+                    window.location.reload()// Recarregar a página ou atualizar a lista de produto
                 })
                 .catch(error => {
-                    console.error('Erro ao excluir cliente:', error);
+                    console.error('Erro ao excluir produto:', error);
                 });
             }
         }
-    
-
-
-
-    //
     </script>
     
 </body>

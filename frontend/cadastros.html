@@ -92,7 +92,7 @@
         <div id="cadastrar-atendente">
             <span id="fecharPopupAtd" onclick="fecharPopupAtd()">X</span>
             <h2>Cadastro de Atendentes</h2><br>
-            <form action="processar_dados" method="post">
+            <form action="/processar-cadastro-atendente" method="post">
                 <div id="form-atendente">
                     <label for="nomeAtendente">Nome:</label><br>
                     <input type="text" id="nomeAtendente" name="nomeAtendente" required size="25"><br>
@@ -106,7 +106,7 @@
                 
                 <div>
                     <br>
-                    <button type="button" id="btn-submitAtendente">Cadastrar</button>
+                    <button type="submit" id="btn-submitAtendente">Cadastrar</button>
                 </div>
             </form>
         </div>
@@ -114,7 +114,7 @@
         <div id="cadastrar-motoboy">
             <span id="fecharPopupBoy" onclick="fecharPopupBoy()">X</span>
             <h2>Cadastro de Motoboy</h2><br>
-            <form action="processar_dados" method="post">
+            <form action="/processar-cadastro-motoboy" method="post">
                 <div id="form-Motoboy">
                     <label for="nomeMotoboy">Nome:</label><br>
                     <input type="text" id="nomeMotoboy" name="nomeMotoboy" required size="25"><br>
@@ -128,18 +128,18 @@
                 
                 <div>
                     <br>
-                    <button type="button" id="btn-submitMotoboy">Cadastrar</button>
+                    <button type="submit" id="btn-submitMotoboy">Cadastrar</button>
                 </div>
             </form>
         </div>
         <div id="cadastrar-produto">
             <span id="fecharPopupProduto" onclick="fecharPopupProduto()">X</span>
             <h2>Cadastro de Produto</h2><br>
-            <form action="processar_dados" method="post">
+            <form action="/processar-cadastro-produto" method="post">
                 <div id="form-Produto1">
                     <p>
-                        <label for="idProduto">Identificação</label><br>
-                        <input type="text" id="idProduto" name="idProduto" required size="20"><br>
+                        <label for="nomeProduto">Nome do Produto</label><br>
+                        <input type="text" id="nomeProduto" name="nomeProduto" required size="20"><br>
                     </p>
                     <p>
                         <label for="valorProduto">Valor R$</label><br>
@@ -161,12 +161,12 @@
                     </p>
                     <p>
                         <label for="fornecedorProduto">Fornecedor</label><br>
-                        <input type="text" id="categoriaProduto" name="categoriaProduto" required size="25"><br>
+                        <input type="text" id="fornecedorProduto" name="fornecedorProduto" required size="25"><br>
                     </p>      
                 </div>
                 <br>
                 <div>
-                    <button type="button" id="btn-submitProduto">Cadastrar</button>
+                    <button type="submit" id="btn-submitProduto">Cadastrar</button>
                 </div>
                 
             </form>

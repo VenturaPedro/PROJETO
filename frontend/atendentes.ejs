@@ -41,43 +41,29 @@
             <a href="/listar-motoboy"><button class="btn-listas">Motoboy</button></a> 
             <a href="/listar-produtos"><button class="btn-listas">Produtos</button></a> 
         </div>
-        <div id="tabela-clientes">
-            <h1>Lista de Clientes</h1>
+        <div id="tabela-atendentes">
+            <h1>Lista de Atendentes</h1>
             <table>
                 <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
                     <th>Email</th>
-                    <th>CPF</th>
-                    <th>Telefone</th>
-                    <th>Logradouro</th>
-                    <th>Cidade</th>
-                    <th>Complemento</th>
-                    <th>Numero</th>
-                    <th>Estado</th>
-                    <th>CEP</th>
+                    <th>Observações</th>
                     <th>Editar</th>
                     <th>Excluir</th>
                     
                 </tr>
                 </thead>    
                 <tbody>
-                    <% clientes.forEach(function(clientes) { %>
+                    <% Atendente.forEach(function(Atendente) { %>
                         <tr>                            
-                            <td><%= clientes.id %></td>
-                            <td><%= clientes.nome %></td>
-                            <td><%= clientes.email %></td>
-                            <td><%= clientes.cpf %></td>
-                            <td><%= clientes.telefone %></td>
-                            <td><%= clientes.logradouro %></td>
-                            <td><%= clientes.cidade %></td>
-                            <td><%= clientes.complemento %></td>
-                            <td><%= clientes.numero %></td>
-                            <td><%= clientes.estado %></td>
-                            <td><%= clientes.cep %></td>
-                            <td><button id="btn-editarCliente" onclick="editarCliente('<%= clientes.id %>')">Editar</button></td>
-                            <td><button id="btn-excluirCliente" onclick="excluirCliente('<%= clientes.id %>')">Excluir</button></td>
+                            <td><%= Atendente.ID %></td>
+                            <td><%= Atendente.Nome %></td>
+                            <td><%= Atendente.Email %></td>
+                            <td><%= Atendente.Observacoes %></td>
+                            <td><button id="btn-editarAtendente" onclick="editarAtendente('<%= Atendente.ID %>')">Editar</button></td>
+                            <td><button id="btn-excluirAtendente" onclick="excluirAtendente('<%= Atendente.ID %>')">Excluir</button></td>
                         
                         </tr>
                     <% }); %>
@@ -85,36 +71,29 @@
             </table>
         </div>
     </section>
-    
-    
     <script>
-        async function excluirCliente(clienteId) {
-            console.log(`Excluir cliente com ID ${clienteId}`);
-            const confirmacao = confirm(`Tem certeza que deseja excluir o cliente com ID ${clienteId}?`);
+        async function excluirAtendente(atendenteId) {
+            console.log(`Excluir atendente com ID ${atendenteId}`);
+            const confirmacao = confirm(`Tem certeza que deseja excluir o atendente com ID ${atendenteId}?`);
             if (confirmacao) {
-                // Enviar uma solicitação ao servidor para excluir o cliente
-                await fetch('/excluir-cliente', {
+                // Enviar uma solicitação ao servidor para excluir o atendente
+                await fetch('/excluir-atendente', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({clienteId}),
+                    body: JSON.stringify({atendenteId}),
                 })
                 .then(response => response.text())
                 .then(data => {
                     alert(data); // Exibir mensagem de sucesso ou tratamento de erro
-                    window.location.reload()// Recarregar a página ou atualizar a lista de clientes
+                    window.location.reload()// Recarregar a página ou atualizar a lista de atendentes
                 })
                 .catch(error => {
-                    console.error('Erro ao excluir cliente:', error);
+                    console.error('Erro ao excluir atendente:', error);
                 });
             }
         }
-    
-
-
-
-    //
     </script>
     
 </body>
