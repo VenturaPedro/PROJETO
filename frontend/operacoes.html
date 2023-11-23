@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>Painel</title>
+    <title>Operações</title>
 </head>
 <body id="painel">
     <nav>
@@ -30,15 +30,18 @@
         </div> 
     </nav>
     <main id="painel-main">
-            
+        <div>
+            <p id="valorInicial"></p>
+        </div>
+        <div id="btn-painel">
             <nav id="painel-1">
-                <a href="cadastros.html"><button id="cadastrarButton">Cadastrar</button></a>
-                <button id="vendasButton">Vendas</button>
+                <a href="#"><button id="abrirCaixaButton"><i class="fa-solid fa-cash-register fa-xl"></i><br>Abrir Caixa</button></a>
+                <button id="fecharCaixaButton"><i class="fa-solid fa-sack-dollar fa-xl"></i><br>Fechar Caixa</button>
                 
             </nav>
             <nav id="painel-2">
-                <a href="operacoes.html"><button id="operacoesButton">Operações</button></a>
-                <button id="relatoriosButton">Relatórios</button> 
+                <a href="#"></a><button id="sangriaButton"><i class="fa-solid fa-money-bill-trend-up fa-flip-vertical fa-xl"></i></i><br>Sangria</button>
+                <button id="reforcoButton"><i class="fa-solid fa-money-bill-trend-up fa-xl"></i><br>Reforço</button> 
             </nav>
         </div>
     </main>

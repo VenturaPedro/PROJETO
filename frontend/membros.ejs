@@ -40,10 +40,9 @@
             <a href="/listar-atendentes"><button class="btn-listas">Atendentes</button></a> 
             <a href="/listar-motoboy"><button class="btn-listas">Motoboy</button></a> 
             <a href="/listar-produtos"><button class="btn-listas">Produtos</button></a> 
-            <a href="/listar-membros"><button class="btn-listas">Membros</button></a> 
         </div>
-        <div id="tabela-motoboy">
-            <h1>Lista de Motoboys</h1>
+        <div id="tabela-membro">
+            <h1>Lista de Membros</h1>
             <table>
                 <thead>
                 <tr>
@@ -57,14 +56,14 @@
                 </tr>
                 </thead>    
                 <tbody>
-                    <% Motoboy.forEach(function(Motoboy) { %>
+                    <% Membro.forEach(function(Membro) { %>
                         <tr>                            
-                            <td><%= Motoboy.ID %></td>
-                            <td><%= Motoboy.Nome %></td>
-                            <td><%= Motoboy.Email %></td>
-                            <td><%= Motoboy.Observacoes %></td>
-                            <td><button id="btn-editarMotoboy" onclick="editarMotoboy('<%= Motoboy.ID %>')">Editar</button></td>
-                            <td><button id="btn-excluirMotoboy" onclick="excluirMotoboy('<%= Motoboy.ID %>')">Excluir</button></td>
+                            <td><%= Membro.ID %></td>
+                            <td><%= Membro.Nome %></td>
+                            <td><%= Membro.Email %></td>
+                            <td><%= Membro.Observacoes %></td>
+                            <td><button id="btn-editarMembro" onclick="editarMembro('<%= Membro.ID %>')">Editar</button></td>
+                            <td><button id="btn-excluirMembro" onclick="excluirMembro('<%= Membro.ID %>')">Excluir</button></td>
                         
                         </tr>
                     <% }); %>
@@ -73,24 +72,24 @@
         </div>
     </section>
     <script>
-        async function excluirMotoboy(motoboyId) {
-            console.log(`Excluir motoboy com ID ${motoboyId}`);
-            const confirmacao = confirm(`Tem certeza que deseja excluir o motoboy com ID ${motoboyId}?`);
+        async function excluirMembro(membroId) {
+            console.log(`Excluir membro com ID ${membroId}`);
+            const confirmacao = confirm(`Tem certeza que deseja excluir o membro com ID ${membroId}?`);
             if (confirmacao) {
-                await fetch('/excluir-motoboy', {
+                await fetch('/excluir-membro', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({motoboyId}),
+                    body: JSON.stringify({membroId}),
                 })
                 .then(response => response.text())
                 .then(data => {
                     alert(data); // Exibir mensagem de sucesso ou tratamento de erro
-                    window.location.reload()// Recarregar a página ou atualizar a lista de motoboy
+                    window.location.reload()// Recarregar a página ou atualizar a lista de membro
                 })
                 .catch(error => {
-                    console.error('Erro ao excluir motoboy:', error);
+                    console.error('Erro ao excluir membro:', error);
                 });
             }
         }

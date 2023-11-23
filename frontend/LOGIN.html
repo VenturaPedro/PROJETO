@@ -22,9 +22,36 @@
                 <button type="submit" id="button-login">Entrar</button>
         </form>
     </div>
-    <script src="script.js"></script>
+    <script>
+        const loginButton = document.getElementById('button-login');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const caixaAberto = false;
+
+        loginButton.addEventListener('click', () => {
+        const username = usernameInput.value;
+        const password = passwordInput.value;
+
+        // Validar as informações do usuário
+        if (username === 'admin' && password === 'admin') {
+        // Se as informações estiverem corretas, verificar se o caixa está aberto
+        if (caixaAberto) {
+            // Se o caixa estiver aberto, redirecionar para a página "/"
+            window.location.href = '/';
+        } else {
+            // Se o caixa estiver fechado, redirecionar para a página "statusCaixa.html"
+            window.location.href = '/caixa';
+        }
+        } else {
+        // Se as informações estiverem incorretas, exibir uma mensagem de erro
+        alert('Nome de usuário ou senha incorretos.');
+        }
+        });
+
+    </script>
     <footer class="rodape">
         <small>CashWave - 2023 &copy; Todos os direitos reservados</small>
     </footer>
+    
 </body>
 </html>

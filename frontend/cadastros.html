@@ -12,7 +12,7 @@
     <nav>
         <div class="menu">  
             <div class="menu-item">
-                <img src="/frontend/imagem/logo-nome.png" alt="logo">
+                <img src="/imagem/logo-nome.png" alt="logo">
             </div>
             <div class="menu-item">
                 <a href="/listar-clientes"><button class="btn"><i class="fas fa-home"></i><br>Dashboard</button></a>
@@ -32,16 +32,17 @@
         </div> 
     </nav>
     <main id="painel-main">
-        <div id="btn-painel">
+        <div id="btn-painel-cadastros">
             <nav id="painel-1">
-                <h1></h1>
-                <button id="btn-cadastrarCliente"><i class="fa-solid fa-user" style="color: #000000;"></i><br>Cliente</button>
-                <button id="btn-cadastrarProduto"><i class="fa-solid fa-cash-register" style="color: #000000;"></i><br>Produto</button>
+                <button id="btn-cadastrarCliente"><i class="fa-solid fa-user"></i><br>Cliente</button>
+                <button id="btn-cadastrarProduto"><i class="fa-solid fa-cash-register"></i><br>Produto</button>
+                <button id="btn-cadastrarProduto"><i class="fa-solid fa-receipt"></i></i><br>Categoria</button>
             </nav>   
                 
             <nav id="painel-2">
-                <button id="btn-cadastrarAtendente"><i class="fa-solid fa-people-group" style="color: #000000;"></i><br>Atendente</button>
-                <button id="btn-cadastrarMotoboy"><i class="fa-solid fa-motorcycle" style="color: #000000;"></i><br>Motoboy</button> 
+                <button id="btn-cadastrarAtendente"><i class="fa-solid fa-people-group"></i><br>Atendente</button>
+                <button id="btn-cadastrarMotoboy"><i class="fa-solid fa-motorcycle"></i><br>Motoboy</button>
+                <button id="btn-cadastrarMembro"><i class="fa-solid fa-kitchen-set"></i><br>Membro</button> 
             </nav>
         </div>
         <div id="cadastrar-cliente">
@@ -125,7 +126,6 @@
                     <label for="obsMotoboy">Observações:</label><br>
                     <input type="text" id="obsMotoboy" name="obsMotoboy" style="width: 83%; height: 35px;"><br>
                 </div>
-                
                 <div>
                     <br>
                     <button type="submit" id="btn-submitMotoboy">Cadastrar</button>
@@ -162,16 +162,39 @@
                     <p>
                         <label for="fornecedorProduto">Fornecedor</label><br>
                         <input type="text" id="fornecedorProduto" name="fornecedorProduto" required size="25"><br>
-                    </p>      
+                    </p> 
+                    <br>  
+                    <div>
+                        <button type="submit" id="btn-submitProduto">Cadastrar</button>
+                    </div>
                 </div>
-                <br>
-                <div>
-                    <button type="submit" id="btn-submitProduto">Cadastrar</button>
-                </div>
-                
-            </form>
-
+            </form>   
         </div>
+        
+        <div id="cadastrar-membro">
+            <span id="fecharPopupMembro" onclick="fecharPopupMembro()">X</span>
+            <h2>Cadastro de Membro da Cozinha</h2><br>
+            <form action="/processar-cadastro-membro" method="post">
+                <div id="form-Membro">
+                    <label for="nomeMembro">Nome:</label><br>
+                    <input type="text" id="nomeMembro" name="nomeMembro" required size="25"><br>
+
+                    <label for="emailMembro">E-mail:</label><br>
+                    <input type="text" id="emailMembro" name="emailMembro" placeholder="email@email.com" size="25"><br>
+
+                    <label for="obsMembro">Observações:</label><br>
+                    <input type="text" id="obsMembro" name="obsMembro" style="width: 83%; height: 35px;"><br>
+                </div>
+                <div>
+                    <br>
+                    <button type="submit" id="btn-submitMembro">Cadastrar</button>
+                </div>
+            </form>
+        </div>
+        
+            
+        
+        
     </main>
     <footer>
         <!-- <h4>rodapé</h4> -->

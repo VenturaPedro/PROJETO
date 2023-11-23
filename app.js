@@ -45,7 +45,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/LOGIN", (req, res) => {   
-    res.sendFile(__dirname + "/");
+    res.sendFile(__dirname + "/frontend/LOGIN.html");
 });
 
 app.get("/caixa", (req, res) => {
@@ -112,7 +112,18 @@ app.get("/listar-produtos", (req, res) => {
     });
 });
 
-
+app.get("/listar-membros", (req, res) => {
+    const sql = 'SELECT * FROM Membro';
+    db.query(sql, (err, results) => {
+      if (err) {
+        console.error('Erro ao recuperar dados:', err);
+        res.send('Erro ao recuperar dados do banco de dados');
+      } else {
+        console.log('Recuperação dos dados completa:');
+        res.render('membros', { Membro: results });
+      }
+    });
+});
   
 
 //-------------------------------------------------------------------
@@ -177,7 +188,19 @@ app.post("/excluir-produto", (req, res) => {
     });
 });
 
-
+app.post("/excluir-membro", (req, res) => {
+    const membroId = req.body.membroId; 
+    const sql = 'DELETE FROM Membro WHERE id = ?';
+    db.query(sql, [membroId], (err, result) => {
+        if (err) {
+            console.error('Erro ao excluir membro:', err);
+            res.status(500).send('Erro ao excluir membro do banco de dados');
+        } else {;
+            console.log('Membro excluído com sucesso');
+            res.status(200).send(`Membro ${membroId} excluído com sucesso `);
+        }
+    });
+});
 
 
 app.post("/processar-cadastro-cliente", (req, res) => {
@@ -198,23 +221,7 @@ app.post("/processar-cadastro-cliente", (req, res) => {
     }
   });
 });
-app.post("/editar-cliente/:id", (req, res) => {
-    const clienteId = req.params.id;
-    const sql = 'SELECT * FROM clientes WHERE id = ?';
-    db.query(sql, [clienteId], (err, result) => {
-        if (err) {
-            console.error('Erro ao recuperar dados do cliente para edição:', err);
-            res.status(500).send('Erro ao recuperar dados do cliente para edição');
-        } else {
-            if (result.length === 0) {
-                res.status(404).send('Cliente não encontrado');
-            } else {
-                const cliente = result[0];
-                res.render('editarCliente', { cliente }); // Corrigir o nome da view aqui
-            }
-        }
-    });
-});
+
 app.post("/editar-cadastro-cliente", (req, res) => {
     const clienteId = req.body.clienteId;
     const { nomeClienteEditado, emailClienteEditado, cpfClienteEditado, telefoneClienteEditado, 
@@ -282,6 +289,20 @@ app.post("/processar-cadastro-produto", (req, res) => {
 });
 });
 
+app.post("/processar-cadastro-membro", (req, res) => {
+    const { nomeMembro, emailMembro, obsMembro} = req.body;
+    
+    const sql = 'INSERT INTO Membro (Nome, Email, Observacoes) VALUES (?, ?, ?)';
+    db.query(sql, [ nomeMembro, emailMembro, obsMembro], (err, result) => {
+        if(err){
+        console.error('Erro ao inserir dados:', err);
+        res.send('Erro ao cadastrar dados no banco de dados');
+        }else{
+        console.log('Dados inseridos com sucesso');
+        res.sendFile(__dirname + "/frontend/cadastros.html");
+        }
+});
+});
 //MENSAGEM STATUS CONEXÃO
 app.listen(8080, () => {
   console.log("Servidor Iniciado na porta 8080: http://localhost:8080");

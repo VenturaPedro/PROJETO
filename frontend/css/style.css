@@ -128,7 +128,6 @@ input[type="number"]{
 
 .menu-item i{
     font-size: 2.5vh;
-    color: #000000;
 } 
 .menu-item button:hover {
     background-color: #750D37; /* Altere a cor de fundo para o que desejar no hover */
@@ -166,7 +165,11 @@ nav button{
     margin: 50px 20px 20px 150px;
 }
 
-#btn-painel button:hover {
+#btn-painel-cadastros{
+    margin-right: 200px;
+}
+
+#btn-painel button:hover, #btn-painel-cadastros button:hover{
     background-color: #210124; /* Altere a cor de fundo para o que desejar no hover */
     color: #FFFFFF; /* Altere a cor do texto para o que desejar no hover */
     transform: scale(1.1); /* Um exemplo de transformação de escala no hover */
@@ -174,6 +177,23 @@ nav button{
 }
 
 #cadastrar-cliente{
+    font-size: 13px;
+    margin: 0% 5%;
+    display: none;
+    position: fixed;
+    width: 120vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 5px 15px 15px;
+    background: #fff;
+    border: 1px solid #000000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    border-radius: 25px;
+}
+
+#editarCliente{
     font-size: 13px;
     margin: 0% 5%;
     display: none;
@@ -220,7 +240,7 @@ nav button{
     z-index: 1000;
     border-radius: 25px;
 }
-#fecharPopupCli, #fecharPopupAtd, #fecharPopupBoy, #fecharPopupProduto {
+#fecharPopupCli, #fecharPopupAtd, #fecharPopupBoy, #fecharPopupProduto, #fecharPopupMembro {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -254,14 +274,14 @@ nav button{
     margin: 0px;   
 }
 
-#btn-submitCliente, #btn-submitAtendente, #btn-submitMotoboy, #btn-submitProduto{
+#btn-submitCliente, #btn-submitAtendente, #btn-submitMotoboy, #btn-submitProduto, #btn-submitMembro{
     font-size: 15px;
     padding: 5px 15px;
     border-radius: 12px;
     border: 1px solid #7c7c7c;
 }
 
-#btn-submitCliente:hover, #btn-submitAtendente:hover, #btn-submitMotoboy:hover, #btn-submitProduto:hover{    
+#btn-submitCliente:hover, #btn-submitAtendente:hover, #btn-submitMotoboy:hover, #btn-submitProduto:hover, #btn-submitMembro:hover{    
     cursor: pointer;
     transition: all 0.5s ease;
     background-color: #210124; 
@@ -270,7 +290,7 @@ nav button{
     font-size: 15px;
 }
 
-#cadastrar-atendente{
+#cadastrar-atendente, #cadastrar-motoboy, #cadastrar-membro{
     font-size: 13px;
     margin: 0% 4%;
     display: none;
@@ -288,23 +308,6 @@ nav button{
 }
 
 
-#cadastrar-motoboy{
-    
-    font-size: 13px;
-    margin: 0% 4%;
-    display: none;
-    position: fixed;
-    width:80vh;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 30px 30px 30px 40px;
-    background: #fff;
-    border: 1px solid #000000;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    border-radius: 25px;
-}
 #cadastrar-produto{
     font-size: 13px;
     margin: 1% 5%;
@@ -357,28 +360,14 @@ nav button{
     padding: 10px;
 }
 
-#tabela-atendentes{
+#tabela-atendentes, #tabela-produto, #tabela-motoboy, #tabela-membro{
     width: 100%;
     border-collapse: collapse;
     margin: 15px;
     background-color: #ccc;
     padding: 10px;
 }
-  
-#tabela-motoboy{
-    width: 100%;
-    border-collapse: collapse;
-    margin: 15px;
-    background-color: #ccc;
-    padding: 10px;
-}
-#tabela-produto{
-    width: 100%;
-    border-collapse: collapse;
-    margin: 15px;
-    background-color: #ccc;
-    padding: 10px;
-}
+
 th, td {
     border: 1px solid #ddd;
     padding: 8px;
@@ -395,4 +384,8 @@ tr:nth-child(even) {
   
 tr:hover {
     background-color: #f1f1f1;
+}
+
+#painel-1 button, #painel-2 button{
+    font-size: 25px;
 }
