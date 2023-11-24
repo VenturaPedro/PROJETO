@@ -41,6 +41,7 @@
             <a href="/listar-motoboy"><button class="btn-listas">Motoboy</button></a> 
             <a href="/listar-produtos"><button class="btn-listas">Produtos</button></a> 
             <a href="/listar-membros"><button class="btn-listas">Membros</button></a> 
+            <a href="/listar-categorias"><button class="btn-listas">Categorias</button></a> 
         </div>
         <div id="tabela-motoboy">
             <h1>Lista de Motoboys</h1>
@@ -65,7 +66,6 @@
                             <td><%= Motoboy.Observacoes %></td>
                             <td><button id="btn-editarMotoboy" onclick="editarMotoboy('<%= Motoboy.ID %>')">Editar</button></td>
                             <td><button id="btn-excluirMotoboy" onclick="excluirMotoboy('<%= Motoboy.ID %>')">Excluir</button></td>
-                        
                         </tr>
                     <% }); %>
                 </tbody>

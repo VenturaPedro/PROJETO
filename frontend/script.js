@@ -24,6 +24,10 @@ function fecharPopupBoy() {
 
 document.getElementById("btn-cadastrarProduto").addEventListener("click", function() {
     document.getElementById("cadastrar-produto").style.display = "block";
+    
+    console.log('preencherCategorias')
+
+    preencherCategorias();
 });
 function fecharPopupProduto() {
     document.getElementById("cadastrar-produto").style.display = "none";
@@ -37,6 +41,28 @@ function fecharPopupMembro() {
     document.getElementById("cadastrar-membro").style.display = "none";
     window.location.reload();
 }
+
+document.getElementById("btn-cadastrarCategoria").addEventListener("click", function() {
+    document.getElementById("cadastrar-categoria").style.display = "block";
+});
+function fecharPopupCategoria() {
+    document.getElementById("cadastrar-categoria").style.display = "none";
+    window.location.reload();
+}
+
+async function preencherCategorias() {
+    const getCategorias = await axios.get("/api/listar-categorias")
+
+    const categoriasBanco = getCategorias.data.categorias
+
+    const selectCategoria = document.getElementById("categoriaProduto")
+
+    for (categoria of categoriasBanco) {
+        let novaCategoria = new Option(categoria.Nome);
+        selectCategoria.add(novaCategoria)
+    }
+}
+
 
 // document.getElementById("btn-editarCliente").addEventListener("click", function() {
 //     document.getElementById("editarCliente").style.display = "block";

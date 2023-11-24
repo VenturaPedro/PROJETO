@@ -124,7 +124,29 @@ app.get("/listar-membros", (req, res) => {
       }
     });
 });
+
+app.get("/listar-categorias", (req, res) => {
+    const sql = 'SELECT * FROM categoria';
+    db.query(sql, (err, results) => {
+      if (err) {
+        console.error('Erro ao recuperar dados:', err);
+        res.send('Erro ao recuperar dados do banco de dados');
+      } else {
+        console.log('Recuperação dos dados completa:');
+        res.render('categorias', { categoria: results });
+      }
+    });
+});
   
+app.get("/api/listar-categorias", (req, res) => {
+    const sql = 'SELECT * FROM categoria';
+    db.query(sql, (err, results) => {
+      if (err) {
+        return res.send(err)
+      }
+      return res.send({ categorias: results })
+    });
+});
 
 //-------------------------------------------------------------------
 app.use(express.static('frontend'))
@@ -202,6 +224,20 @@ app.post("/excluir-membro", (req, res) => {
     });
 });
 
+app.post("/excluir-categoria", (req, res) => {
+    const categoriaId = req.body.categoriaId; 
+    const sql = 'DELETE FROM categoria WHERE id = ?';
+    db.query(sql, [categoriaId], (err, result) => {
+        if (err) {
+            console.error('Erro ao excluir categoria:', err);
+            res.status(500).send('Erro ao excluir categoria do banco de dados');
+        } else {;
+            console.log('Categoria excluído com sucesso');
+            res.status(200).send(`Categoria ${categoriaId} excluído com sucesso `);
+        }
+    });
+});
+
 
 app.post("/processar-cadastro-cliente", (req, res) => {
   const { nomeCliente, emailCliente, cpfCliente, telefoneCliente, 
@@ -248,13 +284,12 @@ const { nomeAtendente, emailAtendente, obsAtendente} = req.body;
 
 const sql = 'INSERT INTO Atendente (Nome, Email, Observacoes) VALUES (?, ?, ?)';
 db.query(sql, [ nomeAtendente, emailAtendente, obsAtendente], (err, result) => {
-    if (err) {
+    if(err){
     console.error('Erro ao inserir dados:', err);
     res.send('Erro ao cadastrar dados no banco de dados');
-    } else {
+    }else{
     console.log('Dados inseridos com sucesso');
     res.sendFile(__dirname + "/frontend/cadastros.html");
-    
     }
 });
 });
@@ -273,6 +308,21 @@ app.post("/processar-cadastro-motoboy", (req, res) => {
         }
 });
 });
+app.post("/processar-cadastro-categoria", (req, res) => {  
+    const { nomeCategoria, obsCategoria} = req.body;
+    
+    const sql = 'INSERT INTO Categoria (Nome, Observacoes) VALUES (?, ?)';
+    db.query(sql, [ nomeCategoria, obsCategoria], (err, result) => {
+        if(err){
+        console.error('Erro ao inserir dados:', err);
+        res.send('Erro ao cadastrar dados no banco de dados');
+        }else{
+        console.log('Dados inseridos com sucesso');
+        res.sendFile(__dirname + "/frontend/cadastros.html");
+        }
+});
+});
+
 
 app.post("/processar-cadastro-produto", (req, res) => {
     const { nomeProduto, valorProduto, descricaoProduto, estoqueProduto, categoriaProduto, fornecedorProduto} = req.body;
@@ -289,7 +339,7 @@ app.post("/processar-cadastro-produto", (req, res) => {
 });
 });
 
-app.post("/processar-cadastro-membro", (req, res) => {
+app.post("/processar-cadastro-membro", (req, res) => {  
     const { nomeMembro, emailMembro, obsMembro} = req.body;
     
     const sql = 'INSERT INTO Membro (Nome, Email, Observacoes) VALUES (?, ?, ?)';

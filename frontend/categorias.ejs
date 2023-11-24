@@ -43,14 +43,13 @@
             <a href="/listar-membros"><button class="btn-listas">Membros</button></a> 
             <a href="/listar-categorias"><button class="btn-listas">Categorias</button></a> 
         </div>
-        <div id="tabela-atendentes">
-            <h1>Lista de Atendentes</h1>
+        <div id="tabela-categorias">
+            <h1>Lista de Categorias</h1>
             <table>
                 <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
-                    <th>Email</th>
                     <th>Observações</th>
                     <th>Editar</th>
                     <th>Excluir</th>
@@ -58,14 +57,13 @@
                 </tr>
                 </thead>    
                 <tbody>
-                    <% Atendente.forEach(function(Atendente) { %>
+                    <% categoria.forEach(function(categoria) { %>
                         <tr>                            
-                            <td><%= Atendente.ID %></td>
-                            <td><%= Atendente.Nome %></td>
-                            <td><%= Atendente.Email %></td>
-                            <td><%= Atendente.Observacoes %></td>
-                            <td><button id="btn-editarAtendente" onclick="editarAtendente('<%= Atendente.ID %>')">Editar</button></td>
-                            <td><button id="btn-excluirAtendente" onclick="excluirAtendente('<%= Atendente.ID %>')">Excluir</button></td>
+                            <td><%= categoria.ID %></td>
+                            <td><%= categoria.Nome %></td>
+                            <td><%= categoria.Observacoes %></td>
+                            <td><button id="btn-editarCategoria" onclick="editarCategoria('<%= categoria.ID %>')">Editar</button></td>
+                            <td><button id="btn-excluirCategoria" onclick="excluirCategoria('<%= categoria.ID %>')">Excluir</button></td>
                         
                         </tr>
                     <% }); %>
@@ -74,25 +72,24 @@
         </div>
     </section>
     <script>
-        async function excluirAtendente(atendenteId) {
-            console.log(`Excluir atendente com ID ${atendenteId}`);
-            const confirmacao = confirm(`Tem certeza que deseja excluir o atendente com ID ${atendenteId}?`);
+        async function excluirCategoria(categoriaId) {
+            console.log(`Excluir categoria com ID ${categoriaId}`);
+            const confirmacao = confirm(`Tem certeza que deseja excluir o categoria com ID ${categoriaId}?`);
             if (confirmacao) {
-                // Enviar uma solicitação ao servidor para excluir o atendente
-                await fetch('/excluir-atendente', {
+                await fetch('/excluir-categoria', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({atendenteId}),
+                    body: JSON.stringify({categoriaId}),
                 })
                 .then(response => response.text())
                 .then(data => {
                     alert(data); // Exibir mensagem de sucesso ou tratamento de erro
-                    window.location.reload()// Recarregar a página ou atualizar a lista de atendentes
+                    window.location.reload()// Recarregar a página ou atualizar a lista de categoria
                 })
                 .catch(error => {
-                    console.error('Erro ao excluir atendente:', error);
+                    console.error('Erro ao excluir categoria:', error);
                 });
             }
         }
