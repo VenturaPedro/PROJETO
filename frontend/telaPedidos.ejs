@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Dashboard</title>      
+    <link rel="shortcut icon" type="image/ico" href="/imagem/logo.png" />
+</head>
+<body id="painel">
+    <nav>
+        <div class="menu">
+            <div class="menu-item">
+                <img src="/imagem/logo-nome.png" alt="logo">
+            </div>
+            <div class="menu-item">
+                <a href="/listar-clientes"><button class="btn"><i class="fas fa-home"></i><br>Dashboard</button></a>            
+            </div>
+            <div class="menu-item">
+                <a href="/listar-pedidos"><button id="pedido" class="btn"><i class="fa-solid fa-cash-register"></i><br>Pedidos</button></a>
+            </div>
+            <div class="menu-item">
+                <button class="btn"><i class="fa-solid fa-truck"></i><br>Entrega</button>
+            </div>
+            <div class="menu-item">
+                <button class="btn"><i class="fa-solid fa-bell-concierge"></i><br>Salão</button>
+            </div>
+            <div class="menu-item">
+                <a href="painel.html"><button class="btn"><i class="fa-solid fa-gears"></i><br>Painel</button></a>
+            </div>
+        </div> 
+    </nav> 
+    <div id="painel-principal">
+        <button id="novo-pedido" class="btn-listas">Novo pedido</button>
+        <div id="tabela-pedidos">
+            <h1>Lista de Pedidos</h1>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data</th>
+                    <th>Atendente</th>
+                    <th>Produtos</th>
+                    <th>Forma de pagamento</th>
+                    <th>Valor Total</th>
+                    <th>Status do pedido</th>
+                    <th colspan="2">Opções</th>
+                </tr>
+                </thead>    
+                <tbody>
+                    <% pedidos.forEach(function(pedido) { %>
+                        <tr>                            
+                            <td><%= pedido.ID %></td>
+                            <td><%= pedido.Data %></td>
+                            <td><%= pedido.Atendente_ID %></td>
+                            <td><%= pedido.PRODUTOS_ID %></td>
+                            <td><%= pedido.pagamento_ID %></td>
+                            <td>R$<%= pedido.valor_total %></td>
+                            <td><%= pedido.status_pedido %></td>
+                            <td><button id="btn-editarPedido" class="btn-edit" onclick="editarPedido('<%= pedido.ID %>')"><i class="fa-solid fa-pen"></button></td>
+                            <td><button id="btn-excluirPedido" class="btn-delete" onclick="excluirPedido('<%= pedido.ID %>')"><i class="fa-solid fa-trash"></button></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal" tabindex="-1" role="dialog" id="vincular-atendente">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Faça um Pedido</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <div class="d-flex pb-3">
+                            <div class="atendente-pedido pr-3">
+                                <h5>Atendente</h5>
+                                <div id="form-atendente-pedido">
+                                    <select class="custom-select" id="escolhaAtendente" name="escolhaAtendente" required size="5"></select>
+                                </div>
+                            </div>
+        
+                            <div class="cliente-pedido">
+                                <h5>Cliente</h5>
+                                <div id="form-cliente-pedido">
+                                    <select class="custom-select" id="escolhaCliente" name="escolhaCliente" required size="5"></select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="itens-pedido">
+                            <h5>Itens do Pedido</h5>
+
+                            <nav class="navbar navbar-light bg-light m-0">
+                                <h6>Quantidade:</h6>
+                                <input class="form-control" id="quantidadeItens" type="text" placeholder="Insira a quantidade do item" aria-label="Quantidade" />
+                            </nav>
+
+                            <nav class="navbar navbar-light bg-light m-0">
+                                <h6>Busca:</h6>
+                                <form class="form-inline">
+                                  <input class="form-control" id="inputBusca" type="search" oninput="buscarItens()" placeholder="Busque pelo nome do item" aria-label="Search">
+                                </form>
+                            </nav>
+
+                            <ul class="list-group" id="resultadoBusca"></ul>
+        
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Qtd</th>
+                                        <th>Descrição</th>
+                                        <th>Valor Unitário</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+        
+                                <tbody id="itensSelecionados"></tbody>
+                            </table>
+                        </div>
+                      </div>
+
+                      <div class="modal-footer">
+                        <button onClick="lancarPedido()" type="button" class="btn btn-primary">Lançar Pedido</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick="fecharPopupAtendentePedido()">Close</button>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="scripts/scriptPedido.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+</body>
+</html>

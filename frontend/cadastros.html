@@ -19,7 +19,7 @@
                 <a href="/listar-clientes"><button class="btn"><i class="fas fa-home"></i><br>Dashboard</button></a>
             </div>
             <div class="menu-item">
-                <button class="btn"><i class="fa-solid fa-cash-register"></i><br>Venda</button>
+                <a href="/listar-pedidos"><button id="pedido" class="btn"><i class="fa-solid fa-cash-register"></i><br>Pedidos</button></a>
             </div>
             <div class="menu-item">
                 <button class="btn"><i class="fa-solid fa-truck"></i><br>Entrega</button>
@@ -37,7 +37,8 @@
             <nav id="painel-1">
                 <button id="btn-cadastrarCliente"><i class="fa-solid fa-user"></i><br>Cliente</button>
                 <button id="btn-cadastrarProduto"><i class="fa-solid fa-cash-register"></i><br>Produto</button>
-                <button id="btn-cadastrarCategoria"><i class="fa-solid fa-receipt"></i></i><br>Categoria</button>
+                <button id="btn-cadastrarCategoria"><i class="fa-solid fa-receipt"></i><br>Categoria</button>
+                <button id="btn-cadastrarPagamento"><i class="fa-solid fa-credit-card"></i><br>Pagamentos</button>
             </nav>   
                 
             <nav id="painel-2">
@@ -47,7 +48,7 @@
             </nav>
         </div>
         <div id="cadastrar-cliente">
-            <span id="fecharPopupCli" onclick="fecharPopupCli()">X</span>
+            <span id="fecharPopupCli" onclick="fecharPopupCli()"><i class="fa-solid fa-circle-xmark"></i></span>
             <h2>Cadastro de Cliente</h2><br>
             <form action="/processar-cadastro-cliente" method="post"><!--ALTERAR AQUI PARA PROCESSAR OS DADOS COM O BANCO-->
                 <div id="form-cliente1">
@@ -92,7 +93,7 @@
         </div>
 
         <div id="cadastrar-atendente">
-            <span id="fecharPopupAtd" onclick="fecharPopupAtd()">X</span>
+            <span id="fecharPopupAtd" onclick="fecharPopupAtd()"><i class="fa-solid fa-circle-xmark"></i></span>
             <h2>Cadastro de Atendentes</h2><br>
             <form action="/processar-cadastro-atendente" method="post">
                 <div id="form-atendente">
@@ -114,7 +115,7 @@
         </div>
 
         <div id="cadastrar-motoboy">
-            <span id="fecharPopupBoy" onclick="fecharPopupBoy()">X</span>
+            <span id="fecharPopupBoy" onclick="fecharPopupBoy()"><i class="fa-solid fa-circle-xmark"></i></span>
             <h2>Cadastro de Motoboy</h2><br>
             <form action="/processar-cadastro-motoboy" method="post">
                 <div id="form-Motoboy">
@@ -134,7 +135,7 @@
             </form>
         </div>
         <div id="cadastrar-produto">
-            <span id="fecharPopupProduto" onclick="fecharPopupProduto()">X</span>
+            <span id="fecharPopupProduto" onclick="fecharPopupProduto()"><i class="fa-solid fa-circle-xmark"></i></span>
             <h2>Cadastro de Produto</h2><br>
             <form action="/processar-cadastro-produto" method="post">
                 <div id="form-Produto1">
@@ -174,7 +175,7 @@
         </div>
         
         <div id="cadastrar-membro">
-            <span id="fecharPopupMembro" onclick="fecharPopupMembro()">X</span>
+            <span id="fecharPopupMembro" onclick="fecharPopupMembro()"><i class="fa-solid fa-circle-xmark"></i></span>
             <h2>Cadastro de Membro da Cozinha</h2><br>
             <form action="/processar-cadastro-membro" method="post">
                 <div id="form-Membro">
@@ -194,7 +195,7 @@
             </form>
         </div>
         <div id="cadastrar-categoria">
-            <span id="fecharPopupCategoria" onclick="fecharPopupCategoria()">X</span>
+            <span id="fecharPopupCategoria" onclick="fecharPopupCategoria()"><i class="fa-solid fa-circle-xmark"></i></span>
             <h2>Cadastro de Categoria de Produtos</h2><br>
             <form action="/processar-cadastro-categoria" method="post">
                 <div id="form-Categoria">
@@ -210,12 +211,30 @@
                 </div>
             </form>
         </div>
+        <div id="cadastrar-pagamento">
+            <span id="fecharPopupPagamento" onclick="fecharPopupPagamento()"><i class="fa-solid fa-circle-xmark"></i></span>
+            <h2>Cadastro de Pagamento de Produtos</h2><br>
+            <form action="/processar-cadastro-pagamento" method="post">
+                <div id="form-Pagamento">
+                    <label for="nomePagamento">Nome:</label><br>
+                    <input type="text" id="nomePagamento" name="nomePagamento" required size="25"><br>
+
+                    <label for="obsPagamento">Observações:</label><br>
+                    <input type="text" id="obsPagamento" name="obsPagamento" style="width: 83%; height: 35px;"><br>
+                </div>
+                <div>
+                    <br>
+                    <button type="submit" id="btn-submitPagamento">Cadastrar</button>
+                </div>
+            </form>
+        </div>
             
     </main>
     <footer>
         <!-- <h4>rodapé</h4> -->
     </footer>
-    <script src="/script.js"></script>
+    <script src="scripts/script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>

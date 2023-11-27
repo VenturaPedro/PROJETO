@@ -24,10 +24,7 @@ function fecharPopupBoy() {
 
 document.getElementById("btn-cadastrarProduto").addEventListener("click", function() {
     document.getElementById("cadastrar-produto").style.display = "block";
-    
-    console.log('preencherCategorias')
-
-    preencherCategorias();
+    preencherCategorias();//preenche a opções de categoria dentro do formulário de produto e o vincula
 });
 function fecharPopupProduto() {
     document.getElementById("cadastrar-produto").style.display = "none";
@@ -50,18 +47,28 @@ function fecharPopupCategoria() {
     window.location.reload();
 }
 
+document.getElementById("btn-cadastrarPagamento").addEventListener("click", function() {
+    document.getElementById("cadastrar-pagamento").style.display = "block";
+});
+function fecharPopupPagamento() {
+    document.getElementById("cadastrar-pagamento").style.display = "none";
+    window.location.reload();
+}
+
 async function preencherCategorias() {
-    const getCategorias = await axios.get("/api/listar-categorias")
+    const getCategorias = await axios.get("/api/listar-categorias");
 
-    const categoriasBanco = getCategorias.data.categorias
+    const categoriasBanco = getCategorias.data.categorias;
 
-    const selectCategoria = document.getElementById("categoriaProduto")
+    const selectCategoria = document.getElementById("categoriaProduto");
 
     for (categoria of categoriasBanco) {
         let novaCategoria = new Option(categoria.Nome);
-        selectCategoria.add(novaCategoria)
+        selectCategoria.add(novaCategoria);
     }
 }
+
+
 
 
 // document.getElementById("btn-editarCliente").addEventListener("click", function() {

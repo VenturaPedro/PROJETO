@@ -20,9 +20,10 @@
                 <img src="/imagem/logo-nome.png" alt="logo">
             </div>
             <div class="menu-item">
-                <a href="/listar-clientes"><button class="btn"><i class="fas fa-home"></i><br>Dashboard</button></a>            </div>
+                <a href="/listar-clientes"><button class="btn"><i class="fas fa-home"></i><br>Dashboard</button></a>            
+            </div>
             <div class="menu-item">
-                <button class="btn"><i class="fa-solid fa-cash-register"></i><br>Venda</button>
+                <a href="/listar-pedidos"><button id="pedido" class="btn"><i class="fa-solid fa-cash-register"></i><br>Pedidos</button></a>
             </div>
             <div class="menu-item">
                 <button class="btn"><i class="fa-solid fa-truck"></i><br>Entrega</button>
@@ -42,7 +43,8 @@
             <a href="/listar-motoboy"><button class="btn-listas">Motoboy</button></a> 
             <a href="/listar-produtos"><button class="btn-listas">Produtos</button></a> 
             <a href="/listar-membros"><button class="btn-listas">Membros</button></a> 
-            <a href="/listar-categorias"><button class="btn-listas">Categorias</button></a> 
+            <a href="/listar-categorias"><button class="btn-listas">Categorias</button></a>
+            <a href="/listar-pagamentos"><button class="btn-listas">Pagamentos</button></a> 
             
         </div>
         <div id="tabela-clientes">
@@ -61,8 +63,8 @@
                     <th>Numero</th>
                     <th>Estado</th>
                     <th>CEP</th>
-                    <th>Editar</th>
-                    <th>Excluir</th>
+                    <th colspan="2">Opções</th>
+                    
                     
                 </tr>
                 </thead>    
@@ -80,8 +82,8 @@
                             <td><%= clientes.numero %></td>
                             <td><%= clientes.estado %></td>
                             <td><%= clientes.cep %></td>
-                            <td><button id="btn-editarCliente" onclick="editarCliente('<%= clientes.id %>')">Editar</button></td>
-                            <td><button id="btn-excluirCliente" onclick="excluirCliente('<%= clientes.id %>')">Excluir</button></td>
+                            <td><button id="btn-editarCliente" class="btn-edit" onclick="editarCliente('<%= clientes.id %>')"><i class="fa-solid fa-pen"></button></td>
+                            <td><button id="btn-excluirCliente" class="btn-delete" onclick="excluirCliente('<%= clientes.id %>')"><i class="fa-solid fa-trash"></button></td>
                         
                         </tr>
                     <% }); %>

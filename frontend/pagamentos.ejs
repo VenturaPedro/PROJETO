@@ -44,30 +44,27 @@
             <a href="/listar-membros"><button class="btn-listas">Membros</button></a> 
             <a href="/listar-categorias"><button class="btn-listas">Categorias</button></a> 
             <a href="/listar-pagamentos"><button class="btn-listas">Pagamentos</button></a>
-            
         </div>
-        <div id="tabela-atendentes">
-            <h1>Lista de Atendentes</h1>
+        <div id="tabela-pagamentos">
+            <h1>Lista de Pagamentos</h1>
             <table>
                 <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
-                    <th>Email</th>
                     <th>Observações</th>
                     <th colspan="2">Opções</th>
                     
                 </tr>
                 </thead>    
                 <tbody>
-                    <% Atendente.forEach(function(Atendente) { %>
+                    <% pagamento.forEach(function(pagamento) { %>
                         <tr>                            
-                            <td><%= Atendente.ID %></td>
-                            <td><%= Atendente.Nome %></td>
-                            <td><%= Atendente.Email %></td>
-                            <td><%= Atendente.Observacoes %></td>
-                            <td><button id="btn-editarAtendente" class="btn-edit" onclick="editarAtendente('<%= Atendente.ID %>')"><i class="fa-solid fa-pen"></button></td>
-                            <td><button id="btn-excluirAtendente" class="btn-edit" onclick="excluirAtendente('<%= Atendente.ID %>')"><i class="fa-solid fa-trash"></button></td>
+                            <td><%= pagamento.ID %></td>
+                            <td><%= pagamento.Nome %></td>
+                            <td><%= pagamento.Observacoes %></td>
+                            <td><button id="btn-editarPagamento" class="btn-edit" onclick="editarPagamento('<%= pagamento.ID %>')"><i class="fa-solid fa-pen"></button></td>
+                            <td><button id="btn-excluirPagamento" class="btn-delete" onclick="excluirPagamento('<%= pagamento.ID %>')"><i class="fa-solid fa-trash"></button></td>
                         
                         </tr>
                     <% }); %>
@@ -76,25 +73,24 @@
         </div>
     </section>
     <script>
-        async function excluirAtendente(atendenteId) {
-            console.log(`Excluir atendente com ID ${atendenteId}`);
-            const confirmacao = confirm(`Tem certeza que deseja excluir o atendente com ID ${atendenteId}?`);
+        async function excluirPagamento(pagamentoId) {
+            console.log(`Excluir forma de pagamento com ID ${pagamentoId}`);
+            const confirmacao = confirm(`Tem certeza que deseja excluir o pagamento com ID ${pagamentoId}?`);
             if (confirmacao) {
-                // Enviar uma solicitação ao servidor para excluir o atendente
-                await fetch('/excluir-atendente', {
+                await fetch('/excluir-pagamento', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({atendenteId}),
+                    body: JSON.stringify({pagamentoId}),
                 })
                 .then(response => response.text())
                 .then(data => {
                     alert(data); // Exibir mensagem de sucesso ou tratamento de erro
-                    window.location.reload()// Recarregar a página ou atualizar a lista de atendentes
+                    window.location.reload()// Recarregar a página ou atualizar a lista de pagamento
                 })
                 .catch(error => {
-                    console.error('Erro ao excluir atendente:', error);
+                    console.error('Erro ao excluir pagamento:', error);
                 });
             }
         }

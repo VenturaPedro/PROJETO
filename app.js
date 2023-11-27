@@ -60,6 +60,8 @@ app.get("/cadastrar",(req, res) => {
   res.sendFile(__dirname + "/frontend/cadastros.html");
 });
 
+
+
 app.get("/listar-clientes", (req, res) => {
     const sql = 'SELECT * FROM clientes';
     db.query(sql, (err, results) => {
@@ -137,6 +139,32 @@ app.get("/listar-categorias", (req, res) => {
       }
     });
 });
+
+app.get("/listar-pagamentos", (req, res) => {
+    const sql = 'SELECT * FROM pagamento';
+    db.query(sql, (err, results) => {
+      if (err) {
+        console.error('Erro ao recuperar dados:', err);
+        res.send('Erro ao recuperar dados do banco de dados');
+      } else {
+        console.log('Recuperação dos dados completa:');
+        res.render('pagamentos', { pagamento: results });
+      }
+    });
+});
+
+app.get("/listar-pedidos", (req, res) => {
+    const sql = 'SELECT * FROM pedido';
+    db.query(sql, (err, results) => {
+      if (err) {
+        console.error('Erro ao recuperar dados:', err);
+        res.send('Erro ao recuperar dados do banco de dados');
+      } else {
+        console.log('Recuperação dos dados completa:');
+        res.render('telaPedidos', { pedidos: results });
+      }
+    });
+});
   
 app.get("/api/listar-categorias", (req, res) => {
     const sql = 'SELECT * FROM categoria';
@@ -146,6 +174,117 @@ app.get("/api/listar-categorias", (req, res) => {
       }
       return res.send({ categorias: results })
     });
+});
+
+app.get("/api/listar-atendentes", (req, res) => {
+    const sql = 'SELECT * FROM Atendente';
+    db.query(sql, (err, results) => {
+      if (err) {
+        return res.send(err)
+      }
+      return res.send({ Atendentes: results })
+    });
+});
+
+app.get("/api/listar-clientes", (req, res) => {
+    const sql = 'SELECT * FROM clientes';
+    db.query(sql, (err, results) => {
+        if (err) {
+            return res.send(err)
+          }
+          return res.send({ clientes: results })
+    });
+});
+
+app.get("/api/listar-produtos", (req, res) => {
+    const sql = 'SELECT * FROM produto';
+    db.query(sql, (err, results) => {
+        if (err) {
+            return res.send(err)
+          }
+          return res.send({ produtos: results })
+    });
+});
+
+app.post("/api/salvar-pedido", async (req, res) => {
+    let insertedPedidoId = 0;
+    const { atendenteId, clienteId, itemsPedido } = req.body;
+
+    const insertPedido = `INSERT INTO PEDIDO 
+            (Data, Atendente_ID, CLIENTE_ID, pagamento_ID, valor_total, status_pedido) 
+        VALUES 
+            (NOW(), ?, ?, ?, ?, ?)`;
+
+    const promiseInsertPedido = new Promise((resolve, reject) => {
+        db.query(insertPedido, [atendenteId, clienteId, "1", 10.21, "Aberto"], (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                insertedPedidoId = results.insertId;
+                resolve();
+            }
+        });
+    });
+
+    const promiseInsertProdutosPedido = new Promise((resolve, reject) => {
+        const promises = itemsPedido.map((produtoPedido) => {
+            const selectValorProduto = 'SELECT valor FROM produto WHERE id = ' + produtoPedido.id;
+
+            return new Promise((resolve, reject) => {
+                db.query(selectValorProduto, (err, results) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        const firstResult = results && results.length > 0 ? results[0] : null;
+                        const valor = firstResult ? firstResult.valor : 0;
+                        resolve(valor);
+                    }
+                });
+            });
+        });
+
+        Promise.all(promises)
+            .then((valoresProdutos) => {
+                const promiseInsertProdutos = valoresProdutos.map((valorProduto, index) => {
+                    const produtoPedido = itemsPedido[index];
+
+                    const valorTotalProduto = isNaN(valorProduto) ? 0 : valorProduto * produtoPedido.quantidade;
+
+                    const insertProdutosPedido = `INSERT INTO PRODUTOS_PEDIDO 
+                            (QUANTIDADE, PEDIDO_ID, PRODUTO_ID, VALOR_TOTAL) 
+                        VALUES 
+                            (?, ?, ?, ?)`;
+
+                    return new Promise((resolve, reject) => {
+                        db.query(insertProdutosPedido, [produtoPedido.quantidade, insertedPedidoId, produtoPedido.id, valorTotalProduto], (err, result) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                console.log('Dados inseridos com sucesso', result);
+                                resolve();
+                            }
+                        });
+                    });
+                });
+
+                return Promise.all(promiseInsertProdutos);
+            })
+            .then(() => {
+                resolve();
+            })
+            .catch((err) => {
+                reject(err); 
+            });
+    });
+
+    Promise.all([promiseInsertPedido, promiseInsertProdutosPedido])
+        .then(() => {
+            console.log("insertedPedidoId", insertedPedidoId);
+        })
+        .catch((err) => {
+            console.error('Error:', err);
+        });
+
 });
 
 //-------------------------------------------------------------------
@@ -238,6 +377,20 @@ app.post("/excluir-categoria", (req, res) => {
     });
 });
 
+app.post("/excluir-pagamento", (req, res) => {
+    const pagamentoId = req.body.pagamentoId; 
+    const sql = 'DELETE FROM pagamento WHERE id = ?';
+    db.query(sql, [pagamentoId], (err, result) => {
+        if (err) {
+            console.error('Erro ao excluir pagamento:', err);
+            res.status(500).send('Erro ao excluir pagamento do banco de dados');
+        } else {;
+            console.log('Pagamento excluído com sucesso');
+            res.status(200).send(`Pagamento ${pagamentoId} excluído com sucesso `);
+        }
+    });
+});
+
 
 app.post("/processar-cadastro-cliente", (req, res) => {
   const { nomeCliente, emailCliente, cpfCliente, telefoneCliente, 
@@ -253,7 +406,6 @@ app.post("/processar-cadastro-cliente", (req, res) => {
     } else {
       console.log('Dados inseridos com sucesso');
       res.sendFile(__dirname + "/frontend/cadastros.html");
-      
     }
   });
 });
@@ -313,6 +465,21 @@ app.post("/processar-cadastro-categoria", (req, res) => {
     
     const sql = 'INSERT INTO Categoria (Nome, Observacoes) VALUES (?, ?)';
     db.query(sql, [ nomeCategoria, obsCategoria], (err, result) => {
+        if(err){
+        console.error('Erro ao inserir dados:', err);
+        res.send('Erro ao cadastrar dados no banco de dados');
+        }else{
+        console.log('Dados inseridos com sucesso');
+        res.sendFile(__dirname + "/frontend/cadastros.html");
+        }
+});
+});
+
+app.post("/processar-cadastro-pagamento", (req, res) => {  
+    const { nomePagamento, obsPagamento} = req.body;
+    
+    const sql = 'INSERT INTO Pagamento (Nome, Observacoes) VALUES (?, ?)';
+    db.query(sql, [ nomePagamento, obsPagamento], (err, result) => {
         if(err){
         console.error('Erro ao inserir dados:', err);
         res.send('Erro ao cadastrar dados no banco de dados');
