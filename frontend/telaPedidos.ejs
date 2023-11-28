@@ -46,7 +46,7 @@
                     <th>ID</th>
                     <th>Data</th>
                     <th>Atendente</th>
-                    <th>Produtos</th>
+                    <th>Cliente</th>
                     <th>Forma de pagamento</th>
                     <th>Valor Total</th>
                     <th>Status do pedido</th>
@@ -57,10 +57,14 @@
                     <% pedidos.forEach(function(pedido) { %>
                         <tr>                            
                             <td><%= pedido.ID %></td>
-                            <td><%= pedido.Data %></td>
-                            <td><%= pedido.Atendente_ID %></td>
-                            <td><%= pedido.PRODUTOS_ID %></td>
-                            <td><%= pedido.pagamento_ID %></td>
+                            <td><%= new Intl.DateTimeFormat('pt-BR', {
+                                dateStyle: 'short',
+                                timeStyle: 'long',
+                                timeZone: 'America/Sao_Paulo',
+                            }).format(pedido.Data) %></td>
+                            <td><%= pedido.Cliente %></td>
+                            <td><%= pedido.Atendente %></td>
+                            <td><%= pedido.FormaPagamento %></td>
                             <td>R$<%= pedido.valor_total %></td>
                             <td><%= pedido.status_pedido %></td>
                             <td><button id="btn-editarPedido" class="btn-edit" onclick="editarPedido('<%= pedido.ID %>')"><i class="fa-solid fa-pen"></button></td>
@@ -75,7 +79,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Faça um Pedido</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="fecharPopupAtendentePedido() ">
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
@@ -132,7 +136,7 @@
 
                       <div class="modal-footer">
                         <button onClick="lancarPedido()" type="button" class="btn btn-primary">Lançar Pedido</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick="fecharPopupAtendentePedido()">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick="fecharPopupAtendentePedido()">Fechar</button>
                       </div>
                 </div>
             </div>

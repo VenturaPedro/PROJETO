@@ -64,7 +64,7 @@ function addToTable(item) {
         id: item.id,
         quantidade: quantidadeItens
     };
-
+ 
     itemsPedido.push(selectedItem);
 }
 
@@ -120,10 +120,12 @@ async function lancarPedido() {
     const clienteElement = document.getElementById("escolhaCliente");
     const clienteId = clienteElement.options[clienteElement.selectedIndex].value
 
+    
+
     const pedido = JSON.stringify({ 
         atendenteId,
         clienteId,
-        itemsPedido,
+        itemsPedido
     });
 
     const axiosConfig = {

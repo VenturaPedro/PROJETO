@@ -154,7 +154,20 @@ app.get("/listar-pagamentos", (req, res) => {
 });
 
 app.get("/listar-pedidos", (req, res) => {
-    const sql = 'SELECT * FROM pedido';
+    const sql = `select PD.ID, 
+                    PD.Data, 
+                    CL.Nome Cliente, 
+                    ATD.Nome Atendente,  
+                    PG.Nome FormaPagamento, 
+                    PD.valor_total, 
+                    PD.status_pedido
+                from pedido PD
+                    left join clientes CL
+                        on PD.CLIENTE_ID = CL.ID
+                    left join atendente ATD
+                        on PD.Atendente_ID = ATD.ID
+                    left join pagamento PG
+                        on PD.pagamento_ID = PG.ID;`;
     db.query(sql, (err, results) => {
       if (err) {
         console.error('Erro ao recuperar dados:', err);
@@ -208,7 +221,8 @@ app.get("/api/listar-produtos", (req, res) => {
 
 app.post("/api/salvar-pedido", async (req, res) => {
     let insertedPedidoId = 0;
-    const { atendenteId, clienteId, itemsPedido } = req.body;
+    let valorTotalPedido = 0;
+    const { atendenteId, clienteId, itemsPedido, valor_total } = req.body;
 
     const insertPedido = `INSERT INTO PEDIDO 
             (Data, Atendente_ID, CLIENTE_ID, pagamento_ID, valor_total, status_pedido) 
@@ -216,7 +230,7 @@ app.post("/api/salvar-pedido", async (req, res) => {
             (NOW(), ?, ?, ?, ?, ?)`;
 
     const promiseInsertPedido = new Promise((resolve, reject) => {
-        db.query(insertPedido, [atendenteId, clienteId, "1", 10.21, "Aberto"], (err, results) => {
+        db.query(insertPedido, [atendenteId, clienteId, 1, 0.00, "Aberto"], (err, results) => {
             if (err) {
                 reject(err);
             } else {
@@ -249,7 +263,7 @@ app.post("/api/salvar-pedido", async (req, res) => {
                     const produtoPedido = itemsPedido[index];
 
                     const valorTotalProduto = isNaN(valorProduto) ? 0 : valorProduto * produtoPedido.quantidade;
-
+                    valorTotalPedido += valorTotalProduto;
                     const insertProdutosPedido = `INSERT INTO PRODUTOS_PEDIDO 
                             (QUANTIDADE, PEDIDO_ID, PRODUTO_ID, VALOR_TOTAL) 
                         VALUES 
@@ -270,6 +284,14 @@ app.post("/api/salvar-pedido", async (req, res) => {
                 return Promise.all(promiseInsertProdutos);
             })
             .then(() => {
+                const sql = 'UPDATE pedido SET valor_total = ? WHERE ID = ?;';
+                db.query(sql, [ valorTotalPedido, insertedPedidoId], (err, result) => {
+                    if (err) {
+                        console.error('Erro ao inserir dados:', err);
+                    } else {
+                        console.log('Dados inseridos com sucesso');
+                    }
+                });
                 resolve();
             })
             .catch((err) => {
@@ -336,15 +358,27 @@ app.post("/excluir-motoboy", (req, res) => {
 });
 
 app.post("/excluir-produto", (req, res) => {
-    const produtoId = req.body.produtoId; 
-    const sql = 'DELETE FROM produto WHERE id = ?';
-    db.query(sql, [produtoId], (err, result) => {
+    const produtoId = req.body.produtoId;
+
+    // Primeiro, exclua as entradas relacionadas em produtos_pedido
+    const deleteProdutosPedido = 'DELETE FROM produtos_pedido WHERE PRODUTO_ID = ?';
+
+    db.query(deleteProdutosPedido, [produtoId], (err, result) => {
         if (err) {
-            console.error('Erro ao excluir Produto:', err);
-            res.status(500).send('Erro ao excluir Produto do banco de dados');
-        } else {;
-            console.log('Produto excluído com sucesso');
-            res.status(200).send(`Produto ${produtoId} excluído com sucesso `);
+            console.error('Erro ao excluir produtos_pedido:', err);
+            res.status(500).send('Erro ao excluir produtos_pedido do banco de dados');
+        } else {
+            // Agora, exclua o produto da tabela produto
+            const deleteProduto = 'DELETE FROM produto WHERE id = ?';
+            db.query(deleteProduto, [produtoId], (err, result) => {
+                if (err) {
+                    console.error('Erro ao excluir Produto:', err);
+                    res.status(500).send('Erro ao excluir Produto do banco de dados');
+                } else {
+                    console.log('Produto excluído com sucesso');
+                    res.status(200).send(`Produto ${produtoId} excluído com sucesso `);
+                }
+            });
         }
     });
 });
