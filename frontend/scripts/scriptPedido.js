@@ -3,6 +3,7 @@ let itemsPedido = [];
 
 document.getElementById("novo-pedido").addEventListener("click", function() {
     document.getElementById("vincular-atendente").style.display = "block";
+    
     preencherAtendente();
     preencherCliente();
     preencherItens();
@@ -66,6 +67,11 @@ function addToTable(item) {
     };
  
     itemsPedido.push(selectedItem);
+}
+
+function fecharPopupPedido() {
+    document.getElementsByClassName("modal-body").style.display = "none";
+    window.location.reload();
 }
 
 async function preencherAtendente() {
@@ -137,4 +143,7 @@ async function lancarPedido() {
     console.log("pedido", pedido)
 
     await axios.post("/api/salvar-pedido", pedido, axiosConfig)
+
+    document.getElementsByClassName("modal-body").style.display = "none";
+    window.location.reload();
 }

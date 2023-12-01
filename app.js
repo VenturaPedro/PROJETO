@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
+const bcrypt = require('bcrypt');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json())
@@ -44,7 +45,7 @@ app.get("/", (req, res) => {
    
 });
 
-app.get("/LOGIN", (req, res) => {   
+app.get("/login", (req, res) => {   
     res.sendFile(__dirname + "/frontend/LOGIN.html");
 });
 
@@ -60,6 +61,50 @@ app.get("/cadastrar",(req, res) => {
   res.sendFile(__dirname + "/frontend/cadastros.html");
 });
 
+app.post("/login", async (req, res) => {
+    const username = req.body.usernameInput;
+    const password = req.body.passwordInput;
+
+    async function validateUser(username, password) {
+        const sql = 'SELECT * FROM usuarios WHERE username = ?';
+        return new Promise((resolve, reject) => {
+            db.query(sql, [username], async (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    if (results.length > 0) {
+                        const user = results[0];
+
+                        console.log('Senha informada:', password);
+                        console.log('Senha armazenada no banco de dados:', user.password);
+
+                        // Comparação direta das senhas
+                        const passwordMatch = password === user.password;
+
+                        console.log('Comparação de senha:', passwordMatch);
+
+                        resolve(passwordMatch ? user : null);
+                    } else {
+                        resolve(null);
+                    }
+                }
+            });
+        });
+    }
+
+    try {
+        const user = await validateUser(username, password);
+
+        if (user) {
+            res.redirect('/');
+        } else {
+            res.status(401).send('Nome de usuário ou senha incorretos.');
+        }
+    } catch (error) {
+        console.error('Erro ao validar usuário:', error);
+        res.status(500).send('Erro ao processar a solicitação.');
+    }
+});
 
 
 app.get("/listar-clientes", (req, res) => {

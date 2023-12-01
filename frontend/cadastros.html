@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Cadastro</title>
     <link rel="shortcut icon" type="image/ico" href="/frontend/imagem/logo.png" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+
 </head>
 <body id="painel">
 
@@ -56,7 +59,7 @@
                     <input type="text" id="nomeCliente" name="nomeCliente" required size="25"><br>
 
                     <label for="emailCliente">E-mail:</label><br>
-                    <input type="text" id="emailCliente" name="emailCliente" placeholder="email@email.com" size="25"><br>
+                    <input type="text" id="emailCliente" name="emailCliente" class="campoEmail" placeholder="email@email.com" size="25"><br>
 
                     <label for="cpfCliente">CPF:</label><br>
                     <input type="text" id="cpfCliente" name="cpfCliente" placeholder="xxx.xxx.xxx.xx"><br>
@@ -83,7 +86,7 @@
                     <input type="text" id="estadoCliente" name="estadoCliente" style="width: 100px;">
 
                     <label for="cepCliente">CEP:</label><br>
-                    <input type="text" id="cepCliente" name="cepCliente" style="width: 100px;">
+                    <input type="text" id="cepCliente" name="cepCliente"  style="width: 100px;">
                 </div>
                 <div>
                     <br>
@@ -101,7 +104,7 @@
                     <input type="text" id="nomeAtendente" name="nomeAtendente" required size="25"><br>
 
                     <label for="emailAtendente">E-mail:</label><br>
-                    <input type="text" id="emailAtendente" name="emailAtendente" placeholder="email@email.com" size="25"><br>
+                    <input type="text" id="emailAtendente" class="campoEmail" name="emailAtendente" placeholder="email@email.com" size="25"><br>
 
                     <label for="obsAtendente">Observações:</label><br>
                     <input type="text" id="obsAtendente" name="obsAtendente" style="width: 83%; height: 35px;"><br>
@@ -123,7 +126,7 @@
                     <input type="text" id="nomeMotoboy" name="nomeMotoboy" required size="25"><br>
 
                     <label for="emailMotoboy">E-mail:</label><br>
-                    <input type="text" id="emailMotoboy" name="emailMotoboy" placeholder="email@email.com" size="25"><br>
+                    <input type="text" class="campoEmail" id="emailMotoboy" name="emailMotoboy" placeholder="email@email.com" size="25"><br>
 
                     <label for="obsMotoboy">Observações:</label><br>
                     <input type="text" id="obsMotoboy" name="obsMotoboy" style="width: 83%; height: 35px;"><br>

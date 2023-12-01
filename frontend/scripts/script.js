@@ -68,7 +68,20 @@ async function preencherCategorias() {
     }
 }
 
+//MASCARAS
 
+$('#cpfCliente').inputmask('999.999.999-99');
+$('#telefoneCliente').inputmask('(99)99999-999[9]', { greedy: false });
+$('#cepCliente').inputmask('99999-999');
+
+// Máscaras para Campos do Formulário de Atendente
+$('.campoEmail').inputmask({ alias: 'email' });
+
+// Máscaras para Campos do Formulário de Motoboy
+$('#emailMotoboy').inputmask({ alias: 'email' });
+
+// Máscaras para Campos do Formulário de Produto
+$('#valorProduto').inputmask('currency', { prefix: 'R$ ' });
 
 
 // document.getElementById("btn-editarCliente").addEventListener("click", function() {
