@@ -254,6 +254,16 @@ app.get("/api/listar-clientes", (req, res) => {
     });
 });
 
+app.get("/api/listar-pagamentos", (req, res) => {
+    const sql = 'SELECT * FROM pagamento';
+    db.query(sql, (err, results) => {
+        if (err) {
+            return res.send(err)
+          }
+          return res.send({ pagamento: results })
+    });
+});
+
 app.get("/api/listar-produtos", (req, res) => {
     const sql = 'SELECT * FROM produto';
     db.query(sql, (err, results) => {
@@ -267,7 +277,7 @@ app.get("/api/listar-produtos", (req, res) => {
 app.post("/api/salvar-pedido", async (req, res) => {
     let insertedPedidoId = 0;
     let valorTotalPedido = 0;
-    const { atendenteId, clienteId, itemsPedido, valor_total } = req.body;
+    const { atendenteId, clienteId, itemsPedido, formaPagamentoId, valor_total } = req.body;
 
     const insertPedido = `INSERT INTO PEDIDO 
             (Data, Atendente_ID, CLIENTE_ID, pagamento_ID, valor_total, status_pedido) 
@@ -275,7 +285,7 @@ app.post("/api/salvar-pedido", async (req, res) => {
             (NOW(), ?, ?, ?, ?, ?)`;
 
     const promiseInsertPedido = new Promise((resolve, reject) => {
-        db.query(insertPedido, [atendenteId, clienteId, 1, 0.00, "Aberto"], (err, results) => {
+        db.query(insertPedido, [atendenteId, clienteId, formaPagamentoId, 0.00, "Aberto"], (err, results) => {
             if (err) {
                 reject(err);
             } else {

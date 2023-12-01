@@ -100,13 +100,13 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="itens-pedido">
-                            <h5>Itens do Pedido</h5>
+                        <h5>Itens do Pedido</h5>
+                        <div class="d-flex">
+                            
 
                             <nav class="navbar navbar-light bg-light m-0">
                                 <h6>Quantidade:</h6>
-                                <input class="form-control" id="quantidadeItens" type="text" placeholder="Insira a quantidade do item" aria-label="Quantidade" />
+                                <input class="form-control" id="quantidadeItens" type="text" placeholder="Insira a quantidade do item" aria-label="Quantidade"/>
                             </nav>
 
                             <nav class="navbar navbar-light bg-light m-0">
@@ -115,7 +115,8 @@
                                   <input class="form-control" id="inputBusca" type="search" oninput="buscarItens()" placeholder="Busque pelo nome do item" aria-label="Search">
                                 </form>
                             </nav>
-
+                        </div>
+                        <div class="modal-body">
                             <ul class="list-group" id="resultadoBusca"></ul>
         
                             <table class="table">
@@ -131,6 +132,12 @@
         
                                 <tbody id="itensSelecionados"></tbody>
                             </table>
+                            <div class="forma-pagamento-pedido">
+                                <h5>Forma de Pagamento</h5>
+                                <div id="form-forma-pagamento">
+                                    <select class="custom-select" id="escolhaFormaPagamento" name="escolhaFormaPagamento" required size="2"></select>
+                                </div>
+                            </div>
                         </div>
                       </div>
 

@@ -7,6 +7,7 @@ document.getElementById("novo-pedido").addEventListener("click", function() {
     preencherAtendente();
     preencherCliente();
     preencherItens();
+    preencherFormaPagamento(); 
 });
 function fecharPopupAtendentePedido() {
     document.getElementById("vincular-atendente").style.display = "none";
@@ -119,6 +120,27 @@ async function preencherItens() {
     items = getItems.data.produtos;
 }
 
+async function preencherFormaPagamento() {
+    const getPagamentos = await axios.get("/api/listar-pagamentos");
+
+    const pagamentosBanco = getPagamentos.data.pagamento;
+
+    const selectPagamento = document.getElementById("escolhaFormaPagamento") ;
+
+    for (pagamento of pagamentosBanco) {
+        let novaPagamento = new Option(pagamento.Nome, pagamento.ID);
+        selectPagamento.add(novaPagamento);
+    }
+    selectPagamento.addEventListener("change", function () {
+        
+        const pagamentoSelecionado = selectPagamento.value;
+ 
+        console.log("Pagamento selecionado:", pagamentoSelecionado);
+    });
+}
+
+
+
 async function lancarPedido() {
     const atendenteElement = document.getElementById("escolhaAtendente");
     const atendenteId = atendenteElement.options[atendenteElement.selectedIndex].value
@@ -126,11 +148,13 @@ async function lancarPedido() {
     const clienteElement = document.getElementById("escolhaCliente");
     const clienteId = clienteElement.options[clienteElement.selectedIndex].value
 
-    
+    const formaPagamentoElement = document.getElementById("escolhaFormaPagamento");
+    const formaPagamentoId = formaPagamentoElement.options[formaPagamentoElement.selectedIndex].value
 
     const pedido = JSON.stringify({ 
         atendenteId,
         clienteId,
+        formaPagamentoId,
         itemsPedido
     });
 
