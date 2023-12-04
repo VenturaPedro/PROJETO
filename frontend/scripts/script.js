@@ -68,6 +68,7 @@ async function preencherCategorias() {
     }
 }
 
+
 //MASCARAS
 
 $('#cpfCliente').inputmask('999.999.999-99');

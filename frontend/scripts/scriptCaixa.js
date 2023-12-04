@@ -13,6 +13,10 @@ window.addEventListener('load', function() {
         document.getElementById("valorAbertura").disabled = true;
         document.getElementById("abrirCaixa").disabled = true;
     }
+    if (localStorage.getItem("statusCaixa") == "fechado") {
+        
+        document.getElementById("fecharCaixa").disabled = true;
+    }
   });
 
 // Função para abrir o caixa

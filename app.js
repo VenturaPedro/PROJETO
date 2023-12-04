@@ -41,7 +41,7 @@ db.connect(err => {
 // });
 
 app.get("/", (req, res) => {
-    res.redirect("/listar-clientes");
+    res.redirect("/LOGIN.html");
    
 });
 
@@ -96,7 +96,7 @@ app.post("/login", async (req, res) => {
         const user = await validateUser(username, password);
 
         if (user) {
-            res.redirect('/');
+            res.redirect('/painel.html');
         } else {
             res.status(401).send('Nome de usuário ou senha incorretos.');
         }

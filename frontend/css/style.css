@@ -67,7 +67,7 @@
     font-size: 20px;
 }
 
-#abrirCaixa, #fecharCaixa{
+#abrirCaixa, #fecharCaixa, #sangria, #reforco{
     font-size: 15px;
     padding: 5px 20px;
     margin: 20px 0px 1px;
@@ -388,6 +388,9 @@ tr:hover {
     padding-left: 250px;
 }
 
+#painel-main-OP{
+    margin-left: 200px;
+}
 
 #painel-1 button, #painel-2 button{
     font-size: 25px;
