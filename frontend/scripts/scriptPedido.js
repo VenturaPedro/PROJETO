@@ -166,8 +166,14 @@ async function lancarPedido() {
 
     console.log("pedido", pedido)
 
-    await axios.post("/api/salvar-pedido", pedido, axiosConfig)
+    const retornoPedido = await axios.post("/api/salvar-pedido", pedido, axiosConfig)
 
+    if(formaPagamentoId == 3){
+        valorInicialCaixa = parseFloat(localStorage.getItem("valorCaixa")) + retornoPedido.data.valorTotalPedido;
+        localStorage.setItem("valorCaixa", valorInicialCaixa.toFixed(2));        
+    }
     document.getElementsByClassName("modal-body").style.display = "none";
     window.location.reload();
 }
+
+

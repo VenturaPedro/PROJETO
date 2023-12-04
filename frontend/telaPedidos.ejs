@@ -17,7 +17,7 @@
     <nav>
         <div class="menu">
             <div class="menu-item">
-                <img src="/imagem/logo-nome.png" alt="logo">
+                <img src="/imagem/logoCash.png" alt="logo">
             </div>
             <div class="menu-item">
                 <a href="/listar-clientes"><button class="btn"><i class="fas fa-home"></i><br>Dashboard</button></a>            
@@ -49,8 +49,8 @@
                     <th>Cliente</th>
                     <th>Forma de pagamento</th>
                     <th>Valor Total</th>
-                    <th>Status do pedido</th>
-                    <th colspan="2">Opções</th>
+                    
+                    <!-- <th colspan="2">Opções</th> -->
                 </tr>
                 </thead>    
                 <tbody>
@@ -66,9 +66,9 @@
                             <td><%= pedido.Cliente %></td>
                             <td><%= pedido.FormaPagamento %></td>
                             <td>R$<%= pedido.valor_total %></td>
-                            <td><%= pedido.status_pedido %></td>
-                            <td><button id="btn-editarPedido" class="btn-edit" onclick="editarPedido('<%= pedido.ID %>')"><i class="fa-solid fa-pen"></button></td>
-                            <td><button id="btn-excluirPedido" class="btn-delete" onclick="excluirPedido('<%= pedido.ID %>')"><i class="fa-solid fa-trash"></button></td>
+                            
+                            <!-- <td><button id="btn-editarPedido" class="btn-edit" onclick="editarPedido('<%= pedido.ID %>')"><i class="fa-solid fa-pen"></button></td>
+                            <td><button id="btn-excluirPedido" class="btn-delete" onclick="excluirPedido('<%= pedido.ID %>')"><i class="fa-solid fa-trash"></button></td> -->
                         </tr>
                     <% }); %>
                 </tbody>
@@ -151,5 +151,6 @@
     </div>
     <script src="scripts/scriptPedido.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+    
 </body>
 </html>

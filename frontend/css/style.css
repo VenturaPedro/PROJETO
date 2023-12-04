@@ -337,8 +337,30 @@ nav button{
     padding: 10px;
 }
 
-#tabela-atendentes, #tabela-produto, #tabela-motoboy, #tabela-membro, #tabela-categorias, #tabela-pagamentos, #tabela-pedidos{
-    width: 100%;
+#tabela-produto{
+    width: auto;
+    border-collapse: collapse;
+    margin: 15px;
+    background-color: #ccc;
+    padding: 10px;
+}
+#tabela-categorias, #tabela-pagamentos{
+    width: 450px;
+    border-collapse: collapse;
+    margin: 15px;
+    background-color: #ccc;
+    padding: 10px;
+}
+#tabela-atendentes, #tabela-motoboy, #tabela-membro{
+    width: 600px;
+    border-collapse: collapse;
+    margin: 15px;
+    background-color: #ccc;
+    padding: 10px;
+}
+
+#tabela-pedidos{
+    width: 750px;
     border-collapse: collapse;
     margin: 15px;
     background-color: #ccc;
@@ -391,4 +413,28 @@ select{
     border-radius: 5px;
     appearance: none;
     cursor: pointer;
+}
+
+/* Adicione este trecho de código ao seu arquivo CSS (por exemplo, style.css) */
+
+#sangria-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+label {
+    margin-right: 10px;
+}
+
+input {
+    margin-right: 10px;
+}
+
+button {
+    padding: 8px;
+    cursor: pointer;
+}
+
+#novo-pedido{
+    font-size: 15px;
 }

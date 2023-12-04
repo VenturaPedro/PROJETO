@@ -283,7 +283,6 @@ app.post("/api/salvar-pedido", async (req, res) => {
             (Data, Atendente_ID, CLIENTE_ID, pagamento_ID, valor_total, status_pedido) 
         VALUES 
             (NOW(), ?, ?, ?, ?, ?)`;
-
     const promiseInsertPedido = new Promise((resolve, reject) => {
         db.query(insertPedido, [atendenteId, clienteId, formaPagamentoId, 0.00, "Aberto"], (err, results) => {
             if (err) {
@@ -357,11 +356,17 @@ app.post("/api/salvar-pedido", async (req, res) => {
     Promise.all([promiseInsertPedido, promiseInsertProdutosPedido])
         .then(() => {
             console.log("insertedPedidoId", insertedPedidoId);
+            res.json({ 
+                
+                idPedido: insertedPedidoId,
+                valorTotalPedido
+                
+            })
         })
         .catch((err) => {
             console.error('Error:', err);
         });
-
+        
 });
 
 //-------------------------------------------------------------------

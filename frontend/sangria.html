@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDV - Caixa</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Sangria</title>
 </head>
-<body>
+<body id="painel">
     <nav>
         <div class="menu">
             <div class="menu-item">
@@ -29,23 +29,19 @@
                 <a href="painel.html"><button class="btn"><i class="fa-solid fa-gears"></i><br>Painel</button></a>
             </div>
         </div> 
-    </nav> 
-    <div id="caixa-container">
-        <h1>CashWave</h1>
-        <h2>Caixa</h2>
-        <p>Status do Caixa: <span id="caixaStatus">Fechado</span></p>
-        <p>Valor do Caixa: R$ <span id="valorInicial">0.00</span></p>
-        <label for="valorAbertura">Informe o valor de abertura do caixa:</label>
-        <br>
-        <input type="number" step="0.01" id="valorAbertura" required style="width: 150px; height: 25px;"><br>
-        <span>
-            <button id="abrirCaixa" onclick="abrirCaixa()">Abrir Caixa</button>
-            <button id="fecharCaixa" onclick="fecharCaixa()">Fechar Caixa</button>
-        </span>
-    </div>  
+    </nav>
+    <main id="painel-main">
+        
+        <div id="sangria-container">
+            <label for="valorSangria">Informe o valor da sangria:</label>
+            <input type="number" step="0.01" id="valorSangria" required style="width: 150px; height: 25px;">
+            <button id="sangriaButton" onclick="sangria()">Realizar Sangria</button>
+        </div>
 
-<script src="scripts/scriptCaixa.js"></script>   
-
-
+    </main>
+    <footer>
+        <!-- <h4>rodapé</h4> -->
+    </footer>
+    <script src="scripts/scriptCaixa.js"></script>
 </body>
 </html>
