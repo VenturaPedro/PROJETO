@@ -43,19 +43,17 @@ function abrirCaixa() {
 }
   
 function fecharCaixa(){
-    console.log("teste", localStorage.getItem("statusCaixa"));
-
-    // Altera o status do caixa para "aberto"
+    // Altera o status do caixa para "fechado"
     statusCaixa = "fechado";
 
     // Atualiza a interface
     document.getElementById("caixaStatus").innerHTML = "Fechado";
 
     // Captura o valor de abertura
-    valorInicialCaixa = parseFloat(document.getElementById("valorAbertura").value);
+    valorInicialCaixa = parseFloat(document.getElementById("valorAbertura"));
 
     // Atualiza o valor inicial na interface
-    document.getElementById("valorInicial").innerHTML = "R$ " + valorInicialCaixa.toFixed(2);
+    // document.getElementById("valorInicial").innerHTML = parseFloat(valorInicialCaixa.toFixed(2));
 
     // Desabilita o input de valor de abertura
     document.getElementById("valorAbertura").disabled = false;
@@ -67,7 +65,6 @@ function fecharCaixa(){
 
 // Função para realizar sangria
 function sangria() {
-    console.log("tst sangria")
   // Verifica se o valor da sangria é válido
   let valorSangria = parseFloat(document.getElementById("valorSangria").value);
   if (isNaN(valorSangria) || valorSangria < 0) {

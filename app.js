@@ -58,7 +58,7 @@ app.get("/painel",(req, res) => {
 });
 
 app.get("/cadastrar",(req, res) => {
-  res.sendFile(__dirname + "/frontend/cadastros.html");
+  res.sendFile(__dirname + "/frontend/cadastros.html");z
 });
 
 app.post("/login", async (req, res) => {
