@@ -108,7 +108,20 @@ app.post("/login", async (req, res) => {
 
 
 app.get("/listar-clientes", (req, res) => {
-    const sql = 'SELECT * FROM clientes';
+    const sql = 'SELECT * FROM clientes WHERE status = "ATIVO"';
+    db.query(sql, (err, results) => {
+      if (err) {
+        console.error('Erro ao recuperar dados:', err);
+        res.send('Erro ao recuperar dados do banco de dados');
+      } else {
+        console.log('Recuperação dos dados completa:');
+        res.render('telaPrincipal', { clientes: results });
+      }
+    });
+});
+
+app.get("/listar-clientes-inativos", (req, res) => {
+    const sql = 'SELECT * FROM clientes WHERE status = "INATIVO"';
     db.query(sql, (err, results) => {
       if (err) {
         console.error('Erro ao recuperar dados:', err);
@@ -245,7 +258,7 @@ app.get("/api/listar-atendentes", (req, res) => {
 });
 
 app.get("/api/listar-clientes", (req, res) => {
-    const sql = 'SELECT * FROM clientes';
+    const sql = 'SELECT * FROM clientes WHERE status = "ATIVO"';
     db.query(sql, (err, results) => {
         if (err) {
             return res.send(err)
@@ -377,17 +390,34 @@ app.use(express.static('frontend'))
 
 app.post("/excluir-cliente", (req, res) => {
     const clienteId = req.body.clienteId; 
-    const sql = 'DELETE FROM clientes WHERE id = ?';
+    const sql = 'UPDATE clientes SET status = "INATIVO" WHERE id = ?';
+
     db.query(sql, [clienteId], (err, result) => {
         if (err) {
-            console.error('Erro ao excluir cliente:', err);
-            res.status(500).send('Erro ao excluir cliente do banco de dados');
-        } else {;
-            console.log('Cliente excluído com sucesso');
-            res.status(200).send(`Cliente ${clienteId} excluído com sucesso `);
+            console.error('Erro ao modificar status do cliente:', err);
+            res.status(500).send('Erro ao modificar status do cliente no banco de dados');
+        } else {
+            console.log(`Status do cliente ${clienteId} modificado para INATIVO com sucesso`);
+            res.status(200).send(`Status do cliente ${clienteId} modificado para INATIVO com sucesso`);
         }
     });
 });
+
+app.post("/ativar-cliente", (req, res) => {
+    const clienteId = req.body.clienteId; 
+    const sql = 'UPDATE clientes SET status = "ATIVO" WHERE id = ?';
+
+    db.query(sql, [clienteId], (err, result) => {
+        if (err) {
+            console.error('Erro ao modificar status do cliente:', err);
+            res.status(500).send('Erro ao modificar status do cliente no banco de dados');
+        } else {
+            console.log(`Status do cliente ${clienteId} modificado para ATIVO com sucesso`);
+            res.status(200).send(`Status do cliente ${clienteId} modificado para ATIVO com sucesso`);
+        }
+    });
+});
+
 
 app.post("/excluir-atendente", (req, res) => {
     const atendenteId = req.body.atendenteId; 
@@ -614,9 +644,24 @@ app.post("/processar-cadastro-membro", (req, res) => {
         }
 });
 });
+
+app.post("/processar-cadastro-despesa", (req, res) => {  
+    const { descricaoDespesa, lancamentoDespesa, valorDespesa, vencimentoDespesa, tipoDespesa, obsDespesa} = req.body;
+    
+    const sql = 'INSERT INTO Despesa (Descricao, Lancamento, Valor, Vencimento, Tipo, Observacao) VALUES (?,?,?,?,?, ?)';
+    db.query(sql, [ descricaoDespesa, lancamentoDespesa, valorDespesa, vencimentoDespesa, tipoDespesa, obsDespesa], (err, result) => {
+        if(err){
+        console.error('Erro ao inserir dados:', err);
+        res.send('Erro ao cadastrar dados no banco de dados');
+        }else{
+        console.log('Dados inseridos com sucesso');
+        res.sendFile(__dirname + "/frontend/cadastros.html");
+        }
+});
+});
 //MENSAGEM STATUS CONEXÃO
-app.listen(8080, () => {
-  console.log("Servidor Iniciado na porta 8080: http://localhost:8080");
+app.listen(80, () => {
+  console.log("Servidor Iniciado na porta 80: http://localhost:80");
 });
 
 

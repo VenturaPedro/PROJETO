@@ -55,6 +55,14 @@ function fecharPopupPagamento() {
     window.location.reload();
 }
 
+document.getElementById("btn-cadastrarDespesa").addEventListener("click", function() {
+    document.getElementById("cadastrar-despesa").style.display = "block";
+});
+function fecharPopupDespesa() {
+    document.getElementById("cadastrar-despesa").style.display = "none";
+    window.location.reload();
+}
+
 async function preencherCategorias() {
     const getCategorias = await axios.get("/api/listar-categorias");
 

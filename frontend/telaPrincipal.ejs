@@ -48,7 +48,19 @@
             
         </div>
         <div id="tabela-clientes">
-            <h1>Lista de Clientes</h1>
+           
+            
+                <div class="flex-container">
+                    <div id="pt1">
+                        <h1>Lista de Clientes</h1>
+                    </div>
+                    <div id="pt2">
+                        <a href="/listar-clientes"><button class="btn-status">ATIVOS</button></a>
+                        <a href="/listar-clientes-inativos"><button class="btn-status">INATIVOS</button></a>
+                    </div>
+                </div>
+                
+                      
             <table>
                 <thead>
                 <tr>
@@ -83,12 +95,23 @@
                             <td><%= clientes.estado %></td>
                             <td><%= clientes.cep %></td>
                             <td><button id="btn-editarCliente" class="btn-edit" onclick="editarCliente('<%= clientes.id %>')"><i class="fa-solid fa-pen"></button></td>
-                            <td><button id="btn-excluirCliente" class="btn-delete" onclick="excluirCliente('<%= clientes.id %>')"><i class="fa-solid fa-trash"></button></td>
+                            <!-- Substitua a linha do botão de excluir pelo seguinte código -->
+                            <td>
+                                <% if (clientes.status === 'INATIVO') { %>
+                                    <button id="btn-atualizarCliente" class="btn-update" onclick="ativarCliente('<%= clientes.id %>')">
+                                        <i class="fa-solid fa-bolt"></i>
+                                    </button>
+                                <% } else { %>
+                                    <button id="btn-excluirCliente" class="btn-delete" onclick="excluirCliente('<%= clientes.id %>')">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                <% } %>
+                            </td>
+
                         
                         </tr>
                     <% }); %>
                 </tbody>
-
             </table>
         </div>
         <div id="editarCliente">
@@ -140,28 +163,65 @@
     </section>
     
     <script>
-        async function excluirCliente(clienteId) {
-            console.log(`Excluir cliente com ID ${clienteId}`);
-            const confirmacao = confirm(`Tem certeza que deseja excluir o cliente com ID ${clienteId}?`);
-            if (confirmacao) {
-                // Enviar uma solicitação ao servidor para excluir o cliente
-                await fetch('/excluir-cliente', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({clienteId}),
-                })
-                .then(response => response.text())
-                .then(data => {
-                    alert(data); // Exibir mensagem de sucesso ou tratamento de erro
-                    window.location.reload()// Recarregar a página ou atualizar a lista de clientes
-                })
-                .catch(error => {
-                    console.error('Erro ao excluir cliente:', error);
-                });
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+        const btnAtivos = document.querySelector('#pt2 .btn-listas:nth-child(1)');
+        const btnInativos = document.querySelector('#pt2 .btn-listas:nth-child(2)');
+
+        btnAtivos.addEventListener('click', function() {
+            window.location.href = '/listar-clientes';
+        });
+
+        btnInativos.addEventListener('click', function() {
+            window.location.href = '/listar-clientes-inativos';
+        });
+        });
+
+
+    async function excluirCliente(clienteId) {
+        console.log(`Inativar cliente com ID ${clienteId}`);
+        const confirmacao = confirm(`Tem certeza que deseja inativar o cliente com ID ${clienteId}?`);
+        if (confirmacao) {
+            // Enviar uma solicitação ao servidor para excluir o cliente
+            await fetch('/excluir-cliente', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({clienteId}),
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data); // Exibir mensagem de sucesso ou tratamento de erro
+                window.location.reload()// Recarregar a página ou atualizar a lista de clientes
+            })
+            .catch(error => {
+                console.error('Erro ao excluir cliente:', error);
+            });
         }
+    }
+
+    async function ativarCliente(clienteId) {
+        console.log(`Ativar cliente com ID ${clienteId}`);
+        const confirmacao = confirm(`Tem certeza que deseja ativar o cliente com ID ${clienteId}?`);
+        if (confirmacao) {
+            // Enviar uma solicitação ao servidor para excluir o cliente
+            await fetch('/ativar-cliente', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({clienteId}),
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data); // Exibir mensagem de sucesso ou tratamento de erro
+                window.location.reload()// Recarregar a página ou atualizar a lista de clientes
+            })
+            .catch(error => {
+                console.error('Erro ao ativar cliente:', error);
+            });
+        }
+    }
     </script>
     
 </body>

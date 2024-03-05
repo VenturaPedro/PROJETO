@@ -48,12 +48,13 @@
                 <button id="btn-cadastrarAtendente"><i class="fa-solid fa-people-group"></i><br>Atendente</button>
                 <button id="btn-cadastrarMotoboy"><i class="fa-solid fa-motorcycle"></i><br>Motoboy</button>
                 <button id="btn-cadastrarMembro"><i class="fa-solid fa-kitchen-set"></i><br>Membro</button> 
+                <button id="btn-cadastrarDespesa"><i class="fa-solid fa-rectangle-list"></i><br>Despesa</button> 
             </nav>
         </div>
         <div id="cadastrar-cliente">
             <span id="fecharPopupCli" onclick="fecharPopupCli()"><i class="fa-solid fa-circle-xmark"></i></span>
             <h2>Cadastro de Cliente</h2><br>
-            <form action="/processar-cadastro-cliente" method="post"><!--ALTERAR AQUI PARA PROCESSAR OS DADOS COM O BANCO-->
+            <form action="/processar-cadastro-cliente" method="post">
                 <div id="form-cliente1">
                     <label for="nomeCliente">Nome:</label><br>
                     <input type="text" id="nomeCliente" name="nomeCliente" required size="25"><br>
@@ -228,6 +229,40 @@
                 <div>
                     <br>
                     <button type="submit" id="btn-submitPagamento">Cadastrar</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="cadastrar-despesa"><!-- criar tabela banco de dados -->
+            <span id="fecharPopupDespesa" onclick="fecharPopupDespesa()"><i class="fa-solid fa-circle-xmark"></i></span>
+            <h2>Cadastro de Despesa</h2><br>
+            <form action="/processar-cadastro-despesa" method="post">
+                <div id="form-Despesa">
+                    <label for="descricaoDespesa">Descrição:</label><br>
+                    <input type="text" id="descricaoDespesa" name="descricaoDespesa" required size="25"><br>
+                    
+                    <label for="lancamentoDespesa">Data de lançamento:</label><br>
+                    <input type="date" id="lancamentoDespesa" name="lancamentoDespesa" required size="25"/><br>
+
+                    <label for="valorDespesa">Valor R$</label><br>
+                    <input type="number" id="valorDespesa" name="valorDespesa" required size="20"><br>
+
+                    <label for="vencimentoDespesa">Data de Vencimento:</label><br>
+                    <input type="date" id="vencimentoDespesa" name="vencimentoDespesa"><br>
+
+                    <label for="tipoDespesa">Tipo de despesa:</label><br>
+                    <select name="tipoDespesa" id="tipoDespesa" required>
+                        <option value="#"selected>Selecione uma opção</option>
+                        <option value="Recorrente">Recorrente</option>
+                        <option value="Unica">Unica</option>
+                    </select><br>
+                    
+                    <label for="obsDespesa">Observações:</label><br>
+                    <input type="text" id="obsDespesa" name="obsDespesa" style="width: 83%; height: 35px;"><br>
+                </div>
+                <div>
+                    <br>
+                    <button type="submit" id="btn-submitDespesa">Cadastrar</button>
                 </div>
             </form>
         </div>
