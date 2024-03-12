@@ -159,6 +159,19 @@ app.get("/listar-pagamentos", (req, res) => {
     });
 });
 
+app.get("/listar-despesas", (req, res) => {
+    const sql = 'SELECT * FROM despesa';
+    db.query(sql, (err, results) => {
+      if (err) {
+        console.error('Erro ao recuperar dados:', err);
+        res.send('Erro ao recuperar dados do banco de dados');
+      } else {
+        console.log('Recuperação dos dados completa:');
+        res.render('despesas', { despesa: results });
+      }
+    });
+});
+
 app.get("/listar-pedidos", (req, res) => {
     const sql = `select PD.ID, 
                     PD.Data, 
@@ -235,7 +248,15 @@ app.get("/api/listar-produtos", (req, res) => {
     });
 });
 
-
+app.get("/api/listar-despesas", (req, res) => {
+    const sql = 'SELECT * FROM despesa';
+    db.query(sql, (err, results) => {
+      if (err) {
+        return res.send(err)
+      }
+      return res.send({ despesa: results })
+    });
+});
 //-------------------------------------------------------------------
 app.use(express.static('frontend'))
 
@@ -508,6 +529,20 @@ app.post("/excluir-pagamento", (req, res) => {
     });
 });
 
+
+app.post("/excluir-despesa", (req, res) => {
+    const despesaId = req.body.despesaId; 
+    const sql = 'DELETE FROM despesa WHERE id = ?';
+    db.query(sql, [despesaId], (err, result) => {
+        if (err) {
+            console.error('Erro ao excluir despesa:', err);
+            res.status(500).send('Erro ao excluir despesa do banco de dados');
+        } else {;
+            console.log('Despesa excluído com sucesso');
+            res.status(200).send(`Despesa ${despesaId} excluído com sucesso `);
+        }
+    });
+});
 
 app.post("/processar-cadastro-cliente", (req, res) => {
   const { nomeCliente, emailCliente, cpfCliente, telefoneCliente, 

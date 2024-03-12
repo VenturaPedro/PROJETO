@@ -335,14 +335,18 @@ nav button{
     margin: 15px;
     background-color: #ccc;
     padding: 10px;
+    display: table-row; 
+
 }
 
-#tabela-produto{
+#tabela-produto, #tabela-despesas{
     width: auto;
     border-collapse: collapse;
     margin: 15px;
     background-color: #ccc;
     padding: 10px;
+    display: table-row; 
+
 }
 #tabela-categorias, #tabela-pagamentos{
     width: 450px;
@@ -350,6 +354,8 @@ nav button{
     margin: 15px;
     background-color: #ccc;
     padding: 10px;
+    display: table-row; 
+
 }
 #tabela-atendentes, #tabela-motoboy, #tabela-membro{
     width: 600px;
@@ -357,14 +363,16 @@ nav button{
     margin: 15px;
     background-color: #ccc;
     padding: 10px;
+    display: table-row; 
+
 }
 
 #tabela-pedidos{
-    width: 750px;
-    border-collapse: collapse;
-    margin: 15px;
+    width: 100%;
+    display: table-row; 
+    margin: 25px;
     background-color: #ccc;
-    padding: 10px;
+    padding: 20px;
 }
 
 th, td {

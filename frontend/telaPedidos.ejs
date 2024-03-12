@@ -10,7 +10,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>Dashboard</title>      
+    <title>PEDIDOS</title>      
     <link rel="shortcut icon" type="image/ico" href="/frontend/imagem/logo.ico" />
 </head>
 <body id="painel">
@@ -37,7 +37,7 @@
         </div> 
     </nav> 
     <div id="painel-principal">
-        <button id="novo-pedido" class="btn-listas">Novo pedido</button>
+        <button id="novo-pedido" class="btn-listas">Novo pedido</button><br><br>
         <div id="tabela-pedidos">
             <h1>Lista de Pedidos</h1>
             <table>
@@ -50,7 +50,7 @@
                     <th>Forma de pagamento</th>
                     <th>Valor Total</th>
                     
-                    <!-- <th colspan="2">Opções</th> -->
+                    <th colspan="2">Opções</th>
                 </tr>
                 </thead>    
                 <tbody>
@@ -67,8 +67,8 @@
                             <td><%= pedido.FormaPagamento %></td>
                             <td>R$<%= pedido.valor_total %></td>
                             
-                            <!-- <td><button id="btn-editarPedido" class="btn-edit" onclick="editarPedido('<%= pedido.ID %>')"><i class="fa-solid fa-pen"></button></td>
-                            <td><button id="btn-excluirPedido" class="btn-delete" onclick="excluirPedido('<%= pedido.ID %>')"><i class="fa-solid fa-trash"></button></td> -->
+                            <td><button id="btn-editarPedido" class="btn-edit" onclick="editarPedido('<%= pedido.ID %>')"><i class="fa-solid fa-pen"></button></td>
+                            <td><button id="btn-excluirPedido" class="btn-delete" onclick="excluirPedido('<%= pedido.ID %>')"><i class="fa-solid fa-trash"></button></td>
                         </tr>
                     <% }); %>
                 </tbody>
