@@ -25,7 +25,7 @@ const db = mysql.createConnection({
 
 //mensagem de conexão
 db.connect(err => {
-  if (err) {
+  if(err){
     console.error('Erro na conexão com o banco de dados:', err);
     return;
   }
@@ -35,14 +35,8 @@ db.connect(err => {
 
 //ROTAS DE GET
 
-// app.get("/", (req, res) => {
-//     res.sendFile(__dirname + "/frontend/LOGIN.html");;
-   
-// });
-
 app.get("/", (req, res) => {
     res.redirect("/LOGIN.html");
-   
 });
 
 app.get("/login", (req, res) => {   
@@ -60,52 +54,6 @@ app.get("/painel",(req, res) => {
 app.get("/cadastrar",(req, res) => {
   res.sendFile(__dirname + "/frontend/cadastros.html");z
 });
-
-app.post("/login", async (req, res) => {
-    const username = req.body.usernameInput;
-    const password = req.body.passwordInput;
-
-    async function validateUser(username, password) {
-        const sql = 'SELECT * FROM usuarios WHERE username = ?';
-        return new Promise((resolve, reject) => {
-            db.query(sql, [username], async (err, results) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    if (results.length > 0) {
-                        const user = results[0];
-
-                        console.log('Senha informada:', password);
-                        console.log('Senha armazenada no banco de dados:', user.password);
-
-                        // Comparação direta das senhas
-                        const passwordMatch = password === user.password;
-
-                        console.log('Comparação de senha:', passwordMatch);
-
-                        resolve(passwordMatch ? user : null);
-                    } else {
-                        resolve(null);
-                    }
-                }
-            });
-        });
-    }
-
-    try {
-        const user = await validateUser(username, password);
-
-        if (user) {
-            res.redirect('/painel.html');
-        } else {
-            res.status(401).send('Nome de usuário ou senha incorretos.');
-        }
-    } catch (error) {
-        console.error('Erro ao validar usuário:', error);
-        res.status(500).send('Erro ao processar a solicitação.');
-    }
-});
-
 
 app.get("/listar-clientes", (req, res) => {
     const sql = 'SELECT * FROM clientes WHERE status = "ATIVO"';
@@ -287,6 +235,13 @@ app.get("/api/listar-produtos", (req, res) => {
     });
 });
 
+
+//-------------------------------------------------------------------
+app.use(express.static('frontend'))
+
+
+//ROTAS POST
+
 app.post("/api/salvar-pedido", async (req, res) => {
     let insertedPedidoId = 0;
     let valorTotalPedido = 0;
@@ -382,11 +337,51 @@ app.post("/api/salvar-pedido", async (req, res) => {
         
 });
 
-//-------------------------------------------------------------------
-app.use(express.static('frontend'))
 
+app.post("/login", async (req, res) => {
+    const username = req.body.usernameInput;
+    const password = req.body.passwordInput;
 
-//ROTAS POST
+    async function validateUser(username, password) {
+        const sql = 'SELECT * FROM usuarios WHERE username = ?';
+        return new Promise((resolve, reject) => {
+            db.query(sql, [username], async (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    if (results.length > 0) {
+                        const user = results[0];
+
+                        console.log('Senha informada:', password);
+                        console.log('Senha armazenada no banco de dados:', user.password);
+
+                        // Comparação direta das senhas
+                        const passwordMatch = password === user.password;
+
+                        console.log('Comparação de senha:', passwordMatch);
+
+                        resolve(passwordMatch ? user : null);
+                    } else {
+                        resolve(null);
+                    }
+                }
+            });
+        });
+    }
+
+    try{
+        const user = await validateUser(username, password);
+
+        if(user){
+            res.redirect('/painel.html');
+        }else{
+            res.status(401).send('Nome de usuário ou senha incorretos.');
+        }
+    }catch(error){
+        console.error('Erro ao validar usuário:', error);
+        res.status(500).send('Erro ao processar a solicitação.');
+    }
+});
 
 app.post("/excluir-cliente", (req, res) => {
     const clienteId = req.body.clienteId; 
@@ -450,7 +445,6 @@ app.post("/excluir-motoboy", (req, res) => {
 app.post("/excluir-produto", (req, res) => {
     const produtoId = req.body.produtoId;
 
-    // Primeiro, exclua as entradas relacionadas em produtos_pedido
     const deleteProdutosPedido = 'DELETE FROM produtos_pedido WHERE PRODUTO_ID = ?';
 
     db.query(deleteProdutosPedido, [produtoId], (err, result) => {
@@ -458,7 +452,6 @@ app.post("/excluir-produto", (req, res) => {
             console.error('Erro ao excluir produtos_pedido:', err);
             res.status(500).send('Erro ao excluir produtos_pedido do banco de dados');
         } else {
-            // Agora, exclua o produto da tabela produto
             const deleteProduto = 'DELETE FROM produto WHERE id = ?';
             db.query(deleteProduto, [produtoId], (err, result) => {
                 if (err) {
@@ -548,8 +541,7 @@ app.post("/editar-cadastro-cliente", (req, res) => {
         res.send('Erro ao cadastrar dados no banco de dados');
       } else {
         console.log('Dados inseridos com sucesso');
-        res.sendFile(__dirname + "/frontend/cadastros.html");
-        
+        res.sendFile(__dirname + "/frontend/cadastros.html");  
       }
     });
   });
@@ -648,7 +640,7 @@ app.post("/processar-cadastro-membro", (req, res) => {
 app.post("/processar-cadastro-despesa", (req, res) => {  
     const { descricaoDespesa, lancamentoDespesa, valorDespesa, vencimentoDespesa, tipoDespesa, obsDespesa} = req.body;
     
-    const sql = 'INSERT INTO Despesa (Descricao, Lancamento, Valor, Vencimento, Tipo, Observacao) VALUES (?,?,?,?,?, ?)';
+    const sql = 'INSERT INTO Despesa(Descricao, Lancamento, Valor, Vencimento, Tipo, Observacao) VALUES (?,?,?,?,?,?)';
     db.query(sql, [ descricaoDespesa, lancamentoDespesa, valorDespesa, vencimentoDespesa, tipoDespesa, obsDespesa], (err, result) => {
         if(err){
         console.error('Erro ao inserir dados:', err);
