@@ -52,7 +52,7 @@
             <table>
                 <thead>
                 <tr>
-                    <th>ID</th>
+                    <!-- <th>ID</th> -->
                     <th>Nome</th>
                     <th>Observações</th>
                     <th colspan="2">Opções</th>
@@ -62,7 +62,7 @@
                 <tbody>
                     <% categoria.forEach(function(categoria) { %>
                         <tr>                            
-                            <td><%= categoria.ID %></td>
+                            <!-- <td><%= categoria.ID %></td> -->
                             <td><%= categoria.Nome %></td>
                             <td><%= categoria.Observacoes %></td>
                             <td><button id="btn-editarCategoria" class="btn-edit" onclick="editarCategoria('<%= categoria.ID %>')"><i class="fa-solid fa-pen"></i></button></td>
@@ -77,7 +77,7 @@
     <script>
         async function excluirCategoria(categoriaId) {
             console.log(`Excluir categoria com ID ${categoriaId}`);
-            const confirmacao = confirm(`Tem certeza que deseja excluir o categoria com ID ${categoriaId}?`);
+            const confirmacao = confirm(`Tem certeza que deseja excluir a categoria com ID ${categoriaId}?`);
             if (confirmacao) {
                 await fetch('/excluir-categoria', {
                     method: 'POST',

@@ -52,7 +52,7 @@
             <table>
                 <thead>
                 <tr>
-                    <th>ID</th>
+                    <!-- <th>ID</th> -->
                     <th>Nome</th>
                     <th>Observações</th>
                     <th colspan="2">Opções</th>
@@ -62,7 +62,7 @@
                 <tbody>
                     <% pagamento.forEach(function(pagamento) { %>
                         <tr>                            
-                            <td><%= pagamento.ID %></td>
+                            <!-- <td><%= pagamento.ID %></td> -->
                             <td><%= pagamento.Nome %></td>
                             <td><%= pagamento.Observacoes %></td>
                             <td><button id="btn-editarPagamento" class="btn-edit" onclick="editarPagamento('<%= pagamento.ID %>')"><i class="fa-solid fa-pen"></button></td>
