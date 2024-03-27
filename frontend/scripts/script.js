@@ -76,6 +76,34 @@ async function preencherCategorias() {
     }
 }
 
+//COMPARAÇÃO DE SENHA ATENDENTE
+// Código para enviar os dados do formulário e processar a resposta
+const form = document.querySelector('form');
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+
+    try {
+        const response = await fetch('/processar-cadastro-atendente', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Se a operação foi bem-sucedida, exibe uma mensagem de sucesso
+            alert(data.success);
+        } else {
+            // Se houver um erro, exibe uma mensagem de erro
+            alert(data.error);
+        }
+    } catch (error) {
+        console.error('Erro ao processar a solicitação:', error);
+        alert('Erro ao processar a solicitação. Por favor, tente novamente mais tarde.');
+    }
+});
 
 //MASCARAS
 

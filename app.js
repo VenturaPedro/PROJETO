@@ -359,29 +359,92 @@ app.post("/api/salvar-pedido", async (req, res) => {
 });
 
 
+// app.post("/login", async (req, res) => {
+//     const username = req.body.usernameInput;
+//     const password = req.body.passwordInput;
+
+//     async function validateUser(username, password) {
+//         const sql = 'SELECT * FROM usuarios WHERE username = ?';
+//         return new Promise((resolve, reject) => {
+//             db.query(sql, [username], async (err, results) => {
+//                 if (err) {
+//                     reject(err);
+//                 } else {
+//                     if (results.length > 0) {
+//                         const user = results[0];
+
+//                         console.log('Senha informada:', password);
+//                         console.log('Senha armazenada no banco de dados:', user.password);
+
+//                         // Comparação direta das senhas
+//                         const passwordMatch = password === user.password;
+
+//                         console.log('Comparação de senha:', passwordMatch);
+
+//                         resolve(passwordMatch ? user : null);
+//                     } else {
+//                         resolve(null);
+//                     }
+//                 }
+//             });
+//         });
+//     }
+
+//     try{
+//         const user = await validateUser(username, password);
+
+//         if(user){
+//             res.redirect('/painel.html');
+//         }else{
+//             res.status(401).send('Nome de usuário ou senha incorretos.');
+//         }
+//     }catch(error){
+//         console.error('Erro ao validar usuário:', error);
+//         res.status(500).send('Erro ao processar a solicitação.');
+//     }
+// });
+
 app.post("/login", async (req, res) => {
     const username = req.body.usernameInput;
     const password = req.body.passwordInput;
 
     async function validateUser(username, password) {
-        const sql = 'SELECT * FROM usuarios WHERE username = ?';
+        // Verifica na tabela admin
+        const sqlAdmin = 'SELECT * FROM adm WHERE Nome = ?';
+        const admin = await queryDatabase(sqlAdmin, username, password);
+
+        // Verifica na tabela Atendente
+        const sqlAtendente = 'SELECT * FROM Atendente WHERE Nome = ?';
+        const atendente = await queryDatabase(sqlAtendente, username, password);
+
+        // Verifica na tabela Motoboy
+        const sqlMotoboy = 'SELECT * FROM Motoboy WHERE Nome = ?';
+        const motoboy = await queryDatabase(sqlMotoboy, username, password);
+
+        // Verifica na tabela Membro
+        const sqlMembro = 'SELECT * FROM Membro WHERE Nome = ?';
+        const membro = await queryDatabase(sqlMembro, username, password);
+
+        // Retorna o usuário se encontrado em uma das tabelas
+        return admin || atendente || motoboy || membro;
+    }
+
+    async function queryDatabase(sql, username, password) {
         return new Promise((resolve, reject) => {
-            db.query(sql, [username], async (err, results) => {
+            db.query(sql, [username], (err, results) => {
                 if (err) {
                     reject(err);
                 } else {
                     if (results.length > 0) {
                         const user = results[0];
-
-                        console.log('Senha informada:', password);
-                        console.log('Senha armazenada no banco de dados:', user.password);
-
-                        // Comparação direta das senhas
-                        const passwordMatch = password === user.password;
-
-                        console.log('Comparação de senha:', passwordMatch);
-
-                        resolve(passwordMatch ? user : null);
+                        // Verifica se a senha está correta
+                        const userPassword = user && user.Senha ? user.Senha.toLowerCase() : null;
+                        const passwordMatch = userPassword === password.toLowerCase();
+                        if (passwordMatch) {
+                            resolve(user);
+                        } else {
+                            resolve(null);
+                        }
                     } else {
                         resolve(null);
                     }
@@ -389,20 +452,23 @@ app.post("/login", async (req, res) => {
             });
         });
     }
+    
 
-    try{
+    try {
         const user = await validateUser(username, password);
 
-        if(user){
+        if (user) {
             res.redirect('/painel.html');
-        }else{
+        } else {
             res.status(401).send('Nome de usuário ou senha incorretos.');
         }
-    }catch(error){
+    } catch (error) {
         console.error('Erro ao validar usuário:', error);
         res.status(500).send('Erro ao processar a solicitação.');
     }
 });
+
+
 
 app.post("/excluir-cliente", (req, res) => {
     const clienteId = req.body.clienteId; 
@@ -598,8 +664,12 @@ app.post("/editar-cadastro-cliente", (req, res) => {
 // });
 
 app.post("/processar-cadastro-atendente", (req, res) => {
-    const { nomeAtendente, emailAtendente, senhaAtendente, obsAtendente } = req.body;
+    const { nomeAtendente, emailAtendente, senhaAtendente, confirmarSenhaAtendente, obsAtendente } = req.body;
     const papelAtendente = 2; // Papel fixo para atendente
+
+    if (senhaAtendente !== confirmarSenhaAtendente) {
+        return res.status(400).json({ error: 'As senhas não coincidem.' });
+    } 
 
     const sql = 'INSERT INTO Atendente (Nome, Email, Senha, Observacoes, Role) VALUES (?, ?, ?, ?, ?)';
     db.query(sql, [nomeAtendente, emailAtendente, senhaAtendente, obsAtendente, papelAtendente], (err, result) => {
