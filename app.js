@@ -579,38 +579,104 @@ app.post("/editar-cadastro-cliente", (req, res) => {
         res.sendFile(__dirname + "/frontend/cadastros.html");  
       }
     });
-  });
+});
 
+
+// app.post("/processar-cadastro-atendente", (req, res) => {
+// const { nomeAtendente, emailAtendente, obsAtendente} = req.body;
+
+// const sql = 'INSERT INTO Atendente (Nome, Email, Observacoes) VALUES (?, ?, ?)';
+// db.query(sql, [nomeAtendente, emailAtendente, obsAtendente], (err, result) => {
+//     if(err){
+//     console.error('Erro ao inserir dados:', err);
+//     res.send('Erro ao cadastrar dados no banco de dados');
+//     }else{
+//     console.log('Dados inseridos com sucesso');
+//     res.sendFile(__dirname + "/frontend/cadastros.html");
+//     }
+// });
+// });
 
 app.post("/processar-cadastro-atendente", (req, res) => {
-const { nomeAtendente, emailAtendente, obsAtendente} = req.body;
+    const { nomeAtendente, emailAtendente, senhaAtendente, obsAtendente } = req.body;
+    const papelAtendente = 2; // Papel fixo para atendente
 
-const sql = 'INSERT INTO Atendente (Nome, Email, Observacoes) VALUES (?, ?, ?)';
-db.query(sql, [ nomeAtendente, emailAtendente, obsAtendente], (err, result) => {
-    if(err){
-    console.error('Erro ao inserir dados:', err);
-    res.send('Erro ao cadastrar dados no banco de dados');
-    }else{
-    console.log('Dados inseridos com sucesso');
-    res.sendFile(__dirname + "/frontend/cadastros.html");
-    }
+    const sql = 'INSERT INTO Atendente (Nome, Email, Senha, Observacoes, Role) VALUES (?, ?, ?, ?, ?)';
+    db.query(sql, [nomeAtendente, emailAtendente, senhaAtendente, obsAtendente, papelAtendente], (err, result) => {
+        if (err) {
+            console.error('Erro ao inserir dados:', err);
+            res.send('Erro ao cadastrar dados no banco de dados');
+        } else {
+            console.log('Dados inseridos com sucesso');
+            res.sendFile(__dirname + "/frontend/cadastros.html");
+        }
+    });
 });
-});
+
+// app.post("/processar-cadastro-motoboy", (req, res) => {
+//     const { nomeMotoboy, emailMotoboy, obsMotoboy} = req.body;
+    
+//     const sql = 'INSERT INTO Motoboy (Nome, Email, Observacoes) VALUES (?, ?, ?)';
+//     db.query(sql, [ nomeMotoboy, emailMotoboy, obsMotoboy], (err, result) => {
+//         if(err){
+//         console.error('Erro ao inserir dados:', err);
+//         res.send('Erro ao cadastrar dados no banco de dados');
+//         }else{
+//         console.log('Dados inseridos com sucesso');
+//         res.sendFile(__dirname + "/frontend/cadastros.html");
+//         }
+// });
+// });
 
 app.post("/processar-cadastro-motoboy", (req, res) => {
-    const { nomeMotoboy, emailMotoboy, obsMotoboy} = req.body;
-    
-    const sql = 'INSERT INTO Motoboy (Nome, Email, Observacoes) VALUES (?, ?, ?)';
-    db.query(sql, [ nomeMotoboy, emailMotoboy, obsMotoboy], (err, result) => {
-        if(err){
-        console.error('Erro ao inserir dados:', err);
-        res.send('Erro ao cadastrar dados no banco de dados');
-        }else{
-        console.log('Dados inseridos com sucesso');
-        res.sendFile(__dirname + "/frontend/cadastros.html");
+    const { nomeMotoboy, emailMotoboy, senhaMotoboy, obsMotoboy } = req.body;
+    const papelMotoboy = 3; // Papel fixo para motoboy
+
+    const sql = 'INSERT INTO Motoboy (Nome, Email, Senha, Observacoes, Role) VALUES (?, ?, ?, ?, ?)';
+    db.query(sql, [nomeMotoboy, emailMotoboy, senhaMotoboy, obsMotoboy, papelMotoboy], (err, result) => {
+        if (err) {
+            console.error('Erro ao inserir dados:', err);
+            res.send('Erro ao cadastrar dados no banco de dados');
+        } else {
+            console.log('Dados inseridos com sucesso');
+            res.sendFile(__dirname + "/frontend/cadastros.html");
         }
+    });
 });
+
+
+// app.post("/processar-cadastro-membro", (req, res) => {  
+//     const { nomeMembro, emailMembro, obsMembro} = req.body;
+    
+//     const sql = 'INSERT INTO Membro (Nome, Email, Observacoes) VALUES (?, ?, ?)';
+//     db.query(sql, [ nomeMembro, emailMembro, obsMembro], (err, result) => {
+//         if(err){
+//         console.error('Erro ao inserir dados:', err);
+//         res.send('Erro ao cadastrar dados no banco de dados');
+//         }else{
+//         console.log('Dados inseridos com sucesso');
+//         res.sendFile(__dirname + "/frontend/cadastros.html");
+//         }
+// });
+// });
+
+app.post("/processar-cadastro-membro", (req, res) => {
+    const { nomeMembro, emailMembro, senhaMembro, obsMembro } = req.body;
+    const papelMembro = 4; // Papel fixo para membro
+
+    const sql = 'INSERT INTO Membro (Nome, Email, Senha, Observacoes, Role) VALUES (?, ?, ?, ?, ?)';
+    db.query(sql, [nomeMembro, emailMembro, senhaMembro, obsMembro, papelMembro], (err, result) => {
+        if (err) {
+            console.error('Erro ao inserir dados:', err);
+            res.send('Erro ao cadastrar dados no banco de dados');
+        } else {
+            console.log('Dados inseridos com sucesso');
+            res.sendFile(__dirname + "/frontend/cadastros.html");
+        }
+    });
 });
+
+
 app.post("/processar-cadastro-categoria", (req, res) => {  
     const { nomeCategoria, obsCategoria} = req.body;
     
@@ -641,27 +707,11 @@ app.post("/processar-cadastro-pagamento", (req, res) => {
 });
 });
 
-
 app.post("/processar-cadastro-produto", (req, res) => {
     const { nomeProduto, valorProduto, descricaoProduto, estoqueProduto, categoriaProduto, fornecedorProduto} = req.body;
     
     const sql = 'INSERT INTO produto (nome, valor, descricao, estoque, categoria, fornecedor) VALUES (?, ?, ?, ?, ?, ?)';
     db.query(sql, [ nomeProduto, valorProduto, descricaoProduto, estoqueProduto, categoriaProduto, fornecedorProduto], (err, result) => {
-        if(err){
-        console.error('Erro ao inserir dados:', err);
-        res.send('Erro ao cadastrar dados no banco de dados');
-        }else{
-        console.log('Dados inseridos com sucesso');
-        res.sendFile(__dirname + "/frontend/cadastros.html");
-        }
-});
-});
-
-app.post("/processar-cadastro-membro", (req, res) => {  
-    const { nomeMembro, emailMembro, obsMembro} = req.body;
-    
-    const sql = 'INSERT INTO Membro (Nome, Email, Observacoes) VALUES (?, ?, ?)';
-    db.query(sql, [ nomeMembro, emailMembro, obsMembro], (err, result) => {
         if(err){
         console.error('Erro ao inserir dados:', err);
         res.send('Erro ao cadastrar dados no banco de dados');
@@ -686,10 +736,9 @@ app.post("/processar-cadastro-despesa", (req, res) => {
         }
 });
 });
+
 //MENSAGEM STATUS CONEXÃO
 app.listen(80, () => {
   console.log("Servidor Iniciado na porta 80: http://localhost:80");
 });
-
-
 // ------------------------------------------------------------------

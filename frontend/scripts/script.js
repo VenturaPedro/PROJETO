@@ -89,6 +89,9 @@ $('.campoEmail').inputmask({ alias: 'email' });
 // Máscaras para Campos do Formulário de Motoboy
 $('#emailMotoboy').inputmask({ alias: 'email' });
 
+// Máscaras para Campos do Formulário de Membro
+$('#emailMembro').inputmask({ alias: 'email' });
+
 // Máscaras para Campos do Formulário de Produto
 $('#valorProduto').inputmask('currency', { prefix: 'R$ ' });
 
