@@ -1,7 +1,7 @@
 document.getElementById("btn-cadastrarCliente").addEventListener("click", function() {
     document.getElementById("cadastrar-cliente").style.display = "block";
 });
-function fecharPopupCli() {
+function fecharPopupCli(){
     document.getElementById("cadastrar-cliente").style.display = "none";
     window.location.reload();
 }
@@ -9,7 +9,7 @@ function fecharPopupCli() {
 document.getElementById("btn-cadastrarAtendente").addEventListener("click", function() {
     document.getElementById("cadastrar-atendente").style.display = "block";
 });
-function fecharPopupAtd() {
+function fecharPopupAtd(){
     document.getElementById("cadastrar-atendente").style.display = "none";
     window.location.reload();
 }
@@ -17,16 +17,17 @@ function fecharPopupAtd() {
 document.getElementById("btn-cadastrarMotoboy").addEventListener("click", function() {
     document.getElementById("cadastrar-motoboy").style.display = "block";
 });
-function fecharPopupBoy() {
+function fecharPopupBoy(){
     document.getElementById("cadastrar-motoboy").style.display = "none";
     window.location.reload();
 }
 
 document.getElementById("btn-cadastrarProduto").addEventListener("click", function() {
     document.getElementById("cadastrar-produto").style.display = "block";
-    preencherCategorias();//preenche a opções de categoria dentro do formulário de produto e o vincula
+    preencherCategorias();
 });
-function fecharPopupProduto() {
+
+function fecharPopupProduto(){
     document.getElementById("cadastrar-produto").style.display = "none";
     window.location.reload();
 }
@@ -34,7 +35,7 @@ function fecharPopupProduto() {
 document.getElementById("btn-cadastrarMembro").addEventListener("click", function() {
     document.getElementById("cadastrar-membro").style.display = "block";
 });
-function fecharPopupMembro() {
+function fecharPopupMembro(){
     document.getElementById("cadastrar-membro").style.display = "none";
     window.location.reload();
 }
@@ -42,7 +43,7 @@ function fecharPopupMembro() {
 document.getElementById("btn-cadastrarCategoria").addEventListener("click", function() {
     document.getElementById("cadastrar-categoria").style.display = "block";
 });
-function fecharPopupCategoria() {
+function fecharPopupCategoria(){
     document.getElementById("cadastrar-categoria").style.display = "none";
     window.location.reload();
 }
@@ -50,7 +51,7 @@ function fecharPopupCategoria() {
 document.getElementById("btn-cadastrarPagamento").addEventListener("click", function() {
     document.getElementById("cadastrar-pagamento").style.display = "block";
 });
-function fecharPopupPagamento() {
+function fecharPopupPagamento(){
     document.getElementById("cadastrar-pagamento").style.display = "none";
     window.location.reload();
 }
@@ -58,19 +59,19 @@ function fecharPopupPagamento() {
 document.getElementById("btn-cadastrarDespesa").addEventListener("click", function() {
     document.getElementById("cadastrar-despesa").style.display = "block";
 });
-function fecharPopupDespesa() {
+function fecharPopupDespesa(){
     document.getElementById("cadastrar-despesa").style.display = "none";
     window.location.reload();
 }
 
-async function preencherCategorias() {
+async function preencherCategorias(){
     const getCategorias = await axios.get("/api/listar-categorias");
 
     const categoriasBanco = getCategorias.data.categorias;
 
     const selectCategoria = document.getElementById("categoriaProduto");
 
-    for (categoria of categoriasBanco) {
+    for(categoria of categoriasBanco){
         let novaCategoria = new Option(categoria.Nome);
         selectCategoria.add(novaCategoria);
     }
@@ -84,22 +85,22 @@ form.addEventListener('submit', async (event) => {
 
     const formData = new FormData(form);
 
-    try {
-        const response = await fetch('/processar-cadastro-atendente', {
+    try{
+        const response = await fetch('/processar-cadastro-atendente',{
             method: 'POST',
             body: formData
         });
 
         const data = await response.json();
 
-        if (response.ok) {
+        if(response.ok){
             // Se a operação foi bem-sucedida, exibe uma mensagem de sucesso
             alert(data.success);
-        } else {
-            // Se houver um erro, exibe uma mensagem de erro
+        }else{
+            
             alert(data.error);
         }
-    } catch (error) {
+    }catch(error){
         console.error('Erro ao processar a solicitação:', error);
         alert('Erro ao processar a solicitação. Por favor, tente novamente mais tarde.');
     }
