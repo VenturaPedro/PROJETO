@@ -3,25 +3,21 @@ const app = express();
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json())
-
 const path = require('path');
 
 // Configuração do mecanismo de visualização EJS
 app.set('views', path.join(__dirname, 'frontend'));
 app.set('view engine', 'ejs');
 
-
-//conexão com o banco
+// Conexão com o banco
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '123456',
   database: 'projeto'
 });
-
 
 //mensagem de conexão
 db.connect(err => {
@@ -31,7 +27,6 @@ db.connect(err => {
   }
   console.log('Conexão com o banco de dados estabelecida');
 });
-
 
 //ROTAS DE GET
 
@@ -52,123 +47,123 @@ app.get("/painel",(req, res) => {
 });
 
 app.get("/cadastrar",(req, res) => {
-  res.sendFile(__dirname + "/frontend/cadastros.html");z
+    res.sendFile(__dirname + "/frontend/cadastros.html");z
 });
 
 app.get("/listar-clientes", (req, res) => {
     const sql = 'SELECT * FROM clientes WHERE status = "ATIVO"';
     db.query(sql, (err, results) => {
-      if (err) {
-        console.error('Erro ao recuperar dados:', err);
-        res.send('Erro ao recuperar dados do banco de dados');
-      } else {
-        console.log('Recuperação dos dados completa:');
-        res.render('telaPrincipal', { clientes: results });
-      }
+        if(err){
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        }else{
+            console.log('Recuperação dos dados completa:');
+            res.render('telaPrincipal', { clientes: results });
+        }
     });
 });
 
 app.get("/listar-clientes-inativos", (req, res) => {
     const sql = 'SELECT * FROM clientes WHERE status = "INATIVO"';
     db.query(sql, (err, results) => {
-      if (err) {
-        console.error('Erro ao recuperar dados:', err);
-        res.send('Erro ao recuperar dados do banco de dados');
-      } else {
-        console.log('Recuperação dos dados completa:');
-        res.render('telaPrincipal', { clientes: results });
-      }
+        if(err){
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        }else{
+            console.log('Recuperação dos dados completa:');
+            res.render('telaPrincipal', { clientes: results });
+        }
     });
 });
 
 app.get("/listar-atendentes", (req, res) => {
     const sql = 'SELECT * FROM Atendente';
     db.query(sql, (err, results) => {
-      if (err) {
-        console.error('Erro ao recuperar dados:', err);
-        res.send('Erro ao recuperar dados do banco de dados');
-      } else {
-        console.log('Recuperação dos dados completa:');
-        res.render('atendentes', { Atendente: results });
-      }
+        if(err){
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        }else{
+            console.log('Recuperação dos dados completa:');
+            res.render('atendentes', { Atendente: results });
+        }
     });
 });
 
 app.get("/listar-motoboy", (req, res) => {
     const sql = 'SELECT * FROM Motoboy';
     db.query(sql, (err, results) => {
-      if (err) {
-        console.error('Erro ao recuperar dados:', err);
-        res.send('Erro ao recuperar dados do banco de dados');
-      } else {
-        console.log('Recuperação dos dados completa:');
-        res.render('motoboys', { Motoboy: results });
-      }
+        if(err){
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        }else{
+            console.log('Recuperação dos dados completa:');
+            res.render('motoboys', { Motoboy: results });
+        }
     });
 });
 
 app.get("/listar-produtos", (req, res) => {
     const sql = 'SELECT * FROM produto';
     db.query(sql, (err, results) => {
-      if (err) {
-        console.error('Erro ao recuperar dados:', err);
-        res.send('Erro ao recuperar dados do banco de dados');
-      } else {
-        console.log('Recuperação dos dados completa:');
-        res.render('produtos', { produto: results });
-      }
+        if(err){
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        }else{
+            console.log('Recuperação dos dados completa:');
+            res.render('produtos', { produto: results });
+        }
     });
 });
 
 app.get("/listar-membros", (req, res) => {
     const sql = 'SELECT * FROM Membro';
     db.query(sql, (err, results) => {
-      if (err) {
-        console.error('Erro ao recuperar dados:', err);
-        res.send('Erro ao recuperar dados do banco de dados');
-      } else {
-        console.log('Recuperação dos dados completa:');
-        res.render('membros', { Membro: results });
-      }
+        if(err){
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        }else{
+            console.log('Recuperação dos dados completa:');
+            res.render('membros', { Membro: results });
+        }
     });
 });
 
 app.get("/listar-categorias", (req, res) => {
     const sql = 'SELECT * FROM categoria';
     db.query(sql, (err, results) => {
-      if (err) {
-        console.error('Erro ao recuperar dados:', err);
-        res.send('Erro ao recuperar dados do banco de dados');
-      } else {
-        console.log('Recuperação dos dados completa:');
-        res.render('categorias', { categoria: results });
-      }
+        if(err){
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        }else{
+            console.log('Recuperação dos dados completa:');
+            res.render('categorias', { categoria: results });
+        }
     });
 });
 
 app.get("/listar-pagamentos", (req, res) => {
     const sql = 'SELECT * FROM pagamento';
     db.query(sql, (err, results) => {
-      if (err) {
-        console.error('Erro ao recuperar dados:', err);
-        res.send('Erro ao recuperar dados do banco de dados');
-      } else {
-        console.log('Recuperação dos dados completa:');
-        res.render('pagamentos', { pagamento: results });
-      }
+        if(err){
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        }else{
+            console.log('Recuperação dos dados completa:');
+            res.render('pagamentos', { pagamento: results });
+        }
     });
 });
 
 app.get("/listar-despesas", (req, res) => {
     const sql = 'SELECT * FROM despesa';
     db.query(sql, (err, results) => {
-      if (err) {
-        console.error('Erro ao recuperar dados:', err);
-        res.send('Erro ao recuperar dados do banco de dados');
-      } else {
-        console.log('Recuperação dos dados completa:');
-        res.render('despesas', { despesa: results });
-      }
+        if(err){
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        }else{
+            console.log('Recuperação dos dados completa:');
+            res.render('despesas', { despesa: results });
+        }
     });
 });
 
@@ -188,33 +183,33 @@ app.get("/listar-pedidos", (req, res) => {
                     left join pagamento PG
                         on PD.pagamento_ID = PG.ID;`;
     db.query(sql, (err, results) => {
-      if (err) {
-        console.error('Erro ao recuperar dados:', err);
-        res.send('Erro ao recuperar dados do banco de dados');
-      } else {
-        console.log('Recuperação dos dados completa:');
-        res.render('telaPedidos', { pedidos: results });
-      }
+        if(err){
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        }else{
+            console.log('Recuperação dos dados completa:');
+            res.render('telaPedidos', { pedidos: results });
+        }
     });
 });
   
 app.get("/api/listar-categorias", (req, res) => {
     const sql = 'SELECT * FROM categoria';
     db.query(sql, (err, results) => {
-      if (err) {
-        return res.send(err)
-      }
-      return res.send({ categorias: results })
+        if(err){
+            return res.send(err)
+        }
+        return res.send({ categorias: results })
     });
 });
 
 app.get("/api/listar-atendentes", (req, res) => {
     const sql = 'SELECT * FROM Atendente';
     db.query(sql, (err, results) => {
-      if(err){
-        return res.send(err)
-      }
-      return res.send({ Atendentes: results })
+        if(err){
+            return res.send(err)
+        }
+        return res.send({ Atendentes: results })
     });
 });
 
@@ -223,7 +218,7 @@ app.get("/api/listar-clientes", (req, res) => {
     db.query(sql, (err, results) => {
         if(err){
             return res.send(err)
-          }
+        }
           return res.send({ clientes: results })
     });
 });
@@ -233,7 +228,7 @@ app.get("/api/listar-pagamentos", (req, res) => {
     db.query(sql, (err, results) => {
         if(err){
             return res.send(err)
-          }
+        }
           return res.send({ pagamento: results })
     });
 });
@@ -243,7 +238,7 @@ app.get("/api/listar-produtos", (req, res) => {
     db.query(sql, (err, results) => {
         if(err){
             return res.send(err)
-          }
+        }
           return res.send({ produtos: results })
     });
 });
@@ -251,10 +246,10 @@ app.get("/api/listar-produtos", (req, res) => {
 app.get("/api/listar-despesas", (req, res) => {
     const sql = 'SELECT * FROM despesa';
     db.query(sql, (err, results) => {
-      if(err){
-        return res.send(err)
-      }
-      return res.send({ despesa: results })
+        if(err){
+            return res.send(err)
+        }
+        return res.send({ despesa: results })
     });
 });
 //-------------------------------------------------------------------
@@ -304,7 +299,6 @@ app.post("/api/salvar-pedido", async (req, res) => {
             .then((valoresProdutos) => {
                 const promiseInsertProdutos = valoresProdutos.map((valorProduto, index) => {
                     const produtoPedido = itemsPedido[index];
-
                     const valorTotalProduto = isNaN(valorProduto) ? 0 : valorProduto * produtoPedido.quantidade;
                     valorTotalPedido += valorTotalProduto;
                     const insertProdutosPedido = `INSERT INTO PRODUTOS_PEDIDO 
@@ -323,7 +317,6 @@ app.post("/api/salvar-pedido", async (req, res) => {
                         });
                     });
                 });
-
                 return Promise.all(promiseInsertProdutos);
             })
             .then(() => {
@@ -346,10 +339,8 @@ app.post("/api/salvar-pedido", async (req, res) => {
         .then(() => {
             console.log("insertedPedidoId", insertedPedidoId);
             res.json({ 
-                
                 idPedido: insertedPedidoId,
                 valorTotalPedido
-                
             })
         })
         .catch((err) => {
@@ -452,11 +443,8 @@ app.post("/login", async (req, res) => {
             });
         });
     }
-    
-
     try{
         const user = await validateUser(username, password);
-
         if(user){
             res.redirect('/painel.html');
         }else{
@@ -545,7 +533,7 @@ app.post("/excluir-produto", (req, res) => {
                     console.error('Erro ao excluir Produto:', err);
                     res.status(500).send('Erro ao excluir Produto do banco de dados');
                 }else{
-                    console.log('Produto excluído com sucesso');
+                    console.log('Produto excluido com sucesso');
                     res.status(200).send(`Produto ${produtoId} excluído com sucesso `);
                 }
             });

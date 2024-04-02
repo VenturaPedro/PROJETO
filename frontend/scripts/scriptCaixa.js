@@ -15,7 +15,7 @@ window.addEventListener('load', function(){
         
         document.getElementById("fecharCaixa").disabled = true;
     }
-  });
+});
 
 // Função para abrir o caixa
 function abrirCaixa(){
@@ -55,39 +55,39 @@ function fecharCaixa(){
 
 function sangria(){
 
-  let valorSangria = parseFloat(document.getElementById("valorSangria").value);
-  if(isNaN(valorSangria) || valorSangria < 0){
-    alert("O valor da sangria deve ser um número válido e maior ou igual a 0.");
-    return;
-  }
+    let valorSangria = parseFloat(document.getElementById("valorSangria").value);
+    if(isNaN(valorSangria) || valorSangria < 0){
+        alert("O valor da sangria deve ser um número válido e maior ou igual a 0.");
+        return;
+    }
 
-  // Atualiza o valor do caixa
-  valorInicialCaixa = parseFloat(localStorage.getItem("valorCaixa")) - valorSangria;
+    // Atualiza o valor do caixa
+    valorInicialCaixa = parseFloat(localStorage.getItem("valorCaixa")) - valorSangria;
 
-  // Atualiza a interface
-  localStorage.setItem("valorCaixa", valorInicialCaixa.toFixed(2));
+    // Atualiza a interface
+    localStorage.setItem("valorCaixa", valorInicialCaixa.toFixed(2));
 }
 
 // Função para realizar reforço
 function reforco(){
-  // Verifica se o valor do reforço é válido
-  let valorReforco = parseFloat(document.getElementById("valorReforco").value);
-  if(isNaN(valorReforco) || valorReforco < 0){
-    alert("O valor do reforço deve ser um número válido e maior ou igual a 0.");
-    return;
-  }
+    // Verifica se o valor do reforço é válido
+    let valorReforco = parseFloat(document.getElementById("valorReforco").value);
+    if(isNaN(valorReforco) || valorReforco < 0){
+        alert("O valor do reforço deve ser um número válido e maior ou igual a 0.");
+        return;
+    }
 
-  valorInicialCaixa = parseFloat(localStorage.getItem("valorCaixa")) + valorReforco;
+    valorInicialCaixa = parseFloat(localStorage.getItem("valorCaixa")) + valorReforco;
 
-  localStorage.setItem("valorCaixa", valorInicialCaixa.toFixed(2));
+    localStorage.setItem("valorCaixa", valorInicialCaixa.toFixed(2));
 }
 
 function carregarValorInicialCaixa(){
-  valorInicialCaixa = parseFloat(document.cookie.split("=")[1]);
+    valorInicialCaixa = parseFloat(document.cookie.split("=")[1]);
 
-  if(valorInicialCaixa){
-    document.getElementById("valorInicial").innerHTML = "R$ " + valorInicialCaixa.toFixed(2);
-  }
+    if(valorInicialCaixa){
+        document.getElementById("valorInicial").innerHTML = "R$ " + valorInicialCaixa.toFixed(2);
+    }
 }
 
 carregarValorInicialCaixa();

@@ -1,4 +1,4 @@
-document.getElementById("btn-cadastrarCliente").addEventListener("click", function() {
+document.getElementById("btn-cadastrarCliente").addEventListener("click", function(){
     document.getElementById("cadastrar-cliente").style.display = "block";
 });
 function fecharPopupCli(){
@@ -6,7 +6,7 @@ function fecharPopupCli(){
     window.location.reload();
 }
 
-document.getElementById("btn-cadastrarAtendente").addEventListener("click", function() {
+document.getElementById("btn-cadastrarAtendente").addEventListener("click", function(){
     document.getElementById("cadastrar-atendente").style.display = "block";
 });
 function fecharPopupAtd(){
@@ -14,7 +14,7 @@ function fecharPopupAtd(){
     window.location.reload();
 }
 
-document.getElementById("btn-cadastrarMotoboy").addEventListener("click", function() {
+document.getElementById("btn-cadastrarMotoboy").addEventListener("click", function(){
     document.getElementById("cadastrar-motoboy").style.display = "block";
 });
 function fecharPopupBoy(){
@@ -22,17 +22,16 @@ function fecharPopupBoy(){
     window.location.reload();
 }
 
-document.getElementById("btn-cadastrarProduto").addEventListener("click", function() {
+document.getElementById("btn-cadastrarProduto").addEventListener("click", function(){
     document.getElementById("cadastrar-produto").style.display = "block";
     preencherCategorias();
 });
-
 function fecharPopupProduto(){
     document.getElementById("cadastrar-produto").style.display = "none";
     window.location.reload();
 }
 
-document.getElementById("btn-cadastrarMembro").addEventListener("click", function() {
+document.getElementById("btn-cadastrarMembro").addEventListener("click", function(){
     document.getElementById("cadastrar-membro").style.display = "block";
 });
 function fecharPopupMembro(){
@@ -40,7 +39,7 @@ function fecharPopupMembro(){
     window.location.reload();
 }
 
-document.getElementById("btn-cadastrarCategoria").addEventListener("click", function() {
+document.getElementById("btn-cadastrarCategoria").addEventListener("click", function(){
     document.getElementById("cadastrar-categoria").style.display = "block";
 });
 function fecharPopupCategoria(){
@@ -48,7 +47,7 @@ function fecharPopupCategoria(){
     window.location.reload();
 }
 
-document.getElementById("btn-cadastrarPagamento").addEventListener("click", function() {
+document.getElementById("btn-cadastrarPagamento").addEventListener("click", function(){
     document.getElementById("cadastrar-pagamento").style.display = "block";
 });
 function fecharPopupPagamento(){
@@ -56,7 +55,7 @@ function fecharPopupPagamento(){
     window.location.reload();
 }
 
-document.getElementById("btn-cadastrarDespesa").addEventListener("click", function() {
+document.getElementById("btn-cadastrarDespesa").addEventListener("click", function(){
     document.getElementById("cadastrar-despesa").style.display = "block";
 });
 function fecharPopupDespesa(){
@@ -78,7 +77,6 @@ async function preencherCategorias(){
 }
 
 //COMPARAÇÃO DE SENHA ATENDENTE
-// Código para enviar os dados do formulário e processar a resposta
 const form = document.querySelector('form');
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -94,7 +92,7 @@ form.addEventListener('submit', async (event) => {
         const data = await response.json();
 
         if(response.ok){
-            // Se a operação foi bem-sucedida, exibe uma mensagem de sucesso
+            // Se a operação foi OK, exibe uma mensagem de sucesso
             alert(data.success);
         }else{
             
