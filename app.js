@@ -652,15 +652,15 @@ app.post("/editar-cadastro-cliente", (req, res) => {
 // });
 
 app.post("/processar-cadastro-atendente", (req, res) => {
-    const { nomeAtendente, emailAtendente, senhaAtendente, confirmarSenhaAtendente, obsAtendente } = req.body;
+    const { nomeAtendente, emailAtendente, telefoneAtendente, senhaAtendente, confirmarSenhaAtendente, obsAtendente } = req.body;
     const papelAtendente = 2; // Papel fixo para atendente
 
     if(senhaAtendente !== confirmarSenhaAtendente) {
         return res.status(400).json({ error: 'As senhas não coincidem.' });
     } 
 
-    const sql = 'INSERT INTO Atendente (Nome, Email, Senha, Observacoes, Role) VALUES (?, ?, ?, ?, ?)';
-    db.query(sql, [nomeAtendente, emailAtendente, senhaAtendente, obsAtendente, papelAtendente], (err, result) => {
+    const sql = 'INSERT INTO Atendente (Nome, Email, Telefone, Senha, Observacoes, Role) VALUES (?, ?, ?, ?, ?, ?)';
+    db.query(sql, [nomeAtendente, emailAtendente, telefoneAtendente, senhaAtendente, obsAtendente, papelAtendente], (err, result) => {
         if(err){
             console.error('Erro ao inserir dados:', err);
             res.send('Erro ao cadastrar dados no banco de dados');
@@ -687,11 +687,15 @@ app.post("/processar-cadastro-atendente", (req, res) => {
 // });
 
 app.post("/processar-cadastro-motoboy", (req, res) => {
-    const { nomeMotoboy, emailMotoboy, senhaMotoboy, obsMotoboy } = req.body;
+    const { nomeMotoboy, emailMotoboy, telefoneMotoboy, senhaMotoboy, confirmarSenhaMotoboy, obsMotoboy } = req.body;
     const papelMotoboy = 3; // Papel fixo para motoboy
 
-    const sql = 'INSERT INTO Motoboy (Nome, Email, Senha, Observacoes, Role) VALUES (?, ?, ?, ?, ?)';
-    db.query(sql, [nomeMotoboy, emailMotoboy, senhaMotoboy, obsMotoboy, papelMotoboy], (err, result) => {
+    if(senhaMotoboy !== confirmarSenhaMotoboy) {
+        return res.status(400).json({ error: 'As senhas não coincidem.' });
+    } 
+
+    const sql = 'INSERT INTO Motoboy (Nome, Email, Telefone, Senha, Observacoes, Role) VALUES (?, ?, ?, ?, ?, ?)';
+    db.query(sql, [nomeMotoboy, emailMotoboy, telefoneMotoboy, senhaMotoboy, obsMotoboy, papelMotoboy], (err, result) => {
         if(err){
             console.error('Erro ao inserir dados:', err);
             res.send('Erro ao cadastrar dados no banco de dados');
@@ -719,11 +723,15 @@ app.post("/processar-cadastro-motoboy", (req, res) => {
 // });
 
 app.post("/processar-cadastro-membro", (req, res) => {
-    const { nomeMembro, emailMembro, senhaMembro, obsMembro } = req.body;
+    const { nomeMembro, emailMembro, telefoneMembro, senhaMembro, confirmarSenhaMembro, obsMembro } = req.body;
     const papelMembro = 4; // Papel fixo para membro
 
-    const sql = 'INSERT INTO Membro (Nome, Email, Senha, Observacoes, Role) VALUES (?, ?, ?, ?, ?)';
-    db.query(sql, [nomeMembro, emailMembro, senhaMembro, obsMembro, papelMembro], (err, result) => {
+    if(senhaMembro !== confirmarSenhaMembro) {
+        return res.status(400).json({ error: 'As senhas não coincidem.' });
+    } 
+
+    const sql = 'INSERT INTO Membro (Nome, Email, Telefone, Senha, Observacoes, Role) VALUES (?, ?, ?, ?, ?, ?)';
+    db.query(sql, [nomeMembro, emailMembro, telefoneMembro, senhaMembro, obsMembro, papelMembro], (err, result) => {
         if(err){
             console.error('Erro ao inserir dados:', err);
             res.send('Erro ao cadastrar dados no banco de dados');
