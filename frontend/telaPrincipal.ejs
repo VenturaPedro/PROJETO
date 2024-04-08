@@ -115,9 +115,10 @@
             <h2>Edição de cadastro</h2>
             <input type="hidden" id="edit-cliente-id" value=<%= clientes.id %>><br>
             <form action="/editar-cadastro-cliente">
+                <% clientes.forEach(function(clientes) { %>
                 <div id="form-cliente1">
                     <label for="nomeClienteEditado">Nome:</label><br>
-                    <input type="text" id="nomeClienteEditado" value=<%= clientes.nome %> required>
+                    <input type="text" id="nomeClienteEditado" value=<%= clientes.nome %>><br>
     
                     <label for="emailClienteEditado-">E-mail:</label><br>
                     <input type="text" id="emailClienteEditado" value=<%= clientes.email %> placeholder="email@email.com" size="25"><br>
@@ -154,6 +155,7 @@
                     <button id="btn-salvarEdicao">Salvar Edição</button>
                     <button id="btn-cancelarEdicao">Cancelar</button>
                 </div>
+                <% }); %>
             </form>
         </div>
     </section>
@@ -163,15 +165,66 @@
         const btnAtivos = document.querySelector('#pt2 .btn-listas:nth-child(1)');
         const btnInativos = document.querySelector('#pt2 .btn-listas:nth-child(2)');
 
-        btnAtivos.addEventListener('click', function(){
-            window.location.href = '/listar-clientes';
-        });
+        // btnAtivos.addEventListener('click', function(){
+        //     window.location.href = '/listar-clientes';
+        // });
 
-        btnInativos.addEventListener('click', function(){
-            window.location.href = '/listar-clientes-inativos';
+        // btnInativos.addEventListener('click', function(){
+        //     window.location.href = '/listar-clientes-inativos';
+        // });
         });
+    async function editarCliente(clienteId){
+        console.log(`Editar cliente com ID ${clienteId}`);
+        const confirmacao = confirm(`Tem certeza que deseja editar o cliente com ID ${clienteId}?`);
+        if(confirmacao){
+            // Enviar uma solicitação ao servidor para excluir o cliente
+            document.getElementById("btn-editarCliente").addEventListener("click", function() {
+            document.getElementById("editarCliente").style.display = "block";
         });
+        function fecharPopupEdicaoCli() {
+        document.getElementById("editarCliente").style.display = "none";
+        window.location.reload();
+        }}};
+//
 
+
+document.getElementById("btn-salvarEdicao").addEventListener("click", async function() {
+    const clienteId = document.getElementById("edit-cliente-id").value;
+    const novoNome = document.getElementById("edit-nomeCliente").value;
+    const novoEmail = document.getElementById("edit-emailCliente").value;
+    const novoCpf = document.getElementById("edit-cpfCliente").value;
+    const novoTelefone = document.getElementById("edit-telefoneCliente").value;
+    const novoLogradouro = document.getElementById("edit-logradouroCliente").value;
+    const novaCidade = document.getElementById("edit-cidadeCliente").value;
+    const novoComplemento = document.getElementById("edit-complementoCliente").value;
+    const novoNumero = document.getElementById("edit-numeroCliente").value;
+    const novoEstado = document.getElementById("edit-estadoCliente").value;
+    const novoCep = document.getElementById("edit-cepCliente").value;
+
+
+    // Enviar uma solicitação ao servidor para editar o cliente
+    await fetch('/editar-cadastro-cliente', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({clienteId, novoNome, novoEmail, novoCpf, novoTelefone, novoLogradouro, novaCidade, novoComplemento, novoNumero, novoEstado, novoCep}),
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data); // Exibir mensagem de sucesso ou tratamento de erro
+        // Recarregar a página ou atualizar a lista de clientes
+        document.getElementById("editar-cliente").style.display = "none";
+        window.location.reload();
+    })
+    .catch(error => {
+        console.error('Erro ao editar cliente:', error);
+    });
+    });
+
+    document.getElementById("btn-cancelarEdicao").addEventListener("click", function() {
+    document.getElementById("editar-cliente").style.display = "none";
+    });
 
     async function excluirCliente(clienteId){
         console.log(`Inativar cliente com ID ${clienteId}`);

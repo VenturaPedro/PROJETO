@@ -172,7 +172,7 @@ nav button{
     font-size: 20px;
 }
 
-#cadastrar-cliente{
+#cadastrar-cliente, #editarCliente{
     font-size: 13px;
     margin: 0% 5%;
     display: none;
@@ -220,7 +220,7 @@ nav button{
     transform: scale(1.1); 
 }
 
-#fecharPopupCli, #fecharPopupAtd, #fecharPopupBoy, #fecharPopupProduto, #fecharPopupMembro, #fecharPopupCategoria, #fecharPopupPagamento, #fecharPopupAtendentePedido, #fecharPopupDespesa{
+#fecharPopupCli, #fecharPopupEdicaoCli, #fecharPopupAtd, #fecharPopupBoy, #fecharPopupProduto, #fecharPopupMembro, #fecharPopupCategoria, #fecharPopupPagamento, #fecharPopupAtendentePedido, #fecharPopupDespesa{
     position: absolute;
     top: 10px;
     right: 10px;
