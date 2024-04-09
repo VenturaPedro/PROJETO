@@ -22,15 +22,6 @@ function fecharPopupBoy(){
     window.location.reload();
 }
 
-document.getElementById("btn-cadastrarProduto").addEventListener("click", function(){
-    document.getElementById("cadastrar-produto").style.display = "block";
-    preencherCategorias();
-});
-function fecharPopupProduto(){
-    document.getElementById("cadastrar-produto").style.display = "none";
-    window.location.reload();
-}
-
 document.getElementById("btn-cadastrarMembro").addEventListener("click", function(){
     document.getElementById("cadastrar-membro").style.display = "block";
 });

@@ -115,6 +115,20 @@ app.get("/listar-produtos", (req, res) => {
     });
 });
 
+app.get("/listar-estoques", (req, res) => {
+    const sql = 'SELECT * FROM estoque';
+    db.query(sql, (err, results) => {
+        if(err){
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        }else{
+            console.log('Recuperação dos dados completa:');
+            res.render('estoque', { estoque: results });
+        }
+    });
+});
+
+
 app.get("/listar-membros", (req, res) => {
     const sql = 'SELECT * FROM Membro';
     db.query(sql, (err, results) => {
@@ -240,6 +254,16 @@ app.get("/api/listar-produtos", (req, res) => {
             return res.send(err)
         }
           return res.send({ produtos: results })
+    });
+});
+
+app.get("/api/listar-estoques", (req, res) => {
+    const sql = 'SELECT * FROM estoque';
+    db.query(sql, (err, results) => {
+        if(err){
+            return res.send(err)
+        }
+          return res.send({ estoque: results })
     });
 });
 
@@ -784,6 +808,21 @@ app.post("/processar-cadastro-produto", (req, res) => {
         }else{
         console.log('Dados inseridos com sucesso');
         res.sendFile(__dirname + "/frontend/cadastros.html");
+        }
+});
+});
+
+app.post("/processar-cadastro-estoque", (req, res) => {
+    const { produto, quantidade, valorCompra, valorVenda, dataValidade, fornecedor, obsEstoque} = req.body;
+    
+    const sql = 'INSERT INTO estoque (produto, quantidade, preco_compra, preco_venda, data_validade, fornecedor, Observacoes) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [ produto, quantidade, valorCompra, valorVenda, dataValidade, fornecedor, obsEstoque], (err, result) => {
+        if(err){
+        console.error('Erro ao inserir dados:', err);
+        res.send('Erro ao cadastrar dados no banco de dados');
+        }else{
+        console.log('Dados inseridos com sucesso');
+        res.sendFile(__dirname + "/frontend/prod-estoq.html");
         }
 });
 });

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Cadastro</title>
+    <link rel="shortcut icon" type="image/ico" href="/frontend/imagem/logo.png" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+
+</head>
+<body id="painel">
+    <nav>
+        <div class="menu">  
+            <div class="menu-item">
+                <img src="/imagem/logoCash.png" alt="logo">
+            </div>
+            <div class="menu-item">
+                <a href="/listar-clientes"><button class="btn"><i class="fas fa-home"></i><br>Dashboard</button></a>
+            </div>
+            <div class="menu-item">
+                <a href="/listar-pedidos"><button id="pedido" class="btn"><i class="fa-solid fa-cash-register"></i><br>Pedidos</button></a>
+            </div>
+            <div class="menu-item">
+                <button class="btn"><i class="fa-solid fa-truck"></i><br>Entrega</button>
+            </div>
+            <div class="menu-item">
+                <button class="btn"><i class="fa-solid fa-bell-concierge"></i><br>Salão</button>
+            </div>
+            <div class="menu-item">
+                <a href="painel.html"><button class="btn"><i class="fa-solid fa-gears"></i><br>Painel</button></a>
+            </div>
+        </div> 
+    </nav>
+    <main id="painel-main-prod">
+        <div id="btn-painel-cadastros">
+            <nav id="painel-1">
+                <button id="btn-cadastrarProduto"><i class="fa-solid fa-burger"></i><br>Produto</button>
+            </nav>   
+            <nav id="painel-2">
+                <button id="btn-cadastrarEstoque"><i class="fa-solid fa-boxes-stacked"></i><br>Estoque</button>
+            </nav>
+        </div>
+
+    
+        <div id="cadastrar-produto">
+            <span id="fecharPopupProduto" onclick="fecharPopupProduto()"><i class="fa-solid fa-circle-xmark"></i></span>
+            <h2>Cadastro de Produto</h2><br>
+            <form action="/processar-cadastro-produto" method="post">
+                <div id="form-Produto1">
+                    <p>
+                        <label for="nomeProduto">Nome do Produto</label><br>
+                        <input type="text" id="nomeProduto" name="nomeProduto" required size="20"><br>
+                    </p>
+                    <p>
+                        <label for="valorProduto">Valor R$</label><br>
+                        <input type="text" id="valorProduto" name="valorProduto" required size="20"><br>
+                    </p>
+                    <p>
+                        <label for="descricaoProduto">Descrição</label><br>
+                        <input type="text" id="descricaoProduto" name="descricaoProduto" style="width: 160px; height: 35px;"><br>
+                    </p>
+                    <p>
+                        <label for="categoriaProduto">Categoria</label><br>
+                        <select id="categoriaProduto" name="categoriaProduto" required style="width: 180px; height: 45px">
+                            <option value="none">Selecione uma opção</option>
+                        </select>
+                    </p>
+                    <br>
+                    <br>  
+                    <div>
+                        <button type="submit" id="btn-submitProduto">Cadastrar</button>
+                    </div>
+                </div>
+            </form>   
+        </div>
+        
+        <div id="cadastrar-estoque">
+            <span id="fecharPopupEstoque" onclick="fecharPopupEstoque()"><i class="fa-solid fa-circle-xmark"></i></span>
+            <h2>Cadastro de Lote no Estoque</h2><br>
+            <form action="/processar-cadastro-estoque" method="post">
+                <div id="form-estoque">
+                    <p>
+                        <label for="produto">Produto</label><br>
+                        <input type="text" id="produto" name="produto" required size="20"><br>
+                    </p>
+                    <br>
+                    <p>
+                        <label for="quantidade">Quantidade em Estoque</label><br>
+                        <input type="text" id="quantidade" name="quantidade" required size="20">   
+                    </p>
+                    <br>
+                    <p>
+                        <label for="valorCompra">Preço de Compra R$</label><br>
+                        <input type="text" id="valorCompra" name="valorCompra" required size="20">
+                    </p>
+                    <br>
+                    <p>
+                        <label for="valorVenda">Preço de Venda R$</label><br>
+                        <input type="text" id="valorVenda" name="valorVenda" required size="20">
+                    </p>
+                    <br>
+                    <p>
+                        <label for="dataValidade">Data de Validade</label><br>
+                        <input type="date" id="dataValidade" name="dataValidade" required>
+                    </p>
+                    <br>
+                    <p>
+                        <label for="fornecedor">Fornecedor</label><br>
+                        <input type="text" id="fornecedor" name="fornecedor" required size="20">
+                    </p> 
+                    <br>
+                    <p>
+                        <label for="obsEstoque">Observações</label>
+                        <input type="text" id="obsEstoque" name="obsEstoque" style="width: 100%; height: 35px;">
+                    </p>
+                    <br>
+                    <div>
+                        <button type="submit" id="btn-submitEstoque">Cadastrar</button>
+                    </div>
+                </div>
+
+            </form>   
+        </div>
+        
+
+        
+            
+    </main>
+    <footer>
+        <!-- <h4>rodapé</h4> -->
+    </footer>
+    <script>
+        document.getElementById("btn-cadastrarProduto").addEventListener("click", function(){
+        document.getElementById("cadastrar-produto").style.display = "block";
+        preencherCategorias();
+        });
+        function fecharPopupProduto(){
+            document.getElementById("cadastrar-produto").style.display = "none";
+            window.location.reload();
+        }
+        async function preencherCategorias(){
+        const getCategorias = await axios.get("/api/listar-categorias");
+
+        const categoriasBanco = getCategorias.data.categorias;
+
+        const selectCategoria = document.getElementById("categoriaProduto");
+
+        for(categoria of categoriasBanco){
+            let novaCategoria = new Option(categoria.Nome);
+            selectCategoria.add(novaCategoria);
+        }
+}
+    </script>
+    <script>
+        document.getElementById("btn-cadastrarEstoque").addEventListener("click", function(){
+        document.getElementById("cadastrar-estoque").style.display = "block";
+        });
+        function fecharPopupEstoque(){
+            document.getElementById("cadastrar-estoque").style.display = "none";
+            window.location.reload();
+        }
+        
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>

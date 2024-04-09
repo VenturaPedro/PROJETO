@@ -10,7 +10,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>DESPESAS</title>      
+    <title>ESTOQUE</title>      
 </head>
 <body id="painel">
     <nav>
@@ -44,43 +44,43 @@
             <a href="/listar-membros"><button class="btn-listas">Membros</button></a> 
             <a href="/listar-categorias"><button class="btn-listas">Categorias</button></a> 
             <a href="/listar-pagamentos"><button class="btn-listas">Pagamentos</button></a>
-            <a href="/listar-despesas"><button class="btn-listas">Despesas</button></a> 
-            <a href="/listar-estoques"><button class="btn-listas">Estoque</button></a> 
+            <a href="/listar-despesas"><button class="btn-listas">Despesas</button></a>
+            <a href="/listar-estoques"><button class="btn-listas">Estoque</button></a>  
             <br><br>
         </div>
-        <div id="tabela-despesas">
-            <h1>Lista de Despesas</h1>
+        <div id="tabela-estoque">
+            <h1>Estoque de Produtos</h1>
             <table>
                 <thead>
                 <tr>
                     <!-- <th>ID</th> -->
-                    <th>Descrição</th>
-                    <th>Lançamento</th>
-                    <th>Valor</th>
-                    <th>Vencimento</th>
-                    <th>Tipo</th>
-                    <th>Observação</th>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Preço de Compra R$</th>
+                    <th>Preço de Venda R$</th>
+                    <th>Data de Validade</th>
+                    <th>Fornecedor</th>
+                    <th>Observações</th>
                     <th colspan="2">Opções</th>
                     
                 </tr>
                 </thead>    
                 <tbody>
-                    <% despesa.forEach(function(despesa) { %>
+                    <% estoque.forEach(function(estoque) { %>
                         <tr>                            
-                            <!-- <td><%= despesa.ID %></td> -->
-                            <td><%= despesa.Descricao %></td>
+                            <!-- <td><%= estoque.id %></td> -->
+                            <td><%= estoque.produto %></td>
+                            <td><%= estoque.quantidade %></td>
+                            <td>R$<%= estoque.preco_compra %></td>
+                            <td>R$<%= estoque.preco_venda %></td>
                             <td><%= new Intl.DateTimeFormat('pt-BR', {
                                 dateStyle: 'short',
-
-                            }).format(despesa.Data) %></td>
-                            <td><p>R$</p><%= despesa.Valor %></td>
-                            <td><%= new Intl.DateTimeFormat('pt-BR', {
-                                dateStyle: 'short',
-                            }).format(despesa.Vencimento) %></td>
-                            <td><%= despesa.Tipo %></td>
-                            <td><%= despesa.Observacao %></td>
-                            <td><button id="btn-editarDespesa" class="btn-edit" onclick="editarDespesa('<%= despesa.ID %>')"><i class="fa-solid fa-pen"></button></td>
-                            <td><button id="btn-excluirDespesa" class="btn-edit" onclick="excluirDespesa('<%= despesa.ID %>')"><i class="fa-solid fa-trash"></button></td>
+                            }).format(estoque.data_validade) %></td>
+                            <td><%= estoque.fornecedor %></td>
+                            <td><%= estoque.Observacoes %></td>
+                            <td><button id="btn-editarEstoque" class="btn-edit" onclick="editarEstoque('<%= estoque.id %>')"><i class="fa-solid fa-pen"></i></button></td>
+                            <td><button id="btn-excluirEstoque" class="btn-delete" onclick="excluirEstoque('<%= estoque.id %>')"><i class="fa-solid fa-trash"></i></button></td>
+                        
                         </tr>
                     <% }); %>
                 </tbody>
@@ -88,25 +88,25 @@
         </div>
     </section>
     <script>
-        async function excluirDespesa(despesaId) {
-            console.log(`Excluir despesa com ID ${despesaId}`);
-            const confirmacao = confirm(`Tem certeza que deseja excluir o despesa com ID ${despesaId}?`);
+        $('#valorProduto').inputmask('currency', { prefix: 'R$ ' });
+        async function excluirEstoque(estoqueId) {
+            console.log(`Excluir Lote de Estoque com ID ${estoqueId}`);
+            const confirmacao = confirm(`Tem certeza que deseja excluir o lote com estoque com ID ${estoqueId}?`);
             if (confirmacao) {
-                // Enviar uma solicitação ao servidor para excluir o despesa
-                await fetch('/excluir-despesa', {
+                await fetch('/excluir-estoque', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({despesaId}),
+                    body: JSON.stringify({estoqueId}),
                 })
                 .then(response => response.text())
                 .then(data => {
                     alert(data); // Exibir mensagem de sucesso ou tratamento de erro
-                    window.location.reload()// Recarregar a página ou atualizar a lista de atendentes
+                    window.location.reload()// Recarregar a página ou atualizar a lista de estoque
                 })
                 .catch(error => {
-                    console.error('Erro ao excluir despesa:', error);
+                    console.error('Erro ao excluir lote:', error);
                 });
             }
         }

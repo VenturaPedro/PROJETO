@@ -220,7 +220,7 @@ nav button{
     transform: scale(1.1); 
 }
 
-#fecharPopupCli, #fecharPopupEdicaoCli, #fecharPopupAtd, #fecharPopupBoy, #fecharPopupProduto, #fecharPopupMembro, #fecharPopupCategoria, #fecharPopupPagamento, #fecharPopupAtendentePedido, #fecharPopupDespesa{
+#fecharPopupCli, #fecharPopupEdicaoCli, #fecharPopupEstoque, #fecharPopupAtd, #fecharPopupBoy, #fecharPopupProduto, #fecharPopupMembro, #fecharPopupCategoria, #fecharPopupPagamento, #fecharPopupAtendentePedido, #fecharPopupDespesa{
     position: absolute;
     top: 10px;
     right: 10px;
@@ -251,20 +251,20 @@ nav button{
     margin: 0px;   
 }
 
-#btn-submitCliente, #btn-submitAtendente, #btn-submitMotoboy, #btn-submitProduto, #btn-submitMembro, #btn-submitCategoria, #btn-submitPagamento, #btn-submitDespesa{
-    font-size: 15px;
+#btn-submitCliente, #btn-submitAtendente, #btn-submitMotoboy, #btn-submitProduto, #btn-submitEstoque, #btn-submitMembro, #btn-submitCategoria, #btn-submitPagamento, #btn-submitDespesa{
+    font-size: 18px;
     padding: 5px 15px;
     border-radius: 12px;
     border: 1px solid #7c7c7c;
 }
 
-#btn-submitCliente:hover, #btn-submitAtendente:hover, #btn-submitMotoboy:hover, #btn-submitProduto:hover, #btn-submitMembro:hover, #btn-submitCategoria:hover, #btn-submitPagamento:hover, #btn-submitDespesa:hover{    
+#btn-submitCliente:hover, #btn-submitAtendente:hover, #btn-submitMotoboy:hover, #btn-submitEstoque:hover, #btn-submitProduto:hover, #btn-submitMembro:hover, #btn-submitCategoria:hover, #btn-submitPagamento:hover, #btn-submitDespesa:hover{    
     cursor: pointer;
     transition: all 0.5s ease;
     background-color: #210124; 
     color: #FFFFFF; 
     transform: scale(1.1); 
-    font-size: 15px;
+    font-size: 18px;
 }
 
 #cadastrar-atendente, #cadastrar-motoboy, #cadastrar-membro, #cadastrar-categoria, #cadastrar-pagamento, #cadastrar-despesa{
@@ -286,15 +286,32 @@ nav button{
 
 
 #cadastrar-produto{
-    font-size: 13px;
-    margin: 1% 5%;
+    font-size: 18px;
+    margin: 0% 4%;
     display: none;
     position: fixed;
-    width: 120vh;
+    width:50vh;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: 30px;
+    padding: 30px 30px 30px 40px;
+    background: #fff;
+    border: 1px solid #000000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    border-radius: 25px;
+}
+
+#cadastrar-estoque{
+    font-size: 18px;
+    margin: 1% 5%;
+    display: none;
+    position: fixed;
+    width: 75vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 50px;
     background: #fff;
     border: 1px solid #000000;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -303,21 +320,20 @@ nav button{
 }
 #form-Produto1{
     display: block;
-    columns: 100px 2;
-    
-    
+    width: 200px;
+    columns: 60px 1;
 }
 
 #form-Produto1 input{
     margin: 0px;  
-    font-size: 12px;
-    padding: 1.5px; 
+    font-size: 15px;
+    padding: 2px; 
     
 }
 
 #form-Produto2{
     display: block;
-    columns: 100px 2;
+    columns: 50px 1;
    
     
 }
@@ -328,8 +344,21 @@ nav button{
     display: flex;
     margin: 0px;   
 }
+#form-estoque{
+    display: block;
+    width: 500px;
+    columns: 120px 2;
+    padding-right: 50px;
+}
+#form-estoque input{
+    margin: 0px;  
+    font-size: 15px;
+    padding: 1.5px; 
+}
 
-#tabela-clientes{
+
+
+#tabela-clientes{   
     width: 100%;
     border-collapse: collapse;
     margin: 15px;
@@ -339,7 +368,7 @@ nav button{
     font-size: 14px;
 }
 
-#tabela-produto, #tabela-despesas{
+#tabela-produto, #tabela-despesas, #tabela-estoque{
     width: auto;
     border-collapse: collapse;
     margin: 15px;
@@ -394,6 +423,10 @@ tr:hover {
 }
 #painel-main1{
     padding-left: 250px;
+}
+#painel-main-prod{
+    padding-top: 80px;
+    padding-left: 450px;
 }
 
 #painel-main-OP{
