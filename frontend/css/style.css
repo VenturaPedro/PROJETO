@@ -316,15 +316,15 @@ nav button{
 #pt2, h1{
     padding: 10px;
 }
-#filtro{
+.filtro{
     font-size: 18px;
 }
-#filtro button{
+.filtro button{
     font-size: 15px;
     border-radius: 25px;
     padding: 5px 15px;
 }
-#filtro button:hover{
+.filtro button:hover{
     font-size: 15px;
     border-radius: 25px;
     padding: 5px 15px;

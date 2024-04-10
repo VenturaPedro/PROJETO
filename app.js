@@ -8,8 +8,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json())
 const path = require('path');
 
-
-
 // Configuração do mecanismo de visualização EJS
 app.set('views', path.join(__dirname, 'frontend'));
 app.set('view engine', 'ejs');
@@ -67,7 +65,6 @@ app.post("/listar-clientes", (req, res) => {
     });
 });
 
-
 app.get("/listar-clientes", (req, res) => {
     const sql = 'SELECT * FROM clientes WHERE status = "ATIVO"';
     db.query(sql, (err, results) => {
@@ -94,6 +91,21 @@ app.get("/listar-clientes-inativos", (req, res) => {
     });
 });
 
+app.post("/filtrar-atendentes", (req, res) => {
+    const termoBusca = req.body.filtroAtd;
+    const sql = `SELECT * FROM Atendente WHERE Nome LIKE '%${termoBusca}%' OR Email LIKE '%${termoBusca}%' OR Telefone LIKE '%${termoBusca}%' OR Observacoes LIKE '%${termoBusca}%'`;
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        } else {
+            console.log('Recuperação dos dados completa:');
+            res.render('atendentes', { Atendente: results });
+        }
+    });
+});
+
+
 app.get("/listar-atendentes", (req, res) => {
     const sql = 'SELECT * FROM Atendente';
     db.query(sql, (err, results) => {
@@ -103,6 +115,20 @@ app.get("/listar-atendentes", (req, res) => {
         }else{
             console.log('Recuperação dos dados completa:');
             res.render('atendentes', { Atendente: results });
+        }
+    });
+});
+
+app.post("/filtrar-motoboys", (req, res) => {
+    const termoBusca = req.body.filtroMotoboys;
+    const sql = `SELECT * FROM Motoboy WHERE Nome LIKE '%${termoBusca}%' OR Email LIKE '%${termoBusca}%' OR Observacoes LIKE '%${termoBusca}%' OR Telefone LIKE '%${termoBusca}%'`;
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        } else {
+            console.log('Recuperação dos dados completa:');
+            res.render('motoboys', { Motoboy: results });
         }
     });
 });
@@ -120,6 +146,20 @@ app.get("/listar-motoboy", (req, res) => {
     });
 });
 
+app.post("/filtrar-produtos", (req, res) => {
+    const termoBusca = req.body.filtroProdutos;
+    const sql = `SELECT * FROM produto WHERE nome LIKE '%${termoBusca}%' OR valor LIKE '%${termoBusca}%' OR descricao LIKE '%${termoBusca}%' OR estoque LIKE '%${termoBusca}%' OR categoria LIKE '%${termoBusca}%' OR fornecedor LIKE '%${termoBusca}%'`;
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        } else {
+            console.log('Recuperação dos dados completa:');
+            res.render('produtos', { produto: results });
+        }
+    });
+});
+
 app.get("/listar-produtos", (req, res) => {
     const sql = 'SELECT * FROM produto';
     db.query(sql, (err, results) => {
@@ -129,6 +169,20 @@ app.get("/listar-produtos", (req, res) => {
         }else{
             console.log('Recuperação dos dados completa:');
             res.render('produtos', { produto: results });
+        }
+    });
+});
+
+app.post("/filtrar-estoques", (req, res) => {
+    const termoBusca = req.body.filtroEstoque;
+    const sql = `SELECT * FROM estoque WHERE produto LIKE '%${termoBusca}%' OR quantidade LIKE '%${termoBusca}%' OR preco_compra LIKE '%${termoBusca}%' OR preco_venda LIKE '%${termoBusca}%' OR data_validade LIKE '%${termoBusca}%' OR fornecedor LIKE '%${termoBusca}%' OR Observacoes LIKE '%${termoBusca}%'`;
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        } else {
+            console.log('Recuperação dos dados completa:');
+            res.render('estoque', { estoque: results });
         }
     });
 });
@@ -146,6 +200,19 @@ app.get("/listar-estoques", (req, res) => {
     });
 });
 
+app.post("/filtrar-membros", (req, res) => {
+    const termoBusca = req.body.filtroMembros;
+    const sql = `SELECT * FROM Membro WHERE Nome LIKE '%${termoBusca}%' OR Email LIKE '%${termoBusca}%' OR Observacoes LIKE '%${termoBusca}%' OR Telefone LIKE '%${termoBusca}%'`;
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        } else {
+            console.log('Recuperação dos dados completa:');
+            res.render('membros', { Membro: results });
+        }
+    });
+});
 
 app.get("/listar-membros", (req, res) => {
     const sql = 'SELECT * FROM Membro';
@@ -156,6 +223,20 @@ app.get("/listar-membros", (req, res) => {
         }else{
             console.log('Recuperação dos dados completa:');
             res.render('membros', { Membro: results });
+        }
+    });
+});
+
+app.post("/filtrar-categorias", (req, res) => {
+    const termoBusca = req.body.filtroCategorias;
+    const sql = `SELECT * FROM categoria WHERE Nome LIKE '%${termoBusca}%' OR Observacoes LIKE '%${termoBusca}%'`;
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        } else {
+            console.log('Recuperação dos dados completa:');
+            res.render('categorias', { categoria: results });
         }
     });
 });
@@ -173,6 +254,8 @@ app.get("/listar-categorias", (req, res) => {
     });
 });
 
+
+
 app.get("/listar-pagamentos", (req, res) => {
     const sql = 'SELECT * FROM pagamento';
     db.query(sql, (err, results) => {
@@ -182,6 +265,20 @@ app.get("/listar-pagamentos", (req, res) => {
         }else{
             console.log('Recuperação dos dados completa:');
             res.render('pagamentos', { pagamento: results });
+        }
+    });
+});
+
+app.post("/filtrar-despesas", (req, res) => {
+    const termoBusca = req.body.filtroDespesas;
+    const sql = `SELECT * FROM despesa WHERE Descricao LIKE '%${termoBusca}%' OR Lancamento LIKE '%${termoBusca}%' OR Valor LIKE '%${termoBusca}%' OR Vencimento LIKE '%${termoBusca}%' OR Tipo LIKE '%${termoBusca}%'`;
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        } else {
+            console.log('Recuperação dos dados completa:');
+            res.render('despesas', { despesa: results });
         }
     });
 });

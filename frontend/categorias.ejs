@@ -49,7 +49,14 @@
             <br><br>
         </div>
         <div id="tabela-categorias">
-            <h1>Lista de Categorias</h1>
+            <div id="pt2">
+                <h1>Lista de Categorias</h1>
+                <form class="filtro"id="filtroCategorias" action="/filtrar-categorias" method="post">
+                    <input type="text" name="filtroCategorias" placeholder="Buscar Categoria">
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
+            
             <table>
                 <thead>
                 <tr>

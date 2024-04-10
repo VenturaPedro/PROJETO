@@ -49,7 +49,13 @@
             <br><br>
         </div>
         <div id="tabela-produto">
-            <h1>Lista de Produtos</h1>
+            <div id="pt2">
+                <h1>Lista de Produtos</h1>
+                <form class="filtro"  id="filtroProdutos" action="/filtrar-produtos" method="post">
+                    <input type="text" name="filtroProdutos" placeholder="Buscar Produtos">
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
             <table>
                 <thead>
                 <tr>
@@ -69,7 +75,7 @@
                         <tr>                            
                             <!-- <td><%= produto.id %></td> -->
                             <td><%= produto.nome %></td>
-                            <td><%= produto.valor %></td>
+                            <td>R$<%= produto.valor %></td>
                             <td><%= produto.descricao %></td>
                             <td><%= produto.estoque %></td>
                             <td><%= produto.categoria %></td>
