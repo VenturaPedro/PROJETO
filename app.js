@@ -3,9 +3,12 @@ const app = express();
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
+const { body, validationResult } = require('express-validator');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json())
 const path = require('path');
+
+
 
 // Configuração do mecanismo de visualização EJS
 app.set('views', path.join(__dirname, 'frontend'));
@@ -49,6 +52,21 @@ app.get("/painel",(req, res) => {
 app.get("/cadastrar",(req, res) => {
     res.sendFile(__dirname + "/frontend/cadastros.html");z
 });
+
+app.post("/listar-clientes", (req, res) => {
+    const termoBusca = req.body.filtro;
+    const sql = `SELECT * FROM clientes WHERE status = "ATIVO" AND (nome LIKE '%${termoBusca}%' OR email LIKE '%${termoBusca}%' OR cpf LIKE '%${termoBusca}%' OR telefone LIKE '%${termoBusca}%')`;
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        } else {
+            console.log('Recuperação dos dados completa:');
+            res.render('telaPrincipal', { clientes: results });
+        }
+    });
+});
+
 
 app.get("/listar-clientes", (req, res) => {
     const sql = 'SELECT * FROM clientes WHERE status = "ATIVO"';
@@ -227,15 +245,15 @@ app.get("/api/listar-atendentes", (req, res) => {
     });
 });
 
-app.get("/api/listar-clientes", (req, res) => {
-    const sql = 'SELECT * FROM clientes WHERE status = "ATIVO"';
-    db.query(sql, (err, results) => {
-        if(err){
-            return res.send(err)
-        }
-          return res.send({ clientes: results })
-    });
-});
+// app.get("/api/listar-clientes", (req, res) => {
+//     const sql = 'SELECT * FROM clientes WHERE status = "ATIVO"';
+//     db.query(sql, (err, results) => {
+//         if(err){
+//             return res.send(err)
+//         }
+//           return res.send({ clientes: results })
+//     });
+// });
 
 app.get("/api/listar-pagamentos", (req, res) => {
     const sql = 'SELECT * FROM pagamento';
@@ -797,7 +815,9 @@ app.post("/processar-cadastro-pagamento", (req, res) => {
 });
 });
 
-app.post("/processar-cadastro-produto", (req, res) => {
+
+
+app.post("/processar-cadastro-produto",(req, res) => {
     const { nomeProduto, valorProduto, descricaoProduto, estoqueProduto, categoriaProduto, fornecedorProduto} = req.body;
     
     const sql = 'INSERT INTO produto (nome, valor, descricao, estoque, categoria, fornecedor) VALUES (?, ?, ?, ?, ?, ?)';
@@ -826,6 +846,7 @@ app.post("/processar-cadastro-estoque", (req, res) => {
         }
 });
 });
+
 
 app.post("/processar-cadastro-despesa", (req, res) => {  
     const { descricaoDespesa, lancamentoDespesa, valorDespesa, vencimentoDespesa, tipoDespesa, obsDespesa} = req.body;

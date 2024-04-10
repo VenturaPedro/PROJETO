@@ -48,7 +48,7 @@
         <div id="cadastrar-produto">
             <span id="fecharPopupProduto" onclick="fecharPopupProduto()"><i class="fa-solid fa-circle-xmark"></i></span>
             <h2>Cadastro de Produto</h2><br>
-            <form action="/processar-cadastro-produto" method="post">
+            <form id="formProduto"action="/processar-cadastro-produto" method="post">
                 <div id="form-Produto1">
                     <p>
                         <label for="nomeProduto">Nome do Produto</label><br>
@@ -56,7 +56,7 @@
                     </p>
                     <p>
                         <label for="valorProduto">Valor R$</label><br>
-                        <input type="text" id="valorProduto" name="valorProduto" required size="20"><br>
+                        <input type="number" id="valorProduto" name="valorProduto" required size="20"><br>
                     </p>
                     <p>
                         <label for="descricaoProduto">Descrição</label><br>
@@ -69,11 +69,11 @@
                         </select>
                     </p>
                     <br>
-                    <br>  
                     <div>
                         <button type="submit" id="btn-submitProduto">Cadastrar</button>
                     </div>
                 </div>
+                
             </form>   
         </div>
         
@@ -124,9 +124,6 @@
 
             </form>   
         </div>
-        
-
-        
             
     </main>
     <footer>
@@ -152,17 +149,18 @@
             let novaCategoria = new Option(categoria.Nome);
             selectCategoria.add(novaCategoria);
         }
-}
+        }
+    
     </script>
     <script>
         document.getElementById("btn-cadastrarEstoque").addEventListener("click", function(){
         document.getElementById("cadastrar-estoque").style.display = "block";
         });
+        
         function fecharPopupEstoque(){
             document.getElementById("cadastrar-estoque").style.display = "none";
-            window.location.reload();
+            window.location.reload();   
         }
-        
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

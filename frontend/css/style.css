@@ -172,12 +172,12 @@ nav button{
     font-size: 20px;
 }
 
-#cadastrar-cliente, #editarCliente{
-    font-size: 13px;
+#cadastrar-cliente{
+    font-size: 18px;
     margin: 0% 5%;
     display: none;
     position: fixed;
-    width: 120vh;
+    width: 75vh;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -187,6 +187,10 @@ nav button{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     border-radius: 25px;
+}
+
+#cadastrar-cliente h2, h3, button#btn-submitCliente{
+    margin: 0px 30px;
 }
 
 #editarCliente{
@@ -229,19 +233,21 @@ nav button{
 }
 #form-cliente1{
     display: block;
-    columns: 100px 2;
+    columns: 80px 2;
+    padding: 0px 30px;
 }
 
 #form-cliente1 input{
     margin: 0px;  
-    font-size: 12px;
+    font-size: 15px;
     padding: 1.5px; 
     
 }
 
 #form-cliente2{
     display: block;
-    columns: 200px 2;
+    columns: 80px 2;
+    padding: 0px 30px;
 }
 
 #form-cliente2 input{
@@ -268,11 +274,11 @@ nav button{
 }
 
 #cadastrar-atendente, #cadastrar-motoboy, #cadastrar-membro, #cadastrar-categoria, #cadastrar-pagamento, #cadastrar-despesa{
-    font-size: 13px;
+    font-size: 18px;
     margin: 0% 4%;
     display: none;
     position: fixed;
-    width:80vh;
+    width:50vh;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -284,6 +290,12 @@ nav button{
     border-radius: 25px;
 }
 
+#cadastrar-atendente input, #cadastrar-motoboy input, #cadastrar-membro input, #cadastrar-categoria input, #cadastrar-pagamento input, #cadastrar-despesa input{
+    font-size: 14px;
+    padding: 2px;
+    display: flex;
+    margin: 0px;   
+}
 
 #cadastrar-produto{
     font-size: 18px;
@@ -301,6 +313,27 @@ nav button{
     z-index: 1000;
     border-radius: 25px;
 }
+#pt2, h1{
+    padding: 10px;
+}
+#filtro{
+    font-size: 18px;
+}
+#filtro button{
+    font-size: 15px;
+    border-radius: 25px;
+    padding: 5px 15px;
+}
+#filtro button:hover{
+    font-size: 15px;
+    border-radius: 25px;
+    padding: 5px 15px;
+    background-color: #750D37; 
+    color: #FFFFFF; 
+    transform: scale(1.1); 
+}
+
+
 
 #cadastrar-estoque{
     font-size: 18px;

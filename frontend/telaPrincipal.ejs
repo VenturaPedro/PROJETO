@@ -58,6 +58,13 @@
                         <a href="/listar-clientes"><button class="btn-status">ATIVOS</button></a>
                         <a href="/listar-clientes-inativos"><button class="btn-status">INATIVOS</button></a>
                         <br><br>
+                        <form id="filtro" action="/listar-clientes" method="post">
+                            <input type="text" name="filtro" placeholder="Buscar por Cliente">
+                            <button type="submit">Buscar</button>
+                        </form>
+                        
+                        
+                        <br>
                     </div>
                 </div>
                 
@@ -271,6 +278,7 @@ document.getElementById("btn-salvarEdicao").addEventListener("click", async func
             });
         }
     }
+
     </script>
 </body>
 </html>
