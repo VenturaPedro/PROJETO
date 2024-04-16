@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
@@ -84,27 +85,27 @@
                 </tr>
                 </thead>    
                 <tbody>
-                    <% clientes.forEach(function(clientes) { %>
+                    <% clientes.forEach(function(cliente) { %>
                         <tr>                            
-                            <!-- <td><%= clientes.id %></td> -->
-                            <td><%= clientes.nome %></td>
-                            <td><%= clientes.email %></td>
-                            <td><%= clientes.cpf %></td>
-                            <td><%= clientes.telefone %></td>
-                            <td><%= clientes.logradouro %></td>
-                            <td><%= clientes.numero %></td>
-                            <td><%= clientes.complemento %></td>
-                            <td><%= clientes.cidade %></td>
-                            <td><%= clientes.estado %></td>
-                            <td><%= clientes.cep %></td>
-                            <td><button id="btn-editarCliente" class="btn-edit" onclick="editarCliente('<%= clientes.id %>')"><i class="fa-solid fa-pen"></button></td>
+                            <!-- <td><%= cliente.id %></td> -->
+                            <td><%= cliente.nome %></td>
+                            <td><%= cliente.email %></td>
+                            <td><%= cliente.cpf %></td>
+                            <td><%= cliente.telefone %></td>
+                            <td><%= cliente.logradouro %></td>
+                            <td><%= cliente.numero %></td>
+                            <td><%= cliente.complemento %></td>
+                            <td><%= cliente.cidade %></td>
+                            <td><%= cliente.estado %></td>
+                            <td><%= cliente.cep %></td>
+                            <td><button id="btn-editarCliente" class="btn-edit" onclick="editarCliente('<%= cliente.id %>')"><i class="fa-solid fa-pen"></button></td>
                             <td>
-                                <% if (clientes.status === 'INATIVO') { %>
-                                    <button id="btn-atualizarCliente" class="btn-update" onclick="ativarCliente('<%= clientes.id %>')">
+                                <% if (cliente.status === 'INATIVO') { %>
+                                    <button id="btn-atualizarCliente" class="btn-update" onclick="ativarCliente('<%= cliente.id %>')">
                                         <i class="fa-solid fa-bolt"></i>
                                     </button>
                                 <% } else { %>
-                                    <button id="btn-excluirCliente" class="btn-delete" onclick="excluirCliente('<%= clientes.id %>')">
+                                    <button id="btn-excluirCliente" class="btn-delete" onclick="excluirCliente('<%= cliente.id %>')">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 <% } %>
@@ -117,49 +118,47 @@
         <div id="editarCliente">
             <span id="fecharPopupEdicaoCli" onclick="fecharPopupEdicaoCli()">X</span>
             <h2>Edição de cadastro</h2>
-            <input type="hidden" id="edit-cliente-id" value=<%= clientes.id %>><br>
-            <form action="/editar-cadastro-cliente">
-                <% clientes.forEach(function(clientes) { %>
+            <input type="hidden" id="edit-cliente-id"><br>
+            <form action="/editar-cadastro-cliente" method="post">
                 <div id="form-cliente1">
                     <label for="nomeClienteEditado">Nome:</label><br>
-                    <input type="text" id="nomeClienteEditado" value=<%= clientes.nome %>><br>
+                    <input type="text" id="nomeClienteEditado"><br>
     
-                    <label for="emailClienteEditado-">E-mail:</label><br>
-                    <input type="text" id="emailClienteEditado" value=<%= clientes.email %> placeholder="email@email.com" size="25"><br>
+                    <label for="emailClienteEditado">E-mail:</label><br>
+                    <input type="text" id="emailClienteEditado" placeholder="email@email.com" size="25"><br>
     
                     <label for="cpfClienteEditado">CPF:</label><br>
-                    <input type="text" id="cpfClienteEditado" value=<%= clientes.cpf %> placeholder="xxx.xxx.xxx.xx"><br>
+                    <input type="text" id="cpfClienteEditado" placeholder="xxx.xxx.xxx.xx"><br>
     
                     <label for="telefoneClienteEditado">Telefone:</label><br>
-                    <input type="tel" id="telefoneClienteEditado" value=<%= clientes.telefone %> placeholder="(99) 90000-0000" required size="20" maxlength="14"><br>
+                    <input type="tel" id="telefoneClienteEditado" placeholder="(99) 90000-0000" required size="20" maxlength="14"><br>
                 </div>
                 <br>
                 <h3>Endereço</h3><br>
                 <div id="form-cliente2">
                     <label for="logradouroClienteEditado">Logradouro:</label>
-                    <input type="text" id="logradouroClienteEditado" value=<%= clientes.logradouro %> size="25">
+                    <input type="text" id="logradouroClienteEditado" size="25">
     
                     <label for="cidadeClienteEditado">Cidade:</label>
-                    <input type="text" id="cidadeClienteEditado" value=<%= clientes.cidade %> size="25">
+                    <input type="text" id="cidadeClienteEditado" size="25">
     
                     <label for="complementoClienteEditado">Complemento:</label>
-                    <input type="text" id="complementoClienteEditado" value=<%= clientes.complemento %> placeholder="Apt / Bloco / Quadra" size="25">
+                    <input type="text" id="complementoClienteEditado" placeholder="Apt / Bloco / Quadra" size="25">
     
                     <label for="numeroClienteEditado">Nº:</label>
-                    <input type="text" id="numeroClienteEditado" value=<%= clientes.numero %> style="width: 50px;">
+                    <input type="text" id="numeroClienteEditado" style="width: 50px;">
     
                     <label for="estadoClienteEditado">Estado:</label>
-                    <input type="text" id="estadoClienteEditado" value=<%= clientes.estado %> style="width: 100px;">
+                    <input type="text" id="estadoClienteEditado" style="width: 100px;">
     
                     <label for="cepClienteEditado">CEP:</label><br>
-                    <input type="text" id="cepClienteEditado" value=<%= clientes.cep %> style="width: 100px;">
+                    <input type="text" id="cepClienteEditado" style="width: 100px;">
                 </div>
                 <div>
                     <br>
-                    <button id="btn-salvarEdicao">Salvar Edição</button>
+                    <button id="btn-salvarEdicao">Salvar</button>
                     <button id="btn-cancelarEdicao">Cancelar</button>
                 </div>
-                <% }); %>
             </form>
         </div>
     </section>
@@ -177,48 +176,64 @@
         //     window.location.href = '/listar-clientes-inativos';
         // });
         });
-    async function editarCliente(clienteId){
-        console.log(`Editar cliente com ID ${clienteId}`);
-        const confirmacao = confirm(`Tem certeza que deseja editar o cliente com ID ${clienteId}?`);
-        if(confirmacao){
-            // Enviar uma solicitação ao servidor para excluir o cliente
-            document.getElementById("btn-editarCliente").addEventListener("click", function() {
-            document.getElementById("editarCliente").style.display = "block";
-        });
-        function fecharPopupEdicaoCli() {
-        document.getElementById("editarCliente").style.display = "none";
-        window.location.reload();
-        }}};
+    
+        async function editarCliente(clienteId){
+            console.log(`Editar cliente com ID ${clienteId}`);
+            const confirmacao = confirm(`Tem certeza que deseja editar o cliente com ID ${clienteId}?`);
+            if(confirmacao){
+                const response = await axios.get("/api/listar-clientes");
+                const clientes = response.data.clientes;
+
+                for (cliente of clientes) {
+                    if (cliente.id == clienteId) {
+                        console.log("cliente", cliente);
+                        document.getElementById('edit-cliente-id').value = cliente.id;
+                        document.getElementById('nomeClienteEditado').value = cliente.nome;
+                        document.getElementById('emailClienteEditado').value = cliente.email;
+                        document.getElementById('cpfClienteEditado').value = cliente.cpf;
+                        document.getElementById('telefoneClienteEditado').value = cliente.telefone;
+                        document.getElementById('logradouroClienteEditado').value = cliente.logradouro;
+                        document.getElementById('cidadeClienteEditado').value = cliente.cidade;
+                        document.getElementById('complementoClienteEditado').value = cliente.complemento;
+                        document.getElementById('numeroClienteEditado').value = cliente.numero;
+                        document.getElementById('estadoClienteEditado').value = cliente.estado;
+                        document.getElementById('cepClienteEditado').value = cliente.cep;
+                        break;
+                    }
+                }
+                
+                // Exibir o popup de edição imediatamente
+                document.getElementById("editarCliente").style.display = "block";
+            }
+        }
+
 //
 
 
 document.getElementById("btn-salvarEdicao").addEventListener("click", async function() {
-    const clienteId = document.getElementById("edit-cliente-id").value;
-    const novoNome = document.getElementById("edit-nomeCliente").value;
-    const novoEmail = document.getElementById("edit-emailCliente").value;
-    const novoCpf = document.getElementById("edit-cpfCliente").value;
-    const novoTelefone = document.getElementById("edit-telefoneCliente").value;
-    const novoLogradouro = document.getElementById("edit-logradouroCliente").value;
-    const novaCidade = document.getElementById("edit-cidadeCliente").value;
-    const novoComplemento = document.getElementById("edit-complementoCliente").value;
-    const novoNumero = document.getElementById("edit-numeroCliente").value;
-    const novoEstado = document.getElementById("edit-estadoCliente").value;
-    const novoCep = document.getElementById("edit-cepCliente").value;
+    const dadosEditados = {
+        clienteId: document.getElementById("edit-cliente-id").value, 
+        novoNome: document.getElementById("nomeClienteEditado").value, 
+        novoEmail: document.getElementById("emailClienteEditado").value, 
+        novoCpf: document.getElementById("cpfClienteEditado").value, 
+        novoTelefone: document.getElementById("telefoneClienteEditado").value, 
+        novoLogradouro: document.getElementById("logradouroClienteEditado").value, 
+        novaCidade: document.getElementById("cidadeClienteEditado").value, 
+        novoComplemento: document.getElementById("complementoClienteEditado").value, 
+        novoNumero: document.getElementById("numeroClienteEditado").value, 
+        novoEstado: document.getElementById("estadoClienteEditado").value, 
+        novoCep: document.getElementById("cepClienteEditado").value
+    };
 
-
-    // Enviar uma solicitação ao servidor para editar o cliente
     await fetch('/editar-cadastro-cliente', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({clienteId, novoNome, novoEmail, novoCpf, novoTelefone, novoLogradouro, novaCidade, novoComplemento, novoNumero, novoEstado, novoCep}),
+        body: JSON.stringify(dadosEditados),
     })
-    .then(response => response.text())
-    .then(data => {
-        alert(data); // Exibir mensagem de sucesso ou tratamento de erro
-        // Recarregar a página ou atualizar a lista de clientes
-        document.getElementById("editar-cliente").style.display = "none";
+    .then(() => {
+        document.getElementById("editarCliente").style.display = "none";
         window.location.reload();
     })
     .catch(error => {
@@ -227,7 +242,7 @@ document.getElementById("btn-salvarEdicao").addEventListener("click", async func
     });
 
     document.getElementById("btn-cancelarEdicao").addEventListener("click", function() {
-    document.getElementById("editar-cliente").style.display = "none";
+    document.getElementById("editarCliente").style.display = "none";
     });
 
     async function excluirCliente(clienteId){

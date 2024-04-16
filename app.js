@@ -7,6 +7,7 @@ const { body, validationResult } = require('express-validator');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json())
 const path = require('path');
+const axios = require('axios');
 
 // Configuração do mecanismo de visualização EJS
 app.set('views', path.join(__dirname, 'frontend'));
@@ -342,15 +343,15 @@ app.get("/api/listar-atendentes", (req, res) => {
     });
 });
 
-// app.get("/api/listar-clientes", (req, res) => {
-//     const sql = 'SELECT * FROM clientes WHERE status = "ATIVO"';
-//     db.query(sql, (err, results) => {
-//         if(err){
-//             return res.send(err)
-//         }
-//           return res.send({ clientes: results })
-//     });
-// });
+app.get("/api/listar-clientes", (req, res) => {
+    const sql = 'SELECT * FROM clientes WHERE status = "ATIVO"';
+    db.query(sql, (err, results) => {
+        if(err){
+            return res.send(err)
+        }
+          return res.send({ clientes: results })
+    });
+});
 
 app.get("/api/listar-pagamentos", (req, res) => {
     const sql = 'SELECT * FROM pagamento';
@@ -362,15 +363,19 @@ app.get("/api/listar-pagamentos", (req, res) => {
     });
 });
 
+// Rota para listar os produtos
 app.get("/api/listar-produtos", (req, res) => {
-    const sql = 'SELECT * FROM produto';
+    const sql = 'SELECT id, nome FROM Produto';
     db.query(sql, (err, results) => {
-        if(err){
-            return res.send(err)
+        if (err) {
+            console.error('Erro ao recuperar produtos:', err);
+            res.status(500).json({ error: 'Erro ao recuperar produtos' });
+        } else {
+            res.status(200).json({ produtos: results });
         }
-          return res.send({ produtos: results })
     });
 });
+
 
 app.get("/api/listar-estoques", (req, res) => {
     const sql = 'SELECT * FROM estoque';
@@ -395,7 +400,32 @@ app.get("/api/listar-despesas", (req, res) => {
 app.use(express.static('frontend'))
 
 
-//ROTAS POST
+
+app.get('/api/consultar-valor-produto/:id', async (req, res) => {
+    const productId = req.params.id;
+
+    // Consulta ao banco de dados para obter o valor e a quantidade do produto
+    const query = 'SELECT estoque.preco_venda, estoque.quantidade FROM produto JOIN estoque ON produto.id = estoque.id_produto WHERE produto.id = ?';
+    db.query(query, [productId], (err, results) => {
+        if (err) {
+            console.error('Erro ao consultar valor e quantidade do produto:', err);
+            res.status(500).json({ error: 'Erro interno do servidor' });
+        } else {
+            console.log("results", results)
+            // Verifica se o produto foi encontrado
+            if (results.length > 0) {
+                const { valor, quantidade } = results[0];
+                res.json({ valor, quantidade });
+            } else {
+                res.status(404).json({ error: 'Produto não encontrado' });
+            }
+        }
+    });
+});
+
+module.exports = app;
+
+
 
 app.post("/api/salvar-pedido", async (req, res) => {
     let insertedPedidoId = 0;
@@ -474,17 +504,60 @@ app.post("/api/salvar-pedido", async (req, res) => {
             });
     });
 
+    // Continuação do código existente...
+
     Promise.all([promiseInsertPedido, promiseInsertProdutosPedido])
-        .then(() => {
-            console.log("insertedPedidoId", insertedPedidoId);
-            res.json({ 
-                idPedido: insertedPedidoId,
-                valorTotalPedido
-            })
-        })
-        .catch((err) => {
-            console.error('Error:', err);
+    .then(() => {
+        console.log("insertedPedidoId", insertedPedidoId);
+
+        // Atualizar o estoque para cada produto vendido
+        const promiseAtualizarEstoque = itemsPedido.map((produtoPedido) => {
+            return new Promise((resolve, reject) => {
+                const updateEstoque = 'UPDATE estoque SET quantidade = quantidade - ? WHERE produto_id = ?';
+                db.query(updateEstoque, [produtoPedido.quantidade, produtoPedido.id], (err, result) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        console.log('Estoque atualizado com sucesso para o produto', produtoPedido.id);
+                        resolve();
+                    }
+                });
+            });
         });
+
+        // Verificar se há estoque suficiente para cada produto
+        const promiseVerificarEstoque = itemsPedido.map((produtoPedido) => {
+            return new Promise((resolve, reject) => {
+                const selectEstoque = 'SELECT quantidade FROM estoque WHERE produto_id = ?';
+                db.query(selectEstoque, [produtoPedido.id], (err, results) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        const quantidadeDisponivel = results && results.length > 0 ? results[0].quantidade : 0;
+                        if (quantidadeDisponivel < produtoPedido.quantidade) {
+                            reject('Estoque insuficiente para o produto ' + produtoPedido.id);
+                        } else {
+                            resolve();
+                        }
+                    }
+                });
+            });
+        });
+
+        // Executar as promessas em paralelo
+        return Promise.all([...promiseAtualizarEstoque, ...promiseVerificarEstoque]);
+    })
+    .then(() => {
+        res.json({ 
+            idPedido: insertedPedidoId,
+            valorTotalPedido
+        });
+    })
+    .catch((err) => {
+        console.error('Erro ao processar pedido:', err);
+        res.status(400).send('Erro ao processar o pedido: ' + err);
+    });
+
         
 });
 
@@ -757,22 +830,25 @@ app.post("/processar-cadastro-cliente", (req, res) => {
 
 app.post("/editar-cadastro-cliente", (req, res) => {
     const clienteId = req.body.clienteId;
-    const { nomeClienteEditado, emailClienteEditado, cpfClienteEditado, telefoneClienteEditado, 
-          logradouroClienteEditado, cidadeClienteEditado, complementoClienteEditado, numeroClienteEditado, 
-          estadoClienteEditado, cepClienteEditado } = req.body;
-  
-    const sql = 'UPDATE INTO clientes (nome, email, cpf, telefone, logradouro, cidade, complemento, numero, estado, cep) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) WHERE id = ?';
-    db.query(sql, [ nomeClienteEditado, emailClienteEditado, cpfClienteEditado, telefoneClienteEditado, logradouroClienteEditado, cidadeClienteEditado, complementoClienteEditado, numeroClienteEditado, 
-      estadoClienteEditado, cepClienteEditado], (err, result) => {
+    const { novoNome, novoEmail, novoCpf, novoTelefone, 
+        novoLogradouro, novaCidade, novoComplemento, 
+        novoNumero, novoEstado, novoCep 
+    } = req.body;
+        
+    const sql = 'UPDATE clientes SET nome=?, email=?, cpf=?, telefone=?, logradouro=?, cidade=?, complemento=?, numero=?, estado=?, cep=? WHERE id=?';
+    db.query(sql, [ novoNome, novoEmail, novoCpf, novoTelefone, novoLogradouro, novaCidade, novoComplemento, novoNumero, 
+        novoEstado, novoCep, clienteId], async (err, result) => {
       if(err){
-        console.error('Erro ao inserir dados:', err);
-        res.send('Erro ao cadastrar dados no banco de dados');
+        console.error('Erro ao atualizar dados:', err);
+        res.send('Erro ao atualizar dados no banco de dados');
       }else{
-        console.log('Dados inseridos com sucesso');
-        res.sendFile(__dirname + "/frontend/cadastros.html");  
+        console.log('Dados atualizados com sucesso');
+
+        res.send(200);
       }
     });
 });
+
 
 
 // app.post("/processar-cadastro-atendente", (req, res) => {
@@ -915,10 +991,10 @@ app.post("/processar-cadastro-pagamento", (req, res) => {
 
 
 app.post("/processar-cadastro-produto",(req, res) => {
-    const { nomeProduto, valorProduto, descricaoProduto, estoqueProduto, categoriaProduto, fornecedorProduto} = req.body;
+    const { nomeProduto, descricaoProduto, categoriaProduto} = req.body;
     
-    const sql = 'INSERT INTO produto (nome, valor, descricao, estoque, categoria, fornecedor) VALUES (?, ?, ?, ?, ?, ?)';
-    db.query(sql, [ nomeProduto, valorProduto, descricaoProduto, estoqueProduto, categoriaProduto, fornecedorProduto], (err, result) => {
+    const sql = 'INSERT INTO produto (nome, descricao, estoque, categoria, fornecedor) VALUES (?, ?, ?)';
+    db.query(sql, [ nomeProduto, descricaoProduto, categoriaProduto], (err, result) => {
         if(err){
         console.error('Erro ao inserir dados:', err);
         res.send('Erro ao cadastrar dados no banco de dados');

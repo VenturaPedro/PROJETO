@@ -55,10 +55,6 @@
                         <input type="text" id="nomeProduto" name="nomeProduto" required size="20"><br>
                     </p>
                     <p>
-                        <label for="valorProduto">Valor R$</label><br>
-                        <input type="number" id="valorProduto" name="valorProduto" required size="20"><br>
-                    </p>
-                    <p>
                         <label for="descricaoProduto">Descrição</label><br>
                         <input type="text" id="descricaoProduto" name="descricaoProduto" style="width: 160px; height: 35px;"><br>
                     </p>
@@ -84,8 +80,11 @@
                 <div id="form-estoque">
                     <p>
                         <label for="produto">Produto</label><br>
-                        <input type="text" id="produto" name="produto" required size="20"><br>
+                        <select id="produto" name="produto" required style="width: auto;">
+                            <option value="">Selecione um produto</option>
+                        </select><br>
                     </p>
+                    
                     <br>
                     <p>
                         <label for="quantidade">Quantidade em Estoque</label><br>
@@ -161,6 +160,28 @@
             document.getElementById("cadastrar-estoque").style.display = "none";
             window.location.reload();   
         }
+        // Função para preencher o campo de seleção com os produtos
+        async function preencherProdutos() {
+            const response = await axios.get("/api/listar-produtos");
+            const produtos = response.data.produtos;
+
+            const selectProduto = document.getElementById("produto");
+            selectProduto.innerHTML = "<option value=''>Selecione um produto</option>";
+
+            produtos.forEach(produto => {
+                const option = document.createElement("option");
+                option.value = produto.nome;
+                option.textContent = produto.nome;
+                selectProduto.appendChild(option);
+            });
+            }
+
+            // Event listener para chamar a função ao abrir o popup de cadastro
+            document.getElementById("btn-cadastrarEstoque").addEventListener("click", async function(){
+                document.getElementById("cadastrar-estoque").style.display = "block";
+                await preencherProdutos();
+            });
+
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

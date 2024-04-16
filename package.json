@@ -13,6 +13,7 @@
     "arraybuffer.prototype.slice": "^1.0.2",
     "asynckit": "^0.4.0",
     "available-typed-arrays": "^1.0.5",
+    "axios": "^1.6.8",
     "balanced-match": "^1.0.2",
     "base64-js": "^1.5.1",
     "bcrypt": "^5.1.1",

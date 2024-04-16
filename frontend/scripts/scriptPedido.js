@@ -43,32 +43,47 @@ function buscarItens() {
         searchResults.innerHTML = "";
     }
 }
+async function addToTable(item) {
+    // Consulta o valor e a quantidade do produto na rota '/api/consultar-valor-produto/:id'
+    try {
+        const response = await axios.get(`/api/consultar-valor-produto/${item.id}`);
+        const { valor, quantidade } = response.data;
 
-function addToTable(item) {
-    const quantidadeItens = document.getElementById("quantidadeItens").value.length > 0
-        ? parseInt(document.getElementById("quantidadeItens").value)
-        : 1;
+        const quantidadeItens = document.getElementById("quantidadeItens").value.length > 0
+            ? parseInt(document.getElementById("quantidadeItens").value)
+            : 1;
 
-    const selectedItemsTable = document.getElementById("itensSelecionados");
-    const newRow = selectedItemsTable.insertRow();
-    const celulaId = newRow.insertCell(0);
-    celulaId.textContent = item.id;
-    const celulaQtd = newRow.insertCell(1);
-    celulaQtd.textContent = quantidadeItens;
-    const celulaDescricao = newRow.insertCell(2);
-    celulaDescricao.textContent = item.nome;
-    const celulaValor = newRow.insertCell(3);
-    celulaValor.textContent = `R$${item.valor}`;
-    const celulaTotal = newRow.insertCell(4);
-    celulaTotal.textContent = `R$${quantidadeItens * item.valor}`;
+        // Verifica se a quantidade disponível no estoque é suficiente
+        if (quantidade < quantidadeItens) {
+            alert("Quantidade selecionada excede a quantidade disponível no estoque.");
+            return;
+        }
 
-    const selectedItem = {
-        id: item.id,
-        quantidade: quantidadeItens
-    };
- 
-    itemsPedido.push(selectedItem);
+        const selectedItemsTable = document.getElementById("itensSelecionados");
+        const newRow = selectedItemsTable.insertRow();
+        const celulaId = newRow.insertCell(0);
+        celulaId.textContent = item.id;
+        const celulaQtd = newRow.insertCell(1);
+        celulaQtd.textContent = quantidadeItens;
+        const celulaDescricao = newRow.insertCell(2);
+        celulaDescricao.textContent = item.nome;
+        const celulaValor = newRow.insertCell(3);
+        celulaValor.textContent = `R$${valor}`;
+        const celulaTotal = newRow.insertCell(4);
+        celulaTotal.textContent = `R$${quantidadeItens * valor}`;
+
+        const selectedItem = {
+            id: item.id,
+            quantidade: quantidadeItens
+        };
+
+        itemsPedido.push(selectedItem);
+    } catch (error) {
+        console.error('Erro ao adicionar item à tabela:', error);
+    }
 }
+
+
 
 function fecharPopupPedido() {
     document.getElementsByClassName("modal-body").style.display = "none";
@@ -172,7 +187,7 @@ async function lancarPedido() {
         valorInicialCaixa = parseFloat(localStorage.getItem("valorCaixa")) + retornoPedido.data.valorTotalPedido;
         parseFloat(localStorage.setItem("valorCaixa", valorInicialCaixa.toFixed(2)));        
     }
-    document.getElementsByClassName("modal-body").style.display = "none";
+    fecharPopupPedido();
     window.location.reload();
 }
 

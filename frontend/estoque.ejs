@@ -62,6 +62,7 @@
                     <!-- <th>ID</th> -->
                     <th>Produto</th>
                     <th>Quantidade</th>
+                    <th>Estoque Atual</th>
                     <th>Preço de Compra R$</th>
                     <th>Preço de Venda R$</th>
                     <th>Data de Validade</th>
@@ -77,6 +78,7 @@
                             <!-- <td><%= estoque.id %></td> -->
                             <td><%= estoque.produto %></td>
                             <td><%= estoque.quantidade %></td>
+                            <td><%= %></td>
                             <td>R$<%= estoque.preco_compra %></td>
                             <td>R$<%= estoque.preco_venda %></td>
                             <td><%= new Intl.DateTimeFormat('pt-BR', {

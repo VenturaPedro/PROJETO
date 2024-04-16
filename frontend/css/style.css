@@ -192,13 +192,24 @@ nav button{
 #cadastrar-cliente h2, h3, button#btn-submitCliente{
     margin: 0px 30px;
 }
+#editarCliente h2, #editarCliente button{
+    margin-left: 25px
+}
 
+#editarCliente button:hover{
+    cursor: pointer;
+    transition: all 0.5s ease;
+    background-color: #210124; 
+    color: #FFFFFF; 
+    transform: scale(1.1); 
+    font-size: 18px;
+}
 #editarCliente{
-    font-size: 13px;
+    font-size: 18px;
     margin: 0% 5%;
     display: none;
     position: fixed;
-    width: 120vh;
+    width: 80vh;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -257,7 +268,7 @@ nav button{
     margin: 0px;   
 }
 
-#btn-submitCliente, #btn-submitAtendente, #btn-submitMotoboy, #btn-submitProduto, #btn-submitEstoque, #btn-submitMembro, #btn-submitCategoria, #btn-submitPagamento, #btn-submitDespesa{
+#btn-submitCliente, #btn-submitAtendente, #btn-salvarEdicao, #btn-cancelarEdicao, #btn-submitMotoboy, #btn-submitProduto, #btn-submitEstoque, #btn-submitMembro, #btn-submitCategoria, #btn-submitPagamento, #btn-submitDespesa{
     font-size: 18px;
     padding: 5px 15px;
     border-radius: 12px;
