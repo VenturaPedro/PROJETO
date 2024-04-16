@@ -156,6 +156,7 @@ form.addEventListener('submit', async (event) => {
 //MASCARAS
 
 $('#cpfCliente').inputmask('999.999.999-99');
+$('#emailCliente').inputmask({ alias: 'email' });
 $('#telefoneCliente').inputmask('(99)99999-999[9]', { greedy: false });
 $('#cepCliente').inputmask('99999-999');
 

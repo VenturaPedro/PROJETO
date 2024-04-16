@@ -1,6 +1,7 @@
 let items = [];
 let itemsPedido = [];
 
+
 document.getElementById("novo-pedido").addEventListener("click", function() {
     document.getElementById("vincular-atendente").style.display = "block";
     
@@ -68,9 +69,9 @@ async function addToTable(item) {
         const celulaDescricao = newRow.insertCell(2);
         celulaDescricao.textContent = item.nome;
         const celulaValor = newRow.insertCell(3);
-        celulaValor.textContent = `R$${valor}`;
+        celulaValor.textContent = `R$${preco_venda}`;
         const celulaTotal = newRow.insertCell(4);
-        celulaTotal.textContent = `R$${quantidadeItens * valor}`;
+        celulaTotal.textContent = `R$${quantidadeItens * preco_venda}`;
 
         const selectedItem = {
             id: item.id,

@@ -405,7 +405,7 @@ app.get('/api/consultar-valor-produto/:id', async (req, res) => {
     const productId = req.params.id;
 
     // Consulta ao banco de dados para obter o valor e a quantidade do produto
-    const query = 'SELECT estoque.preco_venda, estoque.quantidade FROM produto JOIN estoque ON produto.id = estoque.id_produto WHERE produto.id = ?';
+    const query = 'SELECT estoque.preco_venda, estoque.quantidade FROM produto JOIN estoque ON produto.id = estoque.produto WHERE produto.id = ?';
     db.query(query, [productId], (err, results) => {
         if (err) {
             console.error('Erro ao consultar valor e quantidade do produto:', err);
