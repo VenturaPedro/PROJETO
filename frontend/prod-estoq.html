@@ -170,7 +170,7 @@
 
             produtos.forEach(produto => {
                 const option = document.createElement("option");
-                option.value = produto.nome;
+                option.value = produto.id;
                 option.textContent = produto.nome;
                 selectProduto.appendChild(option);
             });

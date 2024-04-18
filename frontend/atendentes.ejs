@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
@@ -83,6 +84,33 @@
                 </tbody>
             </table>
         </div>
+        <div id="editarAtendente">
+            <span id="fecharPopupEdicaoAtd" onclick="fecharPopupEdicaoAtd()">X</span>
+            <h2>Edição de cadastro</h2>
+            <input type="hidden" id="edit-atendente-id"><br>
+            <form action="/editar-cadastro-atendente" method="post">
+                <div id="form-atendente">
+                    
+                    <label for="nomeAtendenteEditado">Nome:</label><br>
+                    <input type="text" id="nomeAtendenteEditado" required size="25">
+
+                    <label for="emailAtendenteEditado">E-mail:</label><br>
+                    <input type="text" id="emailAtendenteEditado" class="campoEmail" name="emailAtendenteEditado" placeholder="email@email.com" size="25">
+
+                    <label for="telefoneAtendenteEditado">Telefone:</label><br>
+                    <input type="tel" id="telefoneAtendenteEditado" name="telefoneAtendenteEditado" placeholder="(99) 90000-0000" required size="20" maxlength="14">
+                    
+                    <label for="obsAtendenteEditado">Observações:</label><br>
+                    <input type="text" id="obsAtendenteEditado" style="width: 83%; height: 35px;">
+                    
+                </div>
+                <div>
+                    <br>
+                    <button id="btn-salvarEdicaoAtd">Salvar</button>
+                    <button id="btn-cancelarEdicaoAtd">Cancelar</button>
+                </div>
+            </form>
+        </div>
     </section>
     <script>
         async function excluirAtendente(atendenteId) {
@@ -107,6 +135,60 @@
                 });
             }
         }
+        async function editarAtendente(atendenteId){
+            console.log(`Editar atendente com ID ${atendenteId}`);
+            
+            const confirmacao = confirm(`Tem certeza que deseja editar o atendente com ID ${atendenteId}?`);
+            if(confirmacao){
+                const response = await axios.get("/api/listar-atendentes");
+                const atendentes = response.data.Atendentes;
+
+                for (atendente of atendentes) {
+                    if (atendente.ID == atendenteId) {
+                        console.log("atendente", atendente);
+                        document.getElementById('edit-atendente-id').value = atendente.ID;
+                        document.getElementById('nomeAtendenteEditado').value = atendente.Nome;
+                        document.getElementById('emailAtendenteEditado').value = atendente.Email;
+                        document.getElementById('telefoneAtendenteEditado').value = atendente.Telefone;
+                        document.getElementById('obsAtendenteEditado').value = atendente.Observacoes;
+                        break;
+                    }
+                }
+                
+                // Exibir o popup de edição imediatamente
+                document.getElementById("editarAtendente").style.display = "block";
+            }
+        }
+
+        
+document.getElementById("btn-salvarEdicaoAtd").addEventListener("click", async function() {
+    const dadosEditados = {
+        atendenteId: document.getElementById("edit-atendente-id").value, 
+        novoNomeAtd: document.getElementById("nomeAtendenteEditado").value, 
+        novoEmailAtd: document.getElementById("emailAtendenteEditado").value, 
+        novoTelefoneAtd: document.getElementById("telefoneAtendenteEditado").value, 
+        novoObsAtd: document.getElementById("obsAtendenteEditado").value, 
+    };
+
+    await fetch('/editar-cadastro-atendente', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dadosEditados),
+    })
+    .then(() => {
+        document.getElementById("editarAtendente").style.display = "none";
+        window.location.reload();
+    })
+    .catch(error => {
+        console.error('Erro ao editar cliente:', error);
+    });
+    });
+
+    document.getElementById("btn-cancelarEdicaoAtd").addEventListener("click", function() {
+    document.getElementById("editarAtendente").style.display = "none";
+    });
     </script>
     
 </body>

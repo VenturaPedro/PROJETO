@@ -192,11 +192,11 @@ nav button{
 #cadastrar-cliente h2, h3, button#btn-submitCliente{
     margin: 0px 30px;
 }
-#editarCliente h2, #editarCliente button{
+#editarCliente h2, #editarCliente button, #editarAtendente h2, #editarAtendente button{
     margin-left: 25px
 }
 
-#editarCliente button:hover{
+#editarCliente button:hover, #editarAtendente button:hover{
     cursor: pointer;
     transition: all 0.5s ease;
     background-color: #210124; 
@@ -284,7 +284,7 @@ nav button{
     font-size: 18px;
 }
 
-#cadastrar-atendente, #cadastrar-motoboy, #cadastrar-membro, #cadastrar-categoria, #cadastrar-pagamento, #cadastrar-despesa{
+#cadastrar-atendente, #editarAtendente, #cadastrar-motoboy, #cadastrar-membro, #cadastrar-categoria, #cadastrar-pagamento, #cadastrar-despesa{
     font-size: 18px;
     margin: 0% 4%;
     display: none;

@@ -405,7 +405,7 @@ app.get('/api/consultar-valor-produto/:id', async (req, res) => {
     const productId = req.params.id;
 
     // Consulta ao banco de dados para obter o valor e a quantidade do produto
-    const query = 'SELECT estoque.preco_venda, estoque.quantidade FROM produto JOIN estoque ON produto.id = estoque.produto WHERE produto.id = ?';
+    const query = 'SELECT estoque.preco_venda, estoque.quantidade FROM estoque JOIN produto ON produto.id = estoque.produto WHERE produto.id = ?';
     db.query(query, [productId], (err, results) => {
         if (err) {
             console.error('Erro ao consultar valor e quantidade do produto:', err);
@@ -449,7 +449,7 @@ app.post("/api/salvar-pedido", async (req, res) => {
 
     const promiseInsertProdutosPedido = new Promise((resolve, reject) => {
         const promises = itemsPedido.map((produtoPedido) => {
-            const selectValorProduto = 'SELECT valor FROM produto WHERE id = ' + produtoPedido.id;
+            const selectValorProduto = 'SELECT valor FROM estoque WHERE id = ' + preco_venda.id;
 
             return new Promise((resolve, reject) => {
                 db.query(selectValorProduto, (err, results) => {
@@ -503,8 +503,6 @@ app.post("/api/salvar-pedido", async (req, res) => {
                 reject(err); 
             });
     });
-
-    // Continuação do código existente...
 
     Promise.all([promiseInsertPedido, promiseInsertProdutosPedido])
     .then(() => {
@@ -677,10 +675,10 @@ app.post("/excluir-cliente", (req, res) => {
     db.query(sql, [clienteId], (err, result) => {
         if(err){
             console.error('Erro ao modificar status do cliente:', err);
-            res.status(500).send('Erro ao modificar status do cliente no banco de dados');
+            res.sendStatus(500).send('Erro ao modificar status do cliente no banco de dados');
         }else{
             console.log(`Status do cliente ${clienteId} modificado para INATIVO com sucesso`);
-            res.status(200).send(`Status do cliente ${clienteId} modificado para INATIVO com sucesso`);
+            res.sendStatus(200).send(`Status do cliente ${clienteId} modificado para INATIVO com sucesso`);
         }
     });
 });
@@ -692,10 +690,10 @@ app.post("/ativar-cliente", (req, res) => {
     db.query(sql, [clienteId], (err, result) => {
         if(err){
             console.error('Erro ao modificar status do cliente:', err);
-            res.status(500).send('Erro ao modificar status do cliente no banco de dados');
+            res.sendStatus(500).send('Erro ao modificar status do cliente no banco de dados');
         }else{
             console.log(`Status do cliente ${clienteId} modificado para ATIVO com sucesso`);
-            res.status(200).send(`Status do cliente ${clienteId} modificado para ATIVO com sucesso`);
+            res.sendStatus(200).send(`Status do cliente ${clienteId} modificado para ATIVO com sucesso`);
         }
     });
 });
@@ -707,10 +705,10 @@ app.post("/excluir-atendente", (req, res) => {
     db.query(sql, [atendenteId], (err, result) => {
         if(err){
             console.error('Erro ao excluir atendente:', err);
-            res.status(500).send('Erro ao excluir atendente do banco de dados');
+            res.sendStatus(500).send('Erro ao excluir atendente do banco de dados');
         }else{;
             console.log('Atendente excluído com sucesso');
-            res.status(200).send(`Atendente ${atendenteId} excluído com sucesso `);
+            res.sendStatus(200).send(`Atendente ${atendenteId} excluído com sucesso `);
         }
     });
 });
@@ -840,15 +838,33 @@ app.post("/editar-cadastro-cliente", (req, res) => {
         novoEstado, novoCep, clienteId], async (err, result) => {
       if(err){
         console.error('Erro ao atualizar dados:', err);
-        res.send('Erro ao atualizar dados no banco de dados');
+        res.sendStatus('Erro ao atualizar dados no banco de dados');
       }else{
         console.log('Dados atualizados com sucesso');
 
-        res.send(200);
+        res.sendStatus(200);
       }
     });
 });
 
+
+app.post("/editar-cadastro-atendente", (req, res) => {
+    const atendenteId = req.body.atendenteId;
+    const { novoNomeAtd, novoEmailAtd, novoTelefoneAtd, novoObsAtd,
+    } = req.body;
+        
+    const sql = 'UPDATE atendente SET Nome=?, Email=?, Telefone=?, Observacoes=? WHERE id=?';
+    db.query(sql, [ novoNomeAtd, novoEmailAtd, novoTelefoneAtd, novoObsAtd, atendenteId], async (err, result) => {
+      if(err){
+        console.error('Erro ao atualizar dados:', err);
+        res.sendStatus('Erro ao atualizar dados no banco de dados');
+      }else{
+        console.log('Dados atualizados com sucesso');
+
+        res.sendStatus(200);
+      }
+    });
+});
 
 
 // app.post("/processar-cadastro-atendente", (req, res) => {

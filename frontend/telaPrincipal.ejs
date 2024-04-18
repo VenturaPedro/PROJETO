@@ -116,7 +116,7 @@
             </table>
         </div>
         <div id="editarCliente">
-            <span id="fecharPopupEdicaoCli" onclick="fecharPopupEdicaoCli()">X</span>
+            <span id="fecharPopupEdicaoCli" onclick="fecharPopupEdicaoCli()"><i class="fa-solid fa-circle-xmark"></i></span>
             <h2>Edição de cadastro</h2>
             <input type="hidden" id="edit-cliente-id"><br>
             <form action="/editar-cadastro-cliente" method="post">
@@ -167,6 +167,11 @@
         document.addEventListener('DOMContentLoaded', function(){
         const btnAtivos = document.querySelector('#pt2 .btn-listas:nth-child(1)');
         const btnInativos = document.querySelector('#pt2 .btn-listas:nth-child(2)');
+
+        function fecharPopupEdicaoCli(){
+        document.getElementById("editarCliente").style.display = "none";
+        window.location.reload();
+}
 
         // btnAtivos.addEventListener('click', function(){
         //     window.location.href = '/listar-clientes';
