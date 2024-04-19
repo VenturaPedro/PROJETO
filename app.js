@@ -445,7 +445,7 @@ app.post("/api/salvar-pedido", async (req, res) => {
 
     const promiseInsertProdutosPedido = new Promise((resolve, reject) => {
         const promises = itemsPedido.map((produtoPedido) => {
-            const selectValorProduto = 'SELECT preco_venda FROM estoque WHERE id = ' + preco_venda.id;
+            const selectValorProduto = 'SELECT preco_venda FROM estoque WHERE id = ' + valor.id;
 
             return new Promise((resolve, reject) => {
                 db.query(selectValorProduto, (err, results) => {

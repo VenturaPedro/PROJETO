@@ -187,6 +187,8 @@ async function lancarPedido() {
         valorInicialCaixa = parseFloat(localStorage.getItem("valorCaixa")) + retornoPedido.data.valorTotalPedido;
         parseFloat(localStorage.setItem("valorCaixa", valorInicialCaixa.toFixed(2)));        
     }
+
+    
     fecharPopupPedido();
     window.location.reload();
 }
