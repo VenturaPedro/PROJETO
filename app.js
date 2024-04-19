@@ -399,13 +399,11 @@ app.get("/api/listar-despesas", (req, res) => {
 //-------------------------------------------------------------------
 app.use(express.static('frontend'))
 
-
-
 app.get('/api/consultar-valor-produto/:id', async (req, res) => {
     const productId = req.params.id;
 
     // Consulta ao banco de dados para obter o valor e a quantidade do produto
-    const query = 'SELECT estoque.preco_venda, estoque.quantidade FROM estoque JOIN produto ON produto.id = estoque.produto WHERE produto.id = ?';
+    const query = 'SELECT estoque.preco_venda as valor, estoque.quantidade FROM estoque JOIN produto ON produto.id = estoque.produto WHERE produto.id = ?';
     db.query(query, [productId], (err, results) => {
         if (err) {
             console.error('Erro ao consultar valor e quantidade do produto:', err);
@@ -414,7 +412,7 @@ app.get('/api/consultar-valor-produto/:id', async (req, res) => {
             console.log("results", results)
             // Verifica se o produto foi encontrado
             if (results.length > 0) {
-                const { valor, quantidade } = results[0];
+                const {  valor, quantidade } = results[0];
                 res.json({ valor, quantidade });
             } else {
                 res.status(404).json({ error: 'Produto não encontrado' });
@@ -424,8 +422,6 @@ app.get('/api/consultar-valor-produto/:id', async (req, res) => {
 });
 
 module.exports = app;
-
-
 
 app.post("/api/salvar-pedido", async (req, res) => {
     let insertedPedidoId = 0;
@@ -449,7 +445,7 @@ app.post("/api/salvar-pedido", async (req, res) => {
 
     const promiseInsertProdutosPedido = new Promise((resolve, reject) => {
         const promises = itemsPedido.map((produtoPedido) => {
-            const selectValorProduto = 'SELECT valor FROM estoque WHERE id = ' + preco_venda.id;
+            const selectValorProduto = 'SELECT preco_venda FROM estoque WHERE id = ' + preco_venda.id;
 
             return new Promise((resolve, reject) => {
                 db.query(selectValorProduto, (err, results) => {
@@ -605,29 +601,63 @@ app.post("/api/salvar-pedido", async (req, res) => {
 //     }
 // });
 
-app.post("/login", async (req, res) => {
-    const username = req.body.usernameInput;
-    const password = req.body.passwordInput;
+app.post("/api/login", async (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
 
     async function validateUser(username, password) {
         // Verifica na tabela admin
         const sqlAdmin = 'SELECT * FROM adm WHERE Nome = ?';
         const admin = await queryDatabase(sqlAdmin, username, password);
 
+        if (admin) {
+            return {
+                status: true,
+                userId: admin.ID,
+                role: "admin"
+            }
+        }
+
         // Verifica na tabela Atendente
         const sqlAtendente = 'SELECT * FROM Atendente WHERE Nome = ?';
         const atendente = await queryDatabase(sqlAtendente, username, password);
+
+        if (atendente) {
+            return {
+                status: true,
+                userId: atendente.ID,
+                role: "atendente"
+            }
+        }
 
         // Verifica na tabela Motoboy
         const sqlMotoboy = 'SELECT * FROM Motoboy WHERE Nome = ?';
         const motoboy = await queryDatabase(sqlMotoboy, username, password);
 
+        if (motoboy) {
+            return {
+                status: true,
+                userId: motoboy.ID,
+                role: "motoboy"
+            }
+        }
+
+
         // Verifica na tabela Membro
         const sqlMembro = 'SELECT * FROM Membro WHERE Nome = ?';
         const membro = await queryDatabase(sqlMembro, username, password);
 
-        // Retorna o usuário se encontrado em uma das tabelas
-        return admin || atendente || motoboy || membro;
+        if (membro) {
+            return {
+                status: true,
+                userId: membro.ID,
+                role: "membro"
+            }
+        }
+
+        return {
+            status: false
+        };
     }
 
     async function queryDatabase(sql, username, password) {
@@ -655,14 +685,14 @@ app.post("/login", async (req, res) => {
     }
     try{
         const user = await validateUser(username, password);
-        if(user){
-            res.redirect('/painel.html');
+        if(user.status){
+            return res.status(200).send(user);
         }else{
-            res.status(401).send('Nome de usuário ou senha incorretos.');
+            return res.status(401).send('Nome de usuário ou senha incorretos.');
         }
     }catch(error){
         console.error('Erro ao validar usuário:', error);
-        res.status(500).send('Erro ao processar a solicitação.');
+        return res.status(500).send('Erro ao processar a solicitação.');
     }
 });
 

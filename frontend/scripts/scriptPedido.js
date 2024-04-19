@@ -4,8 +4,7 @@ let itemsPedido = [];
 
 document.getElementById("novo-pedido").addEventListener("click", function() {
     document.getElementById("vincular-atendente").style.display = "block";
-    
-    preencherAtendente();
+
     preencherCliente();
     preencherItens();
     preencherFormaPagamento(); 
@@ -49,7 +48,7 @@ async function addToTable(item) {
     try {
         const response = await axios.get(`/api/consultar-valor-produto/${item.id}`);
         const { valor, quantidade } = response.data;
-
+        console.log(response.data);
         const quantidadeItens = document.getElementById("quantidadeItens").value.length > 0
             ? parseInt(document.getElementById("quantidadeItens").value)
             : 1;
@@ -69,13 +68,14 @@ async function addToTable(item) {
         const celulaDescricao = newRow.insertCell(2);
         celulaDescricao.textContent = item.nome;
         const celulaValor = newRow.insertCell(3);
-        celulaValor.textContent = `R$${preco_venda}`;
+        celulaValor.textContent = `R$${valor}`;
         const celulaTotal = newRow.insertCell(4);
-        celulaTotal.textContent = `R$${quantidadeItens * preco_venda}`;
+        celulaTotal.textContent = `R$${quantidadeItens * valor}`;
 
         const selectedItem = {
             id: item.id,
-            quantidade: quantidadeItens
+            quantidade: quantidadeItens,
+            valor
         };
 
         itemsPedido.push(selectedItem);
@@ -91,24 +91,24 @@ function fecharPopupPedido() {
     window.location.reload();
 }
 
-async function preencherAtendente() {
-    const getAtendentes = await axios.get("/api/listar-atendentes");
+// async function preencherAtendente() {
+//     const getAtendentes = await axios.get("/api/listar-atendentes");
 
-    const atendentesBanco = getAtendentes.data.Atendentes;
+//     const atendentesBanco = getAtendentes.data.Atendentes;
 
-    const selectAtendente = document.getElementById("escolhaAtendente") ;
+//     const selectAtendente = document.getElementById("escolhaAtendente") ;
 
-    for (Atendente of atendentesBanco) {
-        let novaAtendente = new Option(Atendente.Nome, Atendente.ID);
-        selectAtendente.add(novaAtendente);
-    }
-    selectAtendente.addEventListener("change", function () {
+//     for (Atendente of atendentesBanco) {
+//         let novaAtendente = new Option(Atendente.Nome, Atendente.ID);
+//         selectAtendente.add(novaAtendente);
+//     }
+//     selectAtendente.addEventListener("change", function () {
         
-        const atendenteSelecionado = selectAtendente.value;
+//         const atendenteSelecionado = selectAtendente.value;
  
-        console.log("Atendente selecionado:", atendenteSelecionado);
-    });
-}
+//         console.log("Atendente selecionado:", atendenteSelecionado);
+//     });
+// }
 
 async function preencherCliente() {
     const getClientes = await axios.get("/api/listar-clientes");
@@ -158,8 +158,7 @@ async function preencherFormaPagamento() {
 
 
 async function lancarPedido() {
-    const atendenteElement = document.getElementById("escolhaAtendente");
-    const atendenteId = atendenteElement.options[atendenteElement.selectedIndex].value
+    const atendenteId = sessionStorage.getItem("userId");
 
     const clienteElement = document.getElementById("escolhaCliente");
     const clienteId = clienteElement.options[clienteElement.selectedIndex].value

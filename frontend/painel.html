@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Painel</title>
+    <script src="scripts/script.js"></script>
 </head>
 <body id="painel">
     <nav>
@@ -39,13 +40,18 @@
             </nav>
             <nav id="painel-2">
                 <a href="operacoes.html"><button id="operacoesButton">Operações</button></a>
-                <a href="/login"><button id="sairButton">Sair</button></a>
+                <button onClick=logout() id="sairButton">Sair</button>
             </nav>
         </div>
     </main>
     <footer>
         <!-- <h4>rodapé</h4> -->
     </footer>
-    <script src="scripts/script.js"></script>
+    <script>
+        function logout() {
+            sessionStorage.clear();
+            location.href = "/login";
+        }
+    </script>
 </body>
 </html>

@@ -1,3 +1,7 @@
+if (!sessionStorage.getItem("role")) {
+    location.href = "/login";
+}
+
 document.getElementById("btn-cadastrarCliente").addEventListener("click", function(){
     document.getElementById("cadastrar-cliente").style.display = "block";
 });

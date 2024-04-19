@@ -94,6 +94,12 @@
         </div>
     </section>
     <script>
+        if (sessionStorage.getItem("role")!= "admin") {
+            location.href = "/painel"
+
+        }
+
+
         async function excluirDespesa(despesaId) {
             console.log(`Excluir despesa com ID ${despesaId}`);
             const confirmacao = confirm(`Tem certeza que deseja excluir o despesa com ID ${despesaId}?`);
@@ -116,6 +122,8 @@
                 });
             }
         }
+
+
     </script>
     
 </body>
