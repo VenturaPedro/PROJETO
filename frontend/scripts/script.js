@@ -4,6 +4,7 @@ if (!sessionStorage.getItem("role")) {
 
 document.getElementById("btn-cadastrarCliente").addEventListener("click", function(){
     document.getElementById("cadastrar-cliente").style.display = "block";
+    preencherTaxas()
 });
 function fecharPopupCli(){
     document.getElementById("cadastrar-cliente").style.display = "none";
@@ -26,11 +27,11 @@ function fecharPopupBoy(){
     window.location.reload();
 }
 
-document.getElementById("btn-cadastrarMembro").addEventListener("click", function(){
-    document.getElementById("cadastrar-membro").style.display = "block";
+document.getElementById("btn-cadastrarTaxaDelivery").addEventListener("click", function(){
+    document.getElementById("cadastrar-taxa-delivery").style.display = "block";
 });
-function fecharPopupMembro(){
-    document.getElementById("cadastrar-membro").style.display = "none";
+function fecharPopupTaxa(){
+    document.getElementById("cadastrar-taxa-delivery").style.display = "none";
     window.location.reload();
 }
 
@@ -68,6 +69,21 @@ async function preencherCategorias(){
     for(categoria of categoriasBanco){
         let novaCategoria = new Option(categoria.Nome);
         selectCategoria.add(novaCategoria);
+    }
+}
+
+async function preencherTaxas(){
+    const getTaxas = await axios.get("/api/listar-taxas");
+
+    const taxasBanco = getTaxas.data.TaxaDelivery;
+    console.log(taxasBanco);
+
+    const selectTaxas = document.getElementById("bairroCliente");
+
+    for(TaxaDelivery of taxasBanco){
+        let novaTaxas = new Option(TaxaDelivery.Area, TaxaDelivery.ID);
+        novaTaxas.value = TaxaDelivery.ID;
+        selectTaxas.add(novaTaxas);
     }
 }
 
@@ -129,33 +145,6 @@ form.addEventListener('submit', async (event) => {
 });
 
 
-//COMPARAÇÃO DE SENHA MEMBRO
-const formMembro = document.querySelector('form');
-form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    const formData = new FormData(form);
-
-    try{
-        const response = await fetch('/processar-cadastro-membro',{
-            method: 'POST',
-            body: formData
-        });
-
-        const data = await response.json();
-
-        if(response.ok){
-            // Se a operação foi OK, exibe uma mensagem de sucesso
-            alert(data.success);
-        }else{
-            
-            alert(data.error);
-        }
-    }catch(error){
-        console.error('Erro ao processar a solicitação:', error);
-        alert('Erro ao processar a solicitação. Por favor, tente novamente mais tarde.');
-    }
-});
 
 //MASCARAS
 
@@ -172,9 +161,6 @@ $('#telefoneAtendente').inputmask('(99)99999-999[9]', { greedy: false });
 $('#emailMotoboy').inputmask({ alias: 'email' });
 $('#telefoneMotoboy').inputmask('(99)99999-999[9]', { greedy: false });
 
-// Máscaras para Campos do Formulário de Membro
-$('#emailMembro').inputmask({ alias: 'email' });
-$('#telefoneMembro').inputmask('(99)99999-999[9]', { greedy: false });
 
 // Máscaras para Campos do Formulário de Produto
 $('#valorProduto').inputmask('currency', { prefix: 'R$ ' });

@@ -75,6 +75,7 @@ async function addToTable(item) {
         const selectedItem = {
             id: item.id,
             quantidade: quantidadeItens,
+            totalPedido: celulaTotal,
             valor
         };
 
@@ -181,16 +182,21 @@ async function lancarPedido() {
 
     console.log("pedido", pedido)
 
-    const retornoPedido = await axios.post("/api/salvar-pedido", pedido, axiosConfig)
+    try {
+        const retornoPedido = await axios.post("/api/salvar-pedido", pedido, axiosConfig)
 
-    if(formaPagamentoId == 3){
-        valorInicialCaixa = parseFloat(localStorage.getItem("valorCaixa")) + retornoPedido.data.valorTotalPedido;
-        parseFloat(localStorage.setItem("valorCaixa", valorInicialCaixa.toFixed(2)));        
+        if(formaPagamentoId == 3){
+            valorInicialCaixa = parseFloat(localStorage.getItem("valorCaixa")) + retornoPedido.data.valorTotalPedido;
+            parseFloat(localStorage.setItem("valorCaixa", valorInicialCaixa.toFixed(2)));        
+        }
+
+        console.log(retornoPedido); // Verifica se retornoPedido contém os dados esperados
+
+        fecharPopupPedido();
+    } catch (error) {
+        console.error('Erro ao lançar pedido:', error);
     }
-
-    
-    fecharPopupPedido();
-    window.location.reload();
 }
+
 
 

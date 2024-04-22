@@ -10,7 +10,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>MEMBROS</title>      
+    <title>Taxas Delivery</title>      
 </head>
 <body id="painel">
     <nav>
@@ -35,21 +35,21 @@
     <section id="painel-principal">
         <div>
             <a href="/listar-clientes"><button class="btn-listas">Clientes</button></a> 
-            <a href="/listar-atendentes"><button class="btn-listas">Atendentes</button></a> 
-            <a href="/listar-motoboy"><button class="btn-listas">Motoboy</button></a> 
+            <a href="/listar-atendentes"><button class="btn-listas d-none">Atendentes</button></a> 
+            <a href="/listar-motoboy"><button class="btn-listas d-none">Motoboy</button></a> 
             <a href="/listar-produtos"><button class="btn-listas">Produtos</button></a> 
-            <a href="/listar-membros"><button class="btn-listas">Membros</button></a> 
+            <a href="/listar-taxas"><button class="btn-listas">Taxas</button></a> 
             <a href="/listar-categorias"><button class="btn-listas">Categorias</button></a> 
             <a href="/listar-pagamentos"><button class="btn-listas">Pagamentos</button></a>
-            <a href="/listar-despesas"><button class="btn-listas">Despesas</button></a> 
-            <a href="/listar-estoques"><button class="btn-listas">Estoque</button></a> 
+            <a href="/listar-despesas"><button class="btn-listas d-none">Despesas</button></a> 
+            <a href="/listar-estoques"><button class="btn-listas d-none">Estoque</button></a> 
             <br><br>
         </div>
-        <div id="tabela-membro">
+        <div id="tabela-taxa-delivery">
             <div id="pt2">
-                <h1>Lista de Membros</h1>
-                <form class="filtro" id="filtroMembros" action="/filtrar-membros" method="post">
-                    <input type="text" name="filtroMembros" placeholder="Buscar Membros">
+                <h1>Lista de Taxas Delivery</h1>
+                <form class="filtro" id="filtroTaxas" action="/filtrar-taxas" method="post">
+                    <input type="text" name="filtroTaxas" placeholder="Buscar Taxas">
                     <button type="submit">Buscar</button>
                 </form>
             </div>
@@ -58,25 +58,20 @@
                 <thead>
                 <tr>
                     <!-- <th>ID</th> -->
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Telefone</th>
+                    <th>Bairro / Região</th>
+                    <th>Valor R$</th>
                     <th>Observações</th>
                     <th colspan="2">Opções</th>
-                    
                 </tr>
                 </thead>    
                 <tbody>
-                    <% Membro.forEach(function(Membro) { %>
+                    <% Taxa.forEach(function(Taxa) { %>
                         <tr>                            
-                            <!-- <td><%= Membro.ID %></td> -->
-                            <td><%= Membro.Nome %></td>
-                            <td><%= Membro.Email %></td>
-                            <td><%= Membro.Telefone %></td>
-                            <td><%= Membro.Observacoes %></td>
-                            <td><button id="btn-editarMembro" class="btn-edit" onclick="editarMembro('<%= Membro.ID %>')"><i class="fa-solid fa-pen"></button></td>
-                            <td><button id="btn-excluirMembro" class="btn-delete" onclick="excluirMembro('<%= Membro.ID %>')"><i class="fa-solid fa-trash"></button></td>
-                        
+                            <td><%= Taxa.Area %></td>
+                            <td><%= Taxa.Valor %></td>
+                            <td><%= Taxa.Observacoes %></td>
+                            <td><button id="btn-editarTaxa" class="btn-edit" onclick="editarTaxa('<%= Taxa.ID %>')"><i class="fa-solid fa-pen"></button></td>
+                            <td><button id="btn-excluirTaxa" class="btn-delete" onclick="excluirTaxa('<%= Taxa.ID %>')"><i class="fa-solid fa-trash"></button></td>
                         </tr>
                     <% }); %>
                 </tbody>
@@ -84,24 +79,37 @@
         </div>
     </section>
     <script>
-        async function excluirMembro(membroId) {
-            console.log(`Excluir membro com ID ${membroId}`);
-            const confirmacao = confirm(`Tem certeza que deseja excluir o membro com ID ${membroId}?`);
+                if (sessionStorage.getItem("role")== "admin") {
+            const btnListarDespesas = document.querySelector('#btn-listar-despesas');
+            btnListarDespesas.classList.remove("d-none");
+
+            const btnListarAtendentes = document.querySelector('#btn-listar-atendentes');
+            btnListarAtendentes.classList.remove("d-none");
+
+            const btnListarMotoboys = document.querySelector('#btn-listar-motoboys');
+            btnListarMotoboys.classList.remove("d-none");
+
+            const btnListarEstoques = document.querySelector('#btn-listar-estoques');
+            btnListarEstoques.classList.remove("d-none");
+        }
+        async function excluirTaxa(taxaId) {
+            console.log(`Excluir membro com ID ${taxaId}`);
+            const confirmacao = confirm(`Tem certeza que deseja excluir o membro com ID ${taxaId}?`);
             if (confirmacao) {
-                await fetch('/excluir-membro', {
+                await fetch('/excluir-taxa', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({membroId}),
+                    body: JSON.stringify({taxaId}),
                 })
                 .then(response => response.text())
                 .then(data => {
-                    alert(data); // Exibir mensagem de sucesso ou tratamento de erro
-                    window.location.reload()// Recarregar a página ou atualizar a lista de membro
+                    alert(data); 
+                    window.location.reload()
                 })
                 .catch(error => {
-                    console.error('Erro ao excluir membro:', error);
+                    console.error('Erro ao excluir taxa:', error);
                 });
             }
         }

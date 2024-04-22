@@ -67,7 +67,7 @@ app.post("/listar-clientes", (req, res) => {
 });
 
 app.get("/listar-clientes", (req, res) => {
-    const sql = 'SELECT * FROM clientes WHERE status = "ATIVO"';
+    const sql = 'SELECT CL.*, TD.Area FROM clientes CL LEFT JOIN TaxaDelivery TD ON CL.idBairro = TD.id WHERE status = "ATIVO"';
     db.query(sql, (err, results) => {
         if(err){
             console.error('Erro ao recuperar dados:', err);
@@ -201,29 +201,29 @@ app.get("/listar-estoques", (req, res) => {
     });
 });
 
-app.post("/filtrar-membros", (req, res) => {
-    const termoBusca = req.body.filtroMembros;
-    const sql = `SELECT * FROM Membro WHERE Nome LIKE '%${termoBusca}%' OR Email LIKE '%${termoBusca}%' OR Observacoes LIKE '%${termoBusca}%' OR Telefone LIKE '%${termoBusca}%'`;
+app.post("/filtrar-taxas", (req, res) => {
+    const termoBusca = req.body.filtroTaxas;
+    const sql = `SELECT * FROM TaxaDelivery WHERE Area LIKE '%${termoBusca}%' OR Valor LIKE '%${termoBusca}%' OR Observacoes LIKE '%${termoBusca}%'`;
     db.query(sql, (err, results) => {
         if (err) {
             console.error('Erro ao recuperar dados:', err);
             res.send('Erro ao recuperar dados do banco de dados');
         } else {
             console.log('Recuperação dos dados completa:');
-            res.render('membros', { Membro: results });
+            res.render('taxas', { Taxa: results });
         }
     });
 });
 
-app.get("/listar-membros", (req, res) => {
-    const sql = 'SELECT * FROM Membro';
+app.get("/listar-taxas", (req, res) => {
+    const sql = 'SELECT * FROM TaxaDelivery';
     db.query(sql, (err, results) => {
         if(err){
             console.error('Erro ao recuperar dados:', err);
             res.send('Erro ao recuperar dados do banco de dados');
         }else{
             console.log('Recuperação dos dados completa:');
-            res.render('membros', { Membro: results });
+            res.render('taxas', { Taxa: results });
         }
     });
 });
@@ -333,6 +333,17 @@ app.get("/api/listar-categorias", (req, res) => {
     });
 });
 
+app.get("/api/listar-taxas", (req, res) => {
+    const sql = 'SELECT * FROM TaxaDelivery';
+    db.query(sql, (err, results) => {
+        if(err){
+            return res.status(500).send(err);
+        }
+        return res.status(200).send({ TaxaDelivery: results }); // Sempre envie results como uma matriz
+    });
+});
+
+
 app.get("/api/listar-atendentes", (req, res) => {
     const sql = 'SELECT * FROM Atendente';
     db.query(sql, (err, results) => {
@@ -343,13 +354,15 @@ app.get("/api/listar-atendentes", (req, res) => {
     });
 });
 
-app.get("/api/listar-clientes", (req, res) => {
-    const sql = 'SELECT * FROM clientes WHERE status = "ATIVO"';
+app.get("/api/listar-cliente", (req, res) => {
+    const clienteId = req.query.clienteId
+    const sql = 'SELECT CL.*, TD.Area FROM clientes CL LEFT JOIN TaxaDelivery TD ON CL.idBairro = TD.id WHERE CL.status = "ATIVO" and CL.id = ' + clienteId;
     db.query(sql, (err, results) => {
         if(err){
             return res.send(err)
         }
-          return res.send({ clientes: results })
+        console.log("retorno query braba", results)
+          return res.send({ cliente: results })
     });
 });
 
@@ -426,14 +439,14 @@ module.exports = app;
 app.post("/api/salvar-pedido", async (req, res) => {
     let insertedPedidoId = 0;
     let valorTotalPedido = 0;
-    const { atendenteId, clienteId, itemsPedido, formaPagamentoId, valor_total } = req.body;
+    const { atendenteId, clienteId, itemsPedido, formaPagamentoId, totalPedido } = req.body;
 
     const insertPedido = `INSERT INTO PEDIDO 
             (Data, Atendente_ID, CLIENTE_ID, pagamento_ID, valor_total, status_pedido) 
         VALUES 
             (NOW(), ?, ?, ?, ?, ?)`;
     const promiseInsertPedido = new Promise((resolve, reject) => {
-        db.query(insertPedido, [atendenteId, clienteId, formaPagamentoId, 0.00, "Aberto"], (err, results) => {
+        db.query(insertPedido, [atendenteId, clienteId, formaPagamentoId, totalPedido, "Aberto"], (err, results) => {
             if(err){
                 reject(err);
             }else{
@@ -445,32 +458,32 @@ app.post("/api/salvar-pedido", async (req, res) => {
 
     const promiseInsertProdutosPedido = new Promise((resolve, reject) => {
         const promises = itemsPedido.map((produtoPedido) => {
-            const selectValorProduto = 'SELECT preco_venda FROM estoque WHERE id = ' + valor.id;
-
+            const selectValorProduto = 'SELECT preco_venda FROM estoque WHERE id = ' + produtoPedido.id;
+    
             return new Promise((resolve, reject) => {
                 db.query(selectValorProduto, (err, results) => {
                     if(err){
                         reject(err);
                     }else{
                         const firstResult = results && results.length > 0 ? results[0] : null;
-                        const valor = firstResult ? firstResult.valor : 0;
+                        const valor = firstResult ? firstResult.valor : 0; // Certifique-se de definir valor corretamente
                         resolve(valor);
                     }
                 });
             });
         });
-
+    
         Promise.all(promises)
             .then((valoresProdutos) => {
-                const promiseInsertProdutos = valoresProdutos.map((valorProduto, index) => {
+                const promiseInsertProdutos = valoresProdutos.map((preco_venda, index) => {
                     const produtoPedido = itemsPedido[index];
-                    const valorTotalProduto = isNaN(valorProduto) ? 0 : valorProduto * produtoPedido.quantidade;
+                    const valorTotalProduto = isNaN(preco_venda) ? 0 : preco_venda * produtoPedido.quantidade;
                     valorTotalPedido += valorTotalProduto;
                     const insertProdutosPedido = `INSERT INTO PRODUTOS_PEDIDO 
                             (QUANTIDADE, PEDIDO_ID, PRODUTO_ID, VALOR_TOTAL) 
                         VALUES 
                             (?, ?, ?, ?)`;
-
+    
                     return new Promise((resolve, reject) => {
                         db.query(insertProdutosPedido, [produtoPedido.quantidade, insertedPedidoId, produtoPedido.id, valorTotalProduto], (err, result) => {
                             if(err){
@@ -499,6 +512,7 @@ app.post("/api/salvar-pedido", async (req, res) => {
                 reject(err); 
             });
     });
+    
 
     Promise.all([promiseInsertPedido, promiseInsertProdutosPedido])
     .then(() => {
@@ -507,7 +521,7 @@ app.post("/api/salvar-pedido", async (req, res) => {
         // Atualizar o estoque para cada produto vendido
         const promiseAtualizarEstoque = itemsPedido.map((produtoPedido) => {
             return new Promise((resolve, reject) => {
-                const updateEstoque = 'UPDATE estoque SET quantidade = quantidade - ? WHERE produto_id = ?';
+                const updateEstoque = 'UPDATE estoque SET quantidade = quantidade - ? WHERE id = ?';
                 db.query(updateEstoque, [produtoPedido.quantidade, produtoPedido.id], (err, result) => {
                     if (err) {
                         reject(err);
@@ -522,7 +536,7 @@ app.post("/api/salvar-pedido", async (req, res) => {
         // Verificar se há estoque suficiente para cada produto
         const promiseVerificarEstoque = itemsPedido.map((produtoPedido) => {
             return new Promise((resolve, reject) => {
-                const selectEstoque = 'SELECT quantidade FROM estoque WHERE produto_id = ?';
+                const selectEstoque = 'SELECT quantidade FROM estoque WHERE id = ?';
                 db.query(selectEstoque, [produtoPedido.id], (err, results) => {
                     if (err) {
                         reject(err);
@@ -642,18 +656,6 @@ app.post("/api/login", async (req, res) => {
             }
         }
 
-
-        // Verifica na tabela Membro
-        const sqlMembro = 'SELECT * FROM Membro WHERE Nome = ?';
-        const membro = await queryDatabase(sqlMembro, username, password);
-
-        if (membro) {
-            return {
-                status: true,
-                userId: membro.ID,
-                role: "membro"
-            }
-        }
 
         return {
             status: false
@@ -781,16 +783,16 @@ app.post("/excluir-produto", (req, res) => {
     });
 });
 
-app.post("/excluir-membro", (req, res) => {
-    const membroId = req.body.membroId; 
-    const sql = 'DELETE FROM Membro WHERE id = ?';
-    db.query(sql, [membroId], (err, result) => {
+app.post("/excluir-taxa", (req, res) => {
+    const taxaId = req.body.taxaId; 
+    const sql = 'DELETE FROM TaxaDelivery WHERE id = ?';
+    db.query(sql, [taxaId], (err, result) => {
         if(err){
-            console.error('Erro ao excluir membro:', err);
-            res.status(500).send('Erro ao excluir membro do banco de dados');
+            console.error('Erro ao excluir taxa :', err);
+            res.status(500).send('Erro ao excluir taxa do banco de dados');
         }else{;
-            console.log('Membro excluído com sucesso');
-            res.status(200).send(`Membro ${membroId} excluído com sucesso `);
+            console.log('Taxa excluído com sucesso');
+            res.status(200).send(`Taxa ${taxaId} excluído com sucesso `);
         }
     });
 });
@@ -841,11 +843,11 @@ app.post("/excluir-despesa", (req, res) => {
 app.post("/processar-cadastro-cliente", (req, res) => {
   const { nomeCliente, emailCliente, cpfCliente, telefoneCliente, 
         logradouroCliente, cidadeCliente, complementoCliente, numeroCliente, 
-        estadoCliente, cepCliente } = req.body;
+        estadoCliente, cepCliente, bairroCliente} = req.body;
 
-  const sql = 'INSERT INTO clientes (nome, email, cpf, telefone, logradouro, cidade, complemento, numero, estado, cep) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+  const sql = 'INSERT INTO clientes (nome, email, cpf, telefone, logradouro, cidade, complemento, numero, estado, cep, idBairro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
   db.query(sql, [ nomeCliente, emailCliente, cpfCliente, telefoneCliente, logradouroCliente, cidadeCliente, complementoCliente, numeroCliente, 
-    estadoCliente, cepCliente], (err, result) => {
+    estadoCliente, cepCliente, bairroCliente], (err, result) => {
     if(err){
       console.error('Erro ao inserir dados:', err);
       res.send('Erro ao cadastrar dados no banco de dados');
@@ -860,12 +862,12 @@ app.post("/editar-cadastro-cliente", (req, res) => {
     const clienteId = req.body.clienteId;
     const { novoNome, novoEmail, novoCpf, novoTelefone, 
         novoLogradouro, novaCidade, novoComplemento, 
-        novoNumero, novoEstado, novoCep 
+        novoNumero, novoEstado, novoCep, idBairro
     } = req.body;
         
-    const sql = 'UPDATE clientes SET nome=?, email=?, cpf=?, telefone=?, logradouro=?, cidade=?, complemento=?, numero=?, estado=?, cep=? WHERE id=?';
+    const sql = 'UPDATE clientes SET nome=?, email=?, cpf=?, telefone=?, logradouro=?, cidade=?, complemento=?, numero=?, estado=?, cep=?, idBairro=? WHERE id=?';
     db.query(sql, [ novoNome, novoEmail, novoCpf, novoTelefone, novoLogradouro, novaCidade, novoComplemento, novoNumero, 
-        novoEstado, novoCep, clienteId], async (err, result) => {
+        novoEstado, novoCep, idBairro, clienteId], async (err, result) => {
       if(err){
         console.error('Erro ao atualizar dados:', err);
         res.sendStatus('Erro ao atualizar dados no banco de dados');
@@ -896,22 +898,6 @@ app.post("/editar-cadastro-atendente", (req, res) => {
     });
 });
 
-
-// app.post("/processar-cadastro-atendente", (req, res) => {
-// const { nomeAtendente, emailAtendente, obsAtendente} = req.body;
-
-// const sql = 'INSERT INTO Atendente (Nome, Email, Observacoes) VALUES (?, ?, ?)';
-// db.query(sql, [nomeAtendente, emailAtendente, obsAtendente], (err, result) => {
-//     if(err){
-//     console.error('Erro ao inserir dados:', err);
-//     res.send('Erro ao cadastrar dados no banco de dados');
-//     }else{
-//     console.log('Dados inseridos com sucesso');
-//     res.sendFile(__dirname + "/frontend/cadastros.html");
-//     }
-// });
-// });
-
 app.post("/processar-cadastro-atendente", (req, res) => {
     const { nomeAtendente, emailAtendente, telefoneAtendente, senhaAtendente, confirmarSenhaAtendente, obsAtendente } = req.body;
     const papelAtendente = 2; // Papel fixo para atendente
@@ -931,21 +917,6 @@ app.post("/processar-cadastro-atendente", (req, res) => {
         }
     });
 });
-
-// app.post("/processar-cadastro-motoboy", (req, res) => {
-//     const { nomeMotoboy, emailMotoboy, obsMotoboy} = req.body;
-    
-//     const sql = 'INSERT INTO Motoboy (Nome, Email, Observacoes) VALUES (?, ?, ?)';
-//     db.query(sql, [ nomeMotoboy, emailMotoboy, obsMotoboy], (err, result) => {
-//         if(err){
-//         console.error('Erro ao inserir dados:', err);
-//         res.send('Erro ao cadastrar dados no banco de dados');
-//         }else{
-//         console.log('Dados inseridos com sucesso');
-//         res.sendFile(__dirname + "/frontend/cadastros.html");
-//         }
-// });
-// });
 
 app.post("/processar-cadastro-motoboy", (req, res) => {
     const { nomeMotoboy, emailMotoboy, telefoneMotoboy, senhaMotoboy, confirmarSenhaMotoboy, obsMotoboy } = req.body;
@@ -968,31 +939,11 @@ app.post("/processar-cadastro-motoboy", (req, res) => {
 });
 
 
-// app.post("/processar-cadastro-membro", (req, res) => {  
-//     const { nomeMembro, emailMembro, obsMembro} = req.body;
-    
-//     const sql = 'INSERT INTO Membro (Nome, Email, Observacoes) VALUES (?, ?, ?)';
-//     db.query(sql, [ nomeMembro, emailMembro, obsMembro], (err, result) => {
-//         if(err){
-//         console.error('Erro ao inserir dados:', err);
-//         res.send('Erro ao cadastrar dados no banco de dados');
-//         }else{
-//         console.log('Dados inseridos com sucesso');
-//         res.sendFile(__dirname + "/frontend/cadastros.html");
-//         }
-// });
-// });
+app.post("/processar-cadastro-taxa-delivery", (req, res) => {
+    const { localTaxaDelivery, valorTaxaDelivery, obsTaxaDelivery } = req.body;
 
-app.post("/processar-cadastro-membro", (req, res) => {
-    const { nomeMembro, emailMembro, telefoneMembro, senhaMembro, confirmarSenhaMembro, obsMembro } = req.body;
-    const papelMembro = 4; // Papel fixo para membro
-
-    if(senhaMembro !== confirmarSenhaMembro) {
-        return res.status(400).json({ error: 'As senhas não coincidem.' });
-    } 
-
-    const sql = 'INSERT INTO Membro (Nome, Email, Telefone, Senha, Observacoes, Role) VALUES (?, ?, ?, ?, ?, ?)';
-    db.query(sql, [nomeMembro, emailMembro, telefoneMembro, senhaMembro, obsMembro, papelMembro], (err, result) => {
+    const sql = 'INSERT INTO TaxaDelivery (Area, Valor, Observacoes) VALUES (?, ?, ?)';
+    db.query(sql, [localTaxaDelivery, valorTaxaDelivery, obsTaxaDelivery], (err, result) => {
         if(err){
             console.error('Erro ao inserir dados:', err);
             res.send('Erro ao cadastrar dados no banco de dados');

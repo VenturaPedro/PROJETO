@@ -41,7 +41,7 @@
             <a href="/listar-atendentes"><button id="btn-listar-atendentes" class="btn-listas d-none">Atendentes</button></a> 
             <a href="/listar-motoboy"><button id="btn-listar-motoboys" class="btn-listas d-none">Motoboy</button></a> 
             <a href="/listar-produtos"><button class="btn-listas">Produtos</button></a> 
-            <a href="/listar-membros"><button id="btn-listar-membros" class="btn-listas d-none">Membros</button></a> 
+            <a href="/listar-taxas"><button class="btn-listas">Taxas</button></a> 
             <a href="/listar-categorias"><button class="btn-listas">Categorias</button></a>
             <a href="/listar-pagamentos"><button class="btn-listas">Pagamentos</button></a>
             <a href="/listar-despesas"><button id="btn-listar-despesas"class="btn-listas d-none">Despesas</button></a> 
@@ -70,11 +70,11 @@
                     <!-- <th>ID</th> -->
                     <th>Nome</th>
                     <th>Email</th>
-                    <th>CPF</th>
                     <th>Telefone</th>
                     <th>Logradouro</th>
                     <th>Numero</th>
                     <th>Complemento</th>
+                    <th>Bairro</th>
                     <th>Cidade</th>
                     <th>Estado</th>
                     <th>CEP</th>
@@ -88,11 +88,11 @@
                             <!-- <td><%= cliente.id %></td> -->
                             <td><%= cliente.nome %></td>
                             <td><%= cliente.email %></td>
-                            <td><%= cliente.cpf %></td>
                             <td><%= cliente.telefone %></td>
                             <td><%= cliente.logradouro %></td>
                             <td><%= cliente.numero %></td>
                             <td><%= cliente.complemento %></td>
+                            <td><%= cliente.Area %></td>
                             <td><%= cliente.cidade %></td>
                             <td><%= cliente.estado %></td>
                             <td><%= cliente.cep %></td>
@@ -145,6 +145,11 @@
     
                     <label for="numeroClienteEditado">Nº:</label>
                     <input type="text" id="numeroClienteEditado" style="width: 50px;">
+
+                    <label for="bairroClienteEditado">Bairro/Região</label><br>
+                    <select id="bairroClienteEditado" name="bairroClienteEditado" required style="width: 180px; height: 45px">
+                        <option value="none">Selecione uma opção</option>
+                    </select>
     
                     <label for="estadoClienteEditado">Estado:</label>
                     <input type="text" id="estadoClienteEditado" style="width: 100px;">
@@ -172,9 +177,6 @@
             const btnListarMotoboys = document.querySelector('#btn-listar-motoboys');
             btnListarMotoboys.classList.remove("d-none");
 
-            const btnListarMembros = document.querySelector('#btn-listar-membros');
-            btnListarMembros.classList.remove("d-none");
-
             const btnListarEstoques = document.querySelector('#btn-listar-estoques');
             btnListarEstoques.classList.remove("d-none");
         }
@@ -201,26 +203,34 @@
             console.log(`Editar cliente com ID ${clienteId}`);
             const confirmacao = confirm(`Tem certeza que deseja editar o cliente com ID ${clienteId}?`);
             if(confirmacao){
-                const response = await axios.get("/api/listar-clientes");
-                const clientes = response.data.clientes;
+                const response = await axios.get(`/api/listar-cliente?clienteId=${clienteId}`);
+                const cliente = response.data.cliente[0];
 
-                for (cliente of clientes) {
-                    if (cliente.id == clienteId) {
-                        console.log("cliente", cliente);
-                        document.getElementById('edit-cliente-id').value = cliente.id;
-                        document.getElementById('nomeClienteEditado').value = cliente.nome;
-                        document.getElementById('emailClienteEditado').value = cliente.email;
-                        document.getElementById('cpfClienteEditado').value = cliente.cpf;
-                        document.getElementById('telefoneClienteEditado').value = cliente.telefone;
-                        document.getElementById('logradouroClienteEditado').value = cliente.logradouro;
-                        document.getElementById('cidadeClienteEditado').value = cliente.cidade;
-                        document.getElementById('complementoClienteEditado').value = cliente.complemento;
-                        document.getElementById('numeroClienteEditado').value = cliente.numero;
-                        document.getElementById('estadoClienteEditado').value = cliente.estado;
-                        document.getElementById('cepClienteEditado').value = cliente.cep;
-                        break;
+                const listarTaxas = await axios.get(`/api/listar-taxas`);
+                const taxas = listarTaxas.data.TaxaDelivery
+
+                const selectTaxasEditar = document.getElementById("bairroClienteEditado");
+
+                for(taxaDelivery of taxas){
+                    let optionTaxa = new Option(taxaDelivery.Area, taxaDelivery.ID);
+                    optionTaxa.value = taxaDelivery.ID;
+                    if (taxaDelivery.ID == cliente.idBairro) {
+                        optionTaxa.selected = true;
                     }
+                    selectTaxasEditar.add(optionTaxa);
                 }
+
+                document.getElementById('edit-cliente-id').value = cliente.id;
+                document.getElementById('nomeClienteEditado').value = cliente.nome;
+                document.getElementById('emailClienteEditado').value = cliente.email;
+                document.getElementById('cpfClienteEditado').value = cliente.cpf;
+                document.getElementById('telefoneClienteEditado').value = cliente.telefone;
+                document.getElementById('logradouroClienteEditado').value = cliente.logradouro;
+                document.getElementById('cidadeClienteEditado').value = cliente.cidade;
+                document.getElementById('complementoClienteEditado').value = cliente.complemento;
+                document.getElementById('numeroClienteEditado').value = cliente.numero;
+                document.getElementById('estadoClienteEditado').value = cliente.estado;
+                document.getElementById('cepClienteEditado').value = cliente.cep;
                 
                 // Exibir o popup de edição imediatamente
                 document.getElementById("editarCliente").style.display = "block";
@@ -231,6 +241,12 @@
 
 
 document.getElementById("btn-salvarEdicao").addEventListener("click", async function() {
+    const selectTaxasEditado = document.getElementById("bairroClienteEditado");
+
+    const idBairro = selectTaxasEditado.value;
+
+    console.log("idBarro Editado", idBairro)
+
     const dadosEditados = {
         clienteId: document.getElementById("edit-cliente-id").value, 
         novoNome: document.getElementById("nomeClienteEditado").value, 
@@ -242,6 +258,7 @@ document.getElementById("btn-salvarEdicao").addEventListener("click", async func
         novoComplemento: document.getElementById("complementoClienteEditado").value, 
         novoNumero: document.getElementById("numeroClienteEditado").value, 
         novoEstado: document.getElementById("estadoClienteEditado").value, 
+        idBairro,
         novoCep: document.getElementById("cepClienteEditado").value
     };
 

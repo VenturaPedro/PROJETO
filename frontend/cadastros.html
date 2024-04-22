@@ -42,7 +42,7 @@
             <nav id="painel-2">
                 <button id="btn-cadastrarAtendente"><i class="fa-solid fa-people-group"></i><br>Atendente</button>
                 <button id="btn-cadastrarMotoboy"><i class="fa-solid fa-motorcycle"></i><br>Motoboy</button>
-                <button id="btn-cadastrarMembro"><i class="fa-solid fa-kitchen-set"></i><br>Membro</button> 
+                <button id="btn-cadastrarTaxaDelivery"><i class="fa-solid fa-map-location-dot"></i><br>Taxa Delivery</button> 
                 <button id="btn-cadastrarDespesa"><i class="fa-solid fa-rectangle-list"></i><br>Despesa</button> 
             </nav>
         </div>
@@ -77,6 +77,11 @@
 
                     <label for="numeroCliente">Nº:</label>
                     <input type="number" id="numeroCliente" name="numeroCliente" style="width: 50px;">
+
+                    <label for="bairroCliente">Bairro/Região</label><br>
+                    <select id="bairroCliente" name="bairroCliente" required style="width: 180px; height: 45px">
+                        <option value="none">Selecione uma opção</option>
+                    </select>
 
                     <label for="estadoCliente">Estado:</label>
                     <input type="text" id="estadoCliente" name="estadoCliente" style="width: 100px;">
@@ -151,32 +156,23 @@
             </form>
         </div>
         
-        <div id="cadastrar-membro">
-            <span id="fecharPopupMembro" onclick="fecharPopupMembro()"><i class="fa-solid fa-circle-xmark"></i></span>
-            <h2>Cadastro de Membro da Cozinha</h2><br>
-            <form action="/processar-cadastro-membro" method="post">
-                <div id="form-Membro">
-                    <label for="nomeMembro">Nome:</label><br>
-                    <input type="text" id="nomeMembro" name="nomeMembro" required size="25">
+        <div id="cadastrar-taxa-delivery">
+            <span id="fecharPopupTaxa" onclick="fecharPopupTaxa()"><i class="fa-solid fa-circle-xmark"></i></span>
+            <h2>Cadastro de Taxa de Entrega</h2><br>
+            <form action="/processar-cadastro-taxa-delivery" method="post">
+                <div id="form-TaxaDelivery">
+                    <label for="localTaxaDelivery">Insira o Bairro/Região:</label><br>
+                    <input type="text" id="localTaxaDelivery" name="localTaxaDelivery" required size="25">
 
-                    <label for="emailMembro">E-mail:</label><br>
-                    <input type="text" id="emailMembro" name="emailMembro" placeholder="email@email.com" size="25">
+                    <label for="valorTaxaDelivery">Insira o valor da taxa(R$):</label><br>
+                    <input type="number" id="valorTaxaDelivery" name="valorTaxaDelivery" >
 
-                    <label for="telefoneMembro">Telefone:</label><br>
-                    <input type="number" id="telefoneMembro" name="telefoneMembro" placeholder="(99) 90000-0000" required size="20" maxlength="14">
-
-                    <label for="senhaMembro">Senha:</label><br>
-                    <input type="password" id="senhaMembro" name="senhaMembro" required size="25">
-
-                    <label for="confirmarSenhaMembro">Confirmar Senha:</label><br>
-                    <input type="password" id="confirmarSenhaMembro" name="confirmarSenhaMembro" required size="25">
-
-                    <label for="obsMembro">Observações:</label><br>
-                    <input type="text" id="obsMembro" name="obsMembro" style="width: 83%; height: 35px;">
+                    <label for="obsTaxaDelivery">Observações:</label><br>
+                    <input type="text" id="obsTaxaDelivery" name="obsTaxaDelivery" style="width: 83%; height: 35px;">
                 </div>
                 <div>
                     <br>
-                    <button type="submit" id="btn-submitMembro">Cadastrar</button>
+                    <button type="submit" id="btn-submitTaxaDelivery">Cadastrar</button>
                 </div>
             </form>
         </div>
