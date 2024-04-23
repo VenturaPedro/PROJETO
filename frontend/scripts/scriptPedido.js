@@ -1,7 +1,6 @@
 let items = [];
 let itemsPedido = [];
 
-
 document.getElementById("novo-pedido").addEventListener("click", function() {
     document.getElementById("vincular-atendente").style.display = "block";
 
@@ -44,7 +43,6 @@ function buscarItens() {
     }
 }
 async function addToTable(item) {
-    // Consulta o valor e a quantidade do produto na rota '/api/consultar-valor-produto/:id'
     try {
         const response = await axios.get(`/api/consultar-valor-produto/${item.id}`);
         const { valor, quantidade } = response.data;
@@ -91,25 +89,6 @@ function fecharPopupPedido() {
     document.getElementsByClassName("modal-body").style.display = "none";
     window.location.reload();
 }
-
-// async function preencherAtendente() {
-//     const getAtendentes = await axios.get("/api/listar-atendentes");
-
-//     const atendentesBanco = getAtendentes.data.Atendentes;
-
-//     const selectAtendente = document.getElementById("escolhaAtendente") ;
-
-//     for (Atendente of atendentesBanco) {
-//         let novaAtendente = new Option(Atendente.Nome, Atendente.ID);
-//         selectAtendente.add(novaAtendente);
-//     }
-//     selectAtendente.addEventListener("change", function () {
-        
-//         const atendenteSelecionado = selectAtendente.value;
- 
-//         console.log("Atendente selecionado:", atendenteSelecionado);
-//     });
-// }
 
 async function preencherCliente() {
     const getClientes = await axios.get("/api/listar-clientes");

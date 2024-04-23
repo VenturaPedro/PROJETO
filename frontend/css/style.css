@@ -440,6 +440,10 @@ nav button{
 
 }
 
+.btn-pedidos{
+    display: inline;    
+}
+
 #tabela-pedidos{
     width: 100%;
     display: table-row; 

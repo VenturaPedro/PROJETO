@@ -9,6 +9,8 @@ app.use(express.json())
 const path = require('path');
 const axios = require('axios');
 
+
+
 // Configuração do mecanismo de visualização EJS
 app.set('views', path.join(__dirname, 'frontend'));
 app.set('view engine', 'ejs');
@@ -322,7 +324,35 @@ app.get("/listar-pedidos", (req, res) => {
         }
     });
 });
-  
+
+app.get("/soma-valor-total-pedidos", (req, res) => {
+    const sql = `SELECT SUM(valor_total) AS total FROM pedido`;
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Erro ao calcular a soma do valor total dos pedidos:', err);
+            res.status(500).send('Erro ao calcular a soma do valor total dos pedidos');
+        } else {
+            const total = result[0].total;
+            res.json({ total });
+        }
+    });
+});
+
+// Rota para obter o valor total das despesas
+app.get("/soma-valor-total-despesas", (req, res) => {
+    const sql = "SELECT SUM(Valor) AS total_despesas FROM despesa";
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("Erro ao recuperar o total das despesas:", err);
+            res.status(500).send("Erro ao recuperar o total das despesas");
+        } else {
+            const totalDespesas = results[0].total_despesas || 0;
+            res.json({ totalDespesas });
+        }
+    });
+});
+
+
 app.get("/api/listar-categorias", (req, res) => {
     const sql = 'SELECT * FROM categoria';
     db.query(sql, (err, results) => {
@@ -351,6 +381,18 @@ app.get("/api/listar-atendentes", (req, res) => {
             return res.send(err)
         }
         return res.send({ Atendentes: results })
+    });
+});
+
+app.get("/api/listar-clientes", (req, res) => {
+    const clienteId = req.query.clienteId
+    const sql = 'SELECT * FROM clientes WHERE status = "ATIVO"';
+    db.query(sql, (err, results) => {
+        if(err){
+            return res.send(err)
+        }
+        console.log("retorno query braba", results)
+          return res.send({ clientes: results })
     });
 });
 
