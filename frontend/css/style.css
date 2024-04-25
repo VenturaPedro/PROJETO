@@ -235,7 +235,9 @@ nav button{
     transform: scale(1.1); 
 }
 
-#fecharPopupCli, #fecharPopupEdicaoCli, #fecharPopupEstoque, #fecharPopupAtd, #fecharPopupBoy, #fecharPopupProduto, #fecharPopupTaxa, #fecharPopupCategoria, #fecharPopupPagamento, #fecharPopupAtendentePedido, #fecharPopupDespesa{
+#fecharPopupCli, #fecharPopupEdicaoCli, #fecharPopupEstoque, #fecharPopupAtd, #fecharPopupBoy, 
+#fecharPopupProduto, #fecharPopupTaxa, #fecharPopupCategoria, #fecharPopupPagamento, 
+#fecharPopupAtendentePedido, #fecharPopupDespesa, #fecharPopupRelatorioMensal, #fecharPopupRelatorioDiario{
     position: absolute;
     top: 10px;
     right: 10px;
@@ -268,14 +270,18 @@ nav button{
     margin: 0px;   
 }
 
-#btn-submitCliente, #btn-submitAtendente, #btn-salvarEdicao, #btn-cancelarEdicao, #btn-submitMotoboy, #btn-submitProduto, #btn-submitEstoque, #btn-submitTaxaDelivery, #btn-submitCategoria, #btn-submitPagamento, #btn-submitDespesa{
+#btn-submitCliente, #btn-submitAtendente, #btn-salvarEdicao, #btn-cancelarEdicao, 
+#btn-submitMotoboy, #btn-submitProduto, #btn-submitEstoque, #btn-submitTaxaDelivery, 
+#btn-submitCategoria, #btn-submitPagamento, #btn-submitDespesa, #btn-submitRelatorioD, #btn-submitRelatorioM{
     font-size: 18px;
     padding: 5px 15px;
     border-radius: 12px;
     border: 1px solid #7c7c7c;
 }
 
-#btn-submitCliente:hover, #btn-submitAtendente:hover, #btn-submitMotoboy:hover, #btn-submitEstoque:hover, #btn-submitProduto:hover, #btn-submitTaxaDelivery:hover, #btn-submitCategoria:hover, #btn-submitPagamento:hover, #btn-submitDespesa:hover{    
+#btn-submitCliente:hover, #btn-submitAtendente:hover, #btn-submitMotoboy:hover, #btn-submitEstoque:hover, 
+#btn-submitProduto:hover, #btn-submitTaxaDelivery:hover, #btn-submitCategoria:hover, #btn-submitPagamento:hover, 
+#btn-submitDespesa:hover, #btn-submitRelatorioD, #btn-submitRelatorioM{    
     cursor: pointer;
     transition: all 0.5s ease;
     background-color: #210124; 
@@ -344,8 +350,6 @@ nav button{
     transform: scale(1.1); 
 }
 
-
-
 #cadastrar-estoque{
     font-size: 18px;
     margin: 1% 5%;
@@ -361,6 +365,35 @@ nav button{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     border-radius: 25px;
+}
+
+#painel-relatorios1, #painel-relatorios2{
+    font-size: 18px;
+    display: none;
+    position: fixed;
+    width: 40vh;
+    top: 50%;
+    left: 52%;
+    transform: translate(-50%, -50%);
+    padding: 50px 45px;
+    background: #fff;
+    border: 1px solid #000000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    border-radius: 25px;
+}
+input[type="date"]{
+    background-color: #53323F;
+    padding: 20px;
+    font-family: "Roboto Mono",monospace;
+    color: #ffffff;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+}
+#painel-relatorios1 input, #painel-relatorios2 input{
+    padding:20px;
 }
 #form-Produto1{
     display: block;

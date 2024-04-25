@@ -325,9 +325,38 @@ app.get("/listar-pedidos", (req, res) => {
     });
 });
 
-app.get("/soma-valor-total-pedidos", (req, res) => {
-    const sql = `SELECT SUM(valor_total) AS total FROM pedido`;
-    db.query(sql, (err, result) => {
+// app.get("/soma-valor-total-pedidos", (req, res) => {
+//     const sql = `SELECT SUM(valor_total) AS total FROM pedido`;
+//     db.query(sql, (err, result) => {
+//         if (err) {
+//             console.error('Erro ao calcular a soma do valor total dos pedidos:', err);
+//             res.status(500).send('Erro ao calcular a soma do valor total dos pedidos');
+//         } else {
+//             const total = result[0].total;
+//             res.json({ total });
+//         }
+//     });
+// });
+
+// // Rota para obter o valor total das despesas
+// app.get("/soma-valor-total-despesas", (req, res) => {
+//     const sql = "SELECT SUM(Valor) AS total_despesas FROM despesa";
+//     db.query(sql, (err, results) => {
+//         if (err) {
+//             console.error("Erro ao recuperar o total das despesas:", err);
+//             res.status(500).send("Erro ao recuperar o total das despesas");
+//         } else {
+//             const totalDespesas = results[0].total_despesas || 0;
+//             res.json({ totalDespesas });
+//         }
+//     });
+// });
+
+// Rota para obter o valor total dos pedidos de um dia específico
+app.get("/soma-valor-total-pedidos-dia", (req, res) => {
+    const { data } = req.query;
+    const sql = `SELECT SUM(valor_total) AS total FROM pedido WHERE DATE(data) = ?`;
+    db.query(sql, [data], (err, result) => {
         if (err) {
             console.error('Erro ao calcular a soma do valor total dos pedidos:', err);
             res.status(500).send('Erro ao calcular a soma do valor total dos pedidos');
@@ -338,10 +367,11 @@ app.get("/soma-valor-total-pedidos", (req, res) => {
     });
 });
 
-// Rota para obter o valor total das despesas
-app.get("/soma-valor-total-despesas", (req, res) => {
-    const sql = "SELECT SUM(Valor) AS total_despesas FROM despesa";
-    db.query(sql, (err, results) => {
+// Rota para obter o valor total das despesas de um dia específico
+app.get("/soma-valor-total-despesas-dia", (req, res) => {
+    const { data } = req.query;
+    const sql = "SELECT SUM(Valor) AS total_despesas FROM despesa WHERE DATE(Lancamento) = ?";
+    db.query(sql, [data], (err, results) => {
         if (err) {
             console.error("Erro ao recuperar o total das despesas:", err);
             res.status(500).send("Erro ao recuperar o total das despesas");
@@ -351,6 +381,41 @@ app.get("/soma-valor-total-despesas", (req, res) => {
         }
     });
 });
+
+// Rota para obter o valor total dos pedidos de um mês específico
+app.post("/soma-valor-total-pedidos-mes", (req, res) => {
+    const { dataInicio, dataFim } = req.body;
+
+    const sql = `SELECT SUM(valor_total) AS total FROM pedido WHERE Data BETWEEN ? AND ?`;
+    db.query(sql, [dataInicio, dataFim], (err, result) => {
+        if (err) {
+            console.error('Erro ao calcular a soma do valor total dos pedidos:', err);
+            res.status(500).send('Erro ao calcular a soma do valor total dos pedidos');
+        } else {
+            const total = result[0].total || 0;
+            res.json({ total });
+        }
+    });
+});
+
+// Rota para obter o valor total das despesas de um mês específico
+app.post("/soma-valor-total-despesas-mes", (req, res) => {
+    const { dataInicio, dataFim } = req.body;
+
+    const sql = `SELECT SUM(Valor) AS total_despesas FROM despesa WHERE Lancamento BETWEEN ? AND ?`;
+    db.query(sql, [dataInicio, dataFim], (err, results) => {
+        if (err) {
+            console.error("Erro ao recuperar o total das despesas:", err);
+            res.status(500).send("Erro ao recuperar o total das despesas");
+        } else {
+            const totalDespesas = results[0].total_despesas || 0;
+            res.json({ totalDespesas });
+        }
+    });
+});
+
+
+
 
 
 app.get("/api/listar-categorias", (req, res) => {
@@ -481,6 +546,7 @@ module.exports = app;
 app.post("/api/salvar-pedido", async (req, res) => {
     let insertedPedidoId = 0;
     let valorTotalPedido = 0;
+    console.log('req.body', req.body)
     const { atendenteId, clienteId, itemsPedido, formaPagamentoId, totalPedido } = req.body;
 
     const insertPedido = `INSERT INTO PEDIDO 
@@ -563,7 +629,7 @@ app.post("/api/salvar-pedido", async (req, res) => {
         // Atualizar o estoque para cada produto vendido
         const promiseAtualizarEstoque = itemsPedido.map((produtoPedido) => {
             return new Promise((resolve, reject) => {
-                const updateEstoque = 'UPDATE estoque SET quantidade = quantidade - ? WHERE id = ?';
+                const updateEstoque = 'UPDATE estoque SET quantidade = quantidade - ? WHERE produto = ?';
                 db.query(updateEstoque, [produtoPedido.quantidade, produtoPedido.id], (err, result) => {
                     if (err) {
                         reject(err);
@@ -578,7 +644,7 @@ app.post("/api/salvar-pedido", async (req, res) => {
         // Verificar se há estoque suficiente para cada produto
         const promiseVerificarEstoque = itemsPedido.map((produtoPedido) => {
             return new Promise((resolve, reject) => {
-                const selectEstoque = 'SELECT quantidade FROM estoque WHERE id = ?';
+                const selectEstoque = 'SELECT quantidade FROM estoque WHERE produto = ?';
                 db.query(selectEstoque, [produtoPedido.id], (err, results) => {
                     if (err) {
                         reject(err);

@@ -35,95 +35,299 @@
     <main id="painel-main-prod">
         <div id="btn-painel-cadastros">
             <nav id="painel-1">
-                <button id="btn-cadastrarProduto"><i class="fa-solid fa-calendar-day"></i><br>Relatório Diário</button>
+                <button id="btn-relatorioDia"><i class="fa-solid fa-calendar-day"></i><br>Relatório Diário</button>
             </nav>   
             <nav id="painel-2">
-                <button id="btn-cadastrarEstoque" onclick="gerarRelatorioPedidosComBusca()"><i class="fa-solid fa-calendar-days"></i><br>Relatório Mensal</button>
+                <button id="btn-relatorioMes"><i class="fa-solid fa-calendar-days"></i><br>Relatório Mensal</button>
             </nav>
+        </div>
+        <div id="painel-relatorios1">
+            <span id="fecharPopupRelatorioDiario" onclick="fecharPopupRelatorioD()"><i class="fa-solid fa-circle-xmark"></i></span>
+            <h2>Gerar relatório</h2><br>
+            <form id="formRelatorioDia">
+                <div id="form-Produto1">
+                    <p>
+                        <label for="dataRelatorio">Informe a data que deseja gerar</label><br><br>
+                        <input type="date" id="dataRelatorio" name="dataRelatorio" required size="20"><br>
+                    </p>
+                    <br>
+                    <div>
+                        <button type="submit" id="btn-submitRelatorioD">Gerar</button>
+                    </div>
+                </div>
+            </form>   
+        </div>
+        
+        <div id="painel-relatorios2">
+            <span id="fecharPopupRelatorioMensal" onclick="fecharPopupRelatorioM()"><i class="fa-solid fa-circle-xmark"></i></span>
+            <h2>Gerar relatório</h2><br>
+            <form id="formRelatorioMes">
+                <div id="form-Produto1">
+                    <p>
+                        <label for="mesRelatorio">Selecione o mês:</label><br>
+                        <select id="mesRelatorio" name="mesRelatorio" required>
+                            <option value="">Selecione o mês</option>
+                            <option value="01">Janeiro</option>
+                            <option value="02">Fevereiro</option>
+                            <option value="03">Março</option>
+                            <option value="04">Abril</option>
+                            <option value="05">Maio</option>
+                            <option value="06">Junho</option>
+                            <option value="07">Julho</option>
+                            <option value="08">Agosto</option>
+                            <option value="09">Setembro</option>
+                            <option value="10">Outubro</option>
+                            <option value="11">Novembro</option>
+                            <option value="12">Dezembro</option>
+                        </select><br><br>
+                    </p>
+                    <p>
+                        <label for="anoRelatorio">Selecione o ano:</label><br>
+                        <select id="anoRelatorio" name="anoRelatorio" required>
+                            <option value="">Selecione o ano</option>
+                            <script>
+                                // Obtém o ano atual
+                                const anoAtual = new Date().getFullYear();
+                                // Gera as opções de ano de 2024 para trás
+                                for (let ano = 2024; ano >= anoAtual; ano--) {
+                                    document.write(`<option value="${ano}">${ano}</option>`);
+                                }
+                            </script>
+                        </select><br>
+                    </p>
+                    <br>
+                    <div>
+                        <button type="submit" id="btn-submitRelatorioM">Gerar</button>
+                    </div>
+                </div>
+                
+            </form>   
         </div>
     </main>
     <footer>
         <!-- Seu código de rodapé -->
     </footer>
     <script>
+    document.getElementById("btn-relatorioDia").addEventListener("click", function(){
+        document.getElementById("painel-relatorios1").style.display = "block";
+    });
 
-async function gerarRelatorioPedidosComBusca() {
-    try {
-        const atendenteId = sessionStorage.getItem("role");
-        const usuario = atendenteId ? `Usuário: ${atendenteId}` : 'Usuário não especificado';
-        const dataHoraGeracao = new Date().toLocaleString();
-
-        // Obtém o valor total dos pedidos
-        const responsePedidos = await axios.get('/soma-valor-total-pedidos');
-        const totalPedidos = parseFloat(responsePedidos.data.total);
-
-        // Obtém o valor total das despesas
-        const responseDespesas = await axios.get('/soma-valor-total-despesas');
-        const totalDespesas = parseFloat(responseDespesas.data.totalDespesas);
-
-        // Calcula o lucro total
-        const lucroTotal = totalPedidos - totalDespesas;
-
-        // Verifica se os valores são números válidos
-        if (!isNaN(totalPedidos) && !isNaN(totalDespesas) && !isNaN(lucroTotal)) {
-            // Definição do conteúdo do documento PDF usando os dados obtidos
-            const conteudoPDF = {
-                content: [
-                    { text: 'Relatório Financeiro', style: 'header' },
-                    { text: '\n' }, // Espaço em branco
-                    { text: usuario, style: 'info' },
-                    { text: `Data e hora da geração: ${dataHoraGeracao}`, style: 'info' },
-                    {
-                        text: `Total dos Pedidos: R$ ${totalPedidos.toFixed(2)}`,
-                        style: 'total'
-                    },
-                    {
-                        text: `Total das Despesas: R$ ${totalDespesas.toFixed(2)}`,
-                        style: 'total'
-                    },
-                    {
-                        text: `Lucro Total: R$ ${lucroTotal.toFixed(2)}`,
-                        style: 'total'
-                    },
-                    { text: '\n' } // Espaço em branco
-                ],
-                styles: {
-                    header: {
-                        fontSize: 18,
-                        bold: true,
-                        alignment: 'center'
-                    },
-                    info: {
-                        fontSize: 14,
-                        alignment: 'center'
-                    },
-                    total: {
-                        fontSize: 14,
-                        bold: true,
-                        alignment: 'center'
-                    }
-                }
-            };
-
-            // Criação do documento PDF
-            const pdfDoc = pdfMake.createPdf(conteudoPDF);
-            pdfDoc.open();
-        } else {
-            console.error('Um ou mais valores não são números válidos.');
-        }
-    } catch (error) {
-        console.error('Erro ao gerar o relatório financeiro:', error);
+    function fecharPopupRelatorioD(){
+        document.getElementById("painel-relatorios1").style.display = "none";
+        window.location.reload();
     }
-}
+
+    document.getElementById("btn-relatorioMes").addEventListener("click", function(){
+        document.getElementById("painel-relatorios2").style.display = "block";
+    });
+
+    function fecharPopupRelatorioM(){
+        document.getElementById("painel-relatorios2").style.display = "none";
+        window.location.reload();
+    }
+
+    document.getElementById("formRelatorioDia").addEventListener("submit", function(event){
+        event.preventDefault();
+        gerarRelatorioPedidosComBusca("diario");
+    });
+
+    document.getElementById("formRelatorioMes").addEventListener("submit", function(event){
+        event.preventDefault();
+        gerarRelatorioPedidosComBusca("mensal");
+    });
+
+    async function gerarRelatorioPedidosComBusca(periodo) {
+        try {
+            const atendenteId = sessionStorage.getItem("role");
+            const usuario = atendenteId ? `Usuário: ${atendenteId}` : 'Usuário não especificado';
+            const dataHoraGeracao = new Date().toLocaleString();
+            let dataInicio = "";
+            let dataFim = "";
+            let dataReferencia = "";
+            let totalPedidos = 0;
+            let totalDespesas = 0;
+            let lucroTotal = 0;
+
+            if(periodo === "diario"){
+                const dataRelatorio = document.getElementById("dataRelatorio").value;
+                dataReferencia = dataRelatorio;
+                const responsePedidos = await axios.get(`/soma-valor-total-pedidos-dia?data=${dataReferencia}`);
+                totalPedidos = parseFloat(responsePedidos.data.total);
+
+                // Obtém o valor total das despesas
+                const responseDespesas = await axios.get(`/soma-valor-total-despesas-dia?data=${dataReferencia}`);
+                totalDespesas = parseFloat(responseDespesas.data.totalDespesas);
+            // Calcula o lucro total
+                lucroTotal = totalPedidos - totalDespesas;
+            } else {
+                const mesRelatorio = document.getElementById("mesRelatorio").value - 1;
+                const anoRelatorio = document.getElementById("anoRelatorio").value;
+
+                dataInicio = new Date(anoRelatorio, mesRelatorio, 1);
+                let dataInicioFormatada = `${dataInicio.getFullYear()}-${(dataInicio.getMonth() + 1).toString().padStart(2, '0')}-${dataInicio.getDate().toString().padStart(2, '0')}`;
+
+                dataFim = new Date(anoRelatorio, mesRelatorio + 1, 0)
+                let dataFimFormatada = `${dataFim.getFullYear()}-${(dataFim.getMonth() + 1).toString().padStart(2, '0')}-${dataFim.getDate().toString().padStart(2, '0')}`;
+
+                dataReferencia = `${mesRelatorio + 1}/${anoRelatorio}`;
+                
+                const responsePedidos = await axios.post('/soma-valor-total-pedidos-mes', { dataInicio: dataInicioFormatada, dataFim: dataFimFormatada });
+                totalPedidos = parseFloat(responsePedidos.data.total);
+
+                const responseDespesas = await axios.post('/soma-valor-total-despesas-mes', { dataInicio: dataInicioFormatada, dataFim: dataFimFormatada });
+                totalDespesas = parseFloat(responseDespesas.data.totalDespesas);
+
+                lucroTotal = totalPedidos - totalDespesas;
+
+            }
+            // Verifica se os valores são números válidos
+            if (totalPedidos === 0 && totalDespesas === 0) {
+                alert("Não há pedidos ou despesas no período selecionado.");
+            } else if (totalPedidos === 0) {
+                alert("Não houve pedidos no período selecionado.");
+                const conteudoPDF = {
+                    content: [
+                        { text: usuario, style: 'info' },
+                        { text: `Data e hora da geração: ${dataHoraGeracao}`, style: 'info' },
+                        { text: '\n\n\n' },
+                        { text: 'Relatório Financeiro', style: 'header' },
+                        // Espaço em branco
+                        { text: '\n\n\n' },
+                        {
+                            table: {
+                                headerRows: 1,
+                                widths: ['*', '*'],
+                                body: [
+                                    ['Período de Referência', `${dataReferencia}`],
+                                    ['Total de Saídas (R$)', `R$ ${totalDespesas.toFixed(2)}`],
+                                    ['Rendimento (R$)', `R$ ${lucroTotal.toFixed(2)}`]
+                                ]
+                            }
+                        },
+                        { text: '\n' } // Espaço em branco
+                    ],
+                    styles: {
+                        header: {
+                            fontSize: 24,
+                            bold: true,
+                            alignment: 'center'
+                        },
+                        info: {
+                            fontSize: 10,
+                            alignment: 'center'
+                        },
+                        total: {
+                            fontSize: 14,
+                            bold: true,
+                            alignment: 'center'
+                        }
+                    }
+                };
+
+                // Criação do documento PDF
+                const pdfDoc = pdfMake.createPdf(conteudoPDF);
+                pdfDoc.open();
+           
+            } else if (totalDespesas === 0) {
+                alert("Não houve despesas no período selecionado.");
+                const conteudoPDF = {
+                    content: [
+                        { text: usuario, style: 'info' },
+                        { text: `Data e hora da geração: ${dataHoraGeracao}`, style: 'info' },
+                        { text: '\n\n\n' },
+                        { text: 'Relatório Financeiro', style: 'header' },
+                        // Espaço em branco
+                        { text: '\n\n\n' },
+                        {
+                            table: {
+                                headerRows: 1,
+                                widths: ['*', '*'],
+                                body: [
+                                    ['Período de Referência', `${dataReferencia}`],
+                                    ['Total de Entrada (R$)', `R$ ${totalPedidos.toFixed(2)}`],
+                                    ['Rendimento (R$)', `R$ ${lucroTotal.toFixed(2)}`]
+                                ]
+                            }
+                        },
+                        { text: '\n' } // Espaço em branco
+                    ],
+                    styles: {
+                        header: {
+                            fontSize: 24,
+                            bold: true,
+                            alignment: 'center'
+                        },
+                        info: {
+                            fontSize: 10,
+                            alignment: 'center'
+                        },
+                        total: {
+                            fontSize: 14,
+                            bold: true,
+                            alignment: 'center'
+                        }
+                    }
+                };
+
+                // Criação do documento PDF
+                const pdfDoc = pdfMake.createPdf(conteudoPDF);
+                pdfDoc.open();
+            } else {
+                // Definição do conteúdo do documento PDF usando os dados obtidos
+                const conteudoPDF = {
+                    content: [
+                        { text: usuario, style: 'info' },
+                        { text: `Data e hora da geração: ${dataHoraGeracao}`, style: 'info' },
+                        { text: '\n\n\n' },
+                        { text: 'Relatório Financeiro', style: 'header' },
+                        // Espaço em branco
+                        { text: '\n\n\n' },
+                        {
+                            table: {
+                                headerRows: 1,
+                                widths: ['*', '*'],
+                                body: [
+                                    ['Período de Referência', `${dataReferencia}`],
+                                    ['Total de Entrada (R$)', `R$ ${totalPedidos.toFixed(2)}`],
+                                    ['Total de Saídas (R$)', `R$ ${totalDespesas.toFixed(2)}`],
+                                    ['Rendimento (R$)', `R$ ${lucroTotal.toFixed(2)}`]
+                                ]
+                            }
+                        },
+                        { text: '\n' } // Espaço em branco
+                    ],
+                    styles: {
+                        header: {
+                            fontSize: 24,
+                            bold: true,
+                            alignment: 'center'
+                        },
+                        info: {
+                            fontSize: 10,
+                            alignment: 'center'
+                        },
+                        total: {
+                            fontSize: 14,
+                            bold: true,
+                            alignment: 'center'
+                        }
+                    }
+                };
+
+                // Criação do documento PDF
+                const pdfDoc = pdfMake.createPdf(conteudoPDF);
+                pdfDoc.open();
+            }
 
 
-
+                        
+        } catch (error) {
+            console.error('Erro ao gerar o relatório financeiro:', error);
+        }
+    }
     </script>
     <script type="module" src="scripts/relatorio.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
-
-        
-    

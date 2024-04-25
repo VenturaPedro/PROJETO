@@ -2,14 +2,14 @@ let items = [];
 let itemsPedido = [];
 
 document.getElementById("novo-pedido").addEventListener("click", function() {
-    document.getElementById("vincular-atendente").style.display = "block";
+    document.getElementById("modal-pedido").style.display = "block";
 
     preencherCliente();
     preencherItens();
     preencherFormaPagamento(); 
 });
-function fecharPopupAtendentePedido() {
-    document.getElementById("vincular-atendente").style.display = "none";
+function fecharPopupPedido() {
+    document.getElementById("modal-pedido").className.replace(/\bblock\b/,'');
     window.location.reload();
 }
 
@@ -86,7 +86,7 @@ async function addToTable(item) {
 
 
 function fecharPopupPedido() {
-    document.getElementsByClassName("modal-body").style.display = "none";
+    document.getElementsByClassName("modal-pedido").style.display = "none";
     window.location.reload();
 }
 
@@ -132,6 +132,9 @@ async function preencherFormaPagamento() {
         const pagamentoSelecionado = selectPagamento.value;
  
         console.log("Pagamento selecionado:", pagamentoSelecionado);
+
+
+        
     });
 }
 
@@ -163,6 +166,8 @@ async function lancarPedido() {
 
     try {
         const retornoPedido = await axios.post("/api/salvar-pedido", pedido, axiosConfig)
+
+        console.log('retornoPedido', retornoPedido)
 
         if(formaPagamentoId == 3){
             valorInicialCaixa = parseFloat(localStorage.getItem("valorCaixa")) + retornoPedido.data.valorTotalPedido;

@@ -35,8 +35,7 @@
     </nav> 
     <div id="painel-principal">
         <div class="btn-pedidos">
-            <button id="novo-pedido" class="btn-listas">Novo pedido</button>
-            <button id="gerar-pdf" class="btn-listas">Relatório</button><br><br>
+            <button id="novo-pedido" class="btn-listas">Novo pedido</button><br><br>
         </div>
         
 
@@ -76,12 +75,12 @@
                 </tbody>
             </table>
         </div>
-        <div class="modal" tabindex="-1" role="dialog" id="vincular-atendente">
+        <div class="modal" tabindex="-1" role="dialog" id="modal-pedido">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Faça um Pedido</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="fecharPopupAtendentePedido() ">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="fecharPopupPedido() ">
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
@@ -138,7 +137,7 @@
 
                       <div class="modal-footer">
                         <button onClick="lancarPedido()" type="button" class="btn btn-primary">Lançar Pedido</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick="fecharPopupAtendentePedido()">Fechar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick="fecharPopupPedido()">Fechar</button>
                       </div>
                 </div>
             </div>
