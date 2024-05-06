@@ -235,8 +235,16 @@ nav button{
     transform: scale(1.1); 
 }
 
-#fecharPopupCli, #fecharPopupEdicaoCli, #fecharPopupEstoque, #fecharPopupAtd, #fecharPopupBoy, 
-#fecharPopupProduto, #fecharPopupTaxa, #fecharPopupCategoria, #fecharPopupPagamento, 
+.btnFecharPopup{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 25px; 
+}
+
+#fecharPopupCli, #fecharPopupEdicaoCli, #fecharPopupEstoque, #fecharPopupAtd, #fecharPopupEdicaoAtd, #fecharPopupBoy,#fecharPopupEdicaoMotoboy, 
+#fecharPopupProduto, #fecharPopupTaxa, #fecharPopupEdicaoTaxa, #fecharPopupCategoria, #fecharPopupPagamento, 
 #fecharPopupAtendentePedido, #fecharPopupDespesa, #fecharPopupRelatorioMensal, #fecharPopupRelatorioDiario{
     position: absolute;
     top: 10px;
@@ -269,19 +277,25 @@ nav button{
     display: flex;
     margin: 0px;   
 }
-
-#btn-submitCliente, #btn-submitAtendente, #btn-salvarEdicao, #btn-cancelarEdicao, 
-#btn-submitMotoboy, #btn-submitProduto, #btn-submitEstoque, #btn-submitTaxaDelivery, 
-#btn-submitCategoria, #btn-submitPagamento, #btn-submitDespesa, #btn-submitRelatorioD, #btn-submitRelatorioM{
+.btn-form{
     font-size: 18px;
     padding: 5px 15px;
     border-radius: 12px;
     border: 1px solid #7c7c7c;
 }
 
-#btn-submitCliente:hover, #btn-submitAtendente:hover, #btn-submitMotoboy:hover, #btn-submitEstoque:hover, 
-#btn-submitProduto:hover, #btn-submitTaxaDelivery:hover, #btn-submitCategoria:hover, #btn-submitPagamento:hover, 
-#btn-submitDespesa:hover, #btn-submitRelatorioD, #btn-submitRelatorioM{    
+#btn-submitCliente, #btn-submitAtendente, #btn-salvarEdicao, #btn-cancelarEdicao, 
+#btn-submitMotoboy, #btn-submitProduto, #btn-submitEstoque, #btn-submitTaxaDelivery, 
+#btn-submitCategoria, #btn-submitPagamento, #btn-submitDespesa, #btn-submitRelatorioD, 
+#btn-submitRelatorioM, #btn-salvarEdicaoAtd, #btn-cancelarEdicaoAtd, #btn-salvarEdicaoMotoboy,
+#btn-cancelarEdicaoMotoboy, #btn-salvarEdicaoTaxa, #btn-cancelarEdicaoTaxa, #btn-salvarEdicaoDespesa, #btn-cancelarEdicaoDespesa{
+    font-size: 18px;
+    padding: 5px 15px;
+    border-radius: 12px;
+    border: 1px solid #7c7c7c;
+}
+
+.btn-form:hover{
     cursor: pointer;
     transition: all 0.5s ease;
     background-color: #210124; 
@@ -290,7 +304,21 @@ nav button{
     font-size: 18px;
 }
 
-#cadastrar-atendente, #editarAtendente, #cadastrar-motoboy, #cadastrar-taxa-delivery, #cadastrar-categoria, #cadastrar-pagamento, #cadastrar-despesa{
+
+#btn-submitCliente:hover, #btn-submitAtendente:hover, #btn-submitMotoboy:hover, #btn-submitEstoque:hover, 
+#btn-submitProduto:hover, #btn-submitTaxaDelivery:hover, #btn-submitCategoria:hover, #btn-submitPagamento:hover, 
+#btn-submitDespesa:hover, #btn-submitRelatorioD:hover, #btn-submitRelatorioM:hover, #btn-salvarEdicaoMotoboy:hover,
+#btn-cancelarEdicaoMotoboy:hover, #btn-salvarEdicaoTaxa:hover, #btn-cancelarEdicaoTaxa:hover, #btn-cancelarEdicaoDespesa:hover,
+#btn-salvarEdicaoDespesa:hover{    
+    cursor: pointer;
+    transition: all 0.5s ease;
+    background-color: #210124; 
+    color: #FFFFFF; 
+    transform: scale(1.1); 
+    font-size: 18px;
+}
+
+#cadastrar-atendente, #editarAtendente, #cadastrar-motoboy, #editarMotoboy, #editarTaxaDelivery, #cadastrar-taxa-delivery, #cadastrar-categoria, #editarCategoriaPopup, #cadastrar-pagamento, #cadastrar-despesa, #editarDespesaPopup{
     font-size: 18px;
     margin: 0% 4%;
     display: none;
@@ -307,7 +335,7 @@ nav button{
     border-radius: 25px;
 }
 
-#cadastrar-atendente input, #cadastrar-motoboy input, #cadastrar-taxa-delivery input, #cadastrar-categoria input, #cadastrar-pagamento input, #cadastrar-despesa input{
+#cadastrar-atendente input, #cadastrar-motoboy input, #cadastrar-taxa-delivery input, #cadastrar-categoria input, #cadastrar-pagamento input, #cadastrar-despesa input, #editarDespesaPopup input{
     font-size: 14px;
     padding: 2px;
     display: flex;

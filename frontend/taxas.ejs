@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
@@ -35,14 +36,14 @@
     <section id="painel-principal">
         <div>
             <a href="/listar-clientes"><button class="btn-listas">Clientes</button></a> 
-            <a href="/listar-atendentes"><button class="btn-listas d-none">Atendentes</button></a> 
-            <a href="/listar-motoboy"><button class="btn-listas d-none">Motoboy</button></a> 
+            <a href="/listar-atendentes"><button id="btn-listar-atendentes" class="btn-listas d-none">Atendentes</button></a> 
+            <a href="/listar-motoboy"><button id="btn-listar-motoboys" class="btn-listas d-none">Motoboy</button></a> 
             <a href="/listar-produtos"><button class="btn-listas">Produtos</button></a> 
             <a href="/listar-taxas"><button class="btn-listas">Taxas</button></a> 
-            <a href="/listar-categorias"><button class="btn-listas">Categorias</button></a> 
+            <a href="/listar-categorias"><button class="btn-listas">Categorias</button></a>
             <a href="/listar-pagamentos"><button class="btn-listas">Pagamentos</button></a>
-            <a href="/listar-despesas"><button class="btn-listas d-none">Despesas</button></a> 
-            <a href="/listar-estoques"><button class="btn-listas d-none">Estoque</button></a> 
+            <a href="/listar-despesas"><button id="btn-listar-despesas"class="btn-listas d-none">Despesas</button></a> 
+            <a href="/listar-estoques"><button id="btn-listar-estoques"class="btn-listas d-none">Estoque</button></a>  
             <br><br>
         </div>
         <div id="tabela-taxa-delivery">
@@ -77,6 +78,29 @@
                 </tbody>
             </table>
         </div>
+        <div id="editarTaxaDelivery">
+            <span id="fecharPopupEdicaoTaxa" onclick="fecharPopupEdicaoTaxa()"><i class="fa-solid fa-circle-xmark"></i></span>
+            <h2>Edição de taxa de entrega</h2>
+            <input type="hidden" id="edit-taxa-id"><br>
+            <form action="/editar-taxa-delivery" method="post">
+                <div>
+                    <label for="localTaxaEditada">Bairro / Região:</label><br>
+                    <input type="text" id="localTaxaEditada" name="localTaxaEditada" required size="30">
+        
+                    <label for="valorTaxaEditada">Valor R$:</label><br>
+                    <input type="text" id="valorTaxaEditada" name="valorTaxaEditada" required size="10">
+        
+                    <label for="obsTaxaEditada">Observações:</label><br>
+                    <input type="text" id="obsTaxaEditada" name="obsTaxaEditada" style="width: 80%; height: 50px;">
+                </div>
+                <div>
+                    <br>
+                    <button id="btn-salvarEdicaoTaxa">Salvar</button>
+                    <button id="btn-cancelarEdicaoTaxa" onclick="fecharPopupEdicaoTaxa()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+        
     </section>
     <script>
         if (sessionStorage.getItem("role")== "admin") {
@@ -93,8 +117,8 @@
             btnListarEstoques.classList.remove("d-none");
         }
         async function excluirTaxa(taxaId) {
-            console.log(`Excluir membro com ID ${taxaId}`);
-            const confirmacao = confirm(`Tem certeza que deseja excluir o membro com ID ${taxaId}?`);
+            console.log(`Excluir Taxa com ID ${taxaId}`);
+            const confirmacao = confirm(`Tem certeza que deseja excluir a Taxa com ID ${taxaId}?`);
             if (confirmacao) {
                 await fetch('/excluir-taxa', {
                     method: 'POST',
@@ -113,6 +137,67 @@
                 });
             }
         }
+
+
+        async function editarTaxa(taxaId){
+            console.log(`Editar taxa com ID ${taxaId}`);
+            
+            const confirmacao = confirm(`Tem certeza que deseja editar a taxa com ID ${taxaId}?`);
+            if(confirmacao){
+                const response = await axios.get("/api/listar-taxas");
+                const taxas = response.data.TaxaDelivery;
+
+                for (taxa of taxas) {
+                    if (taxa.ID == taxaId) {
+                        console.log("taxa", taxa);
+                        document.getElementById('edit-taxa-id').value = taxa.ID;
+                        document.getElementById('localTaxaEditada').value = taxa.Area;
+                        document.getElementById('valorTaxaEditada').value = taxa.Valor;
+                        document.getElementById('obsTaxaEditada').value = taxa.Observacoes;
+                        break;
+                    }
+                }
+                
+                // Exibir o popup de edição imediatamente
+                document.getElementById("editarTaxaDelivery").style.display = "block";
+            }
+        }
+
+        function fecharPopupEdicaoTaxa(){
+            document.getElementById("editarTaxaDelivery").style.display = "none";
+            window.location.reload();
+        }
+
+        document.getElementById("btn-salvarEdicaoTaxa").addEventListener("click", async function() {
+            const dadosEditados = {
+                taxaId: document.getElementById("edit-taxa-id").value, 
+                localTaxaEditada: document.getElementById("localTaxaEditada").value, 
+                valorTaxaEditada: document.getElementById("valorTaxaEditada").value, 
+                obsTaxaEditada: document.getElementById("obsTaxaEditada").value, 
+            };
+
+            await fetch('/editar-taxa-delivery', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dadosEditados),
+            })
+            .then(() => {
+                document.getElementById("editarTaxaDelivery").style.display = "none";
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Erro ao editar taxa:', error);
+            });
+        });
+
+        document.getElementById("btn-cancelarEdicaoTaxa").addEventListener("click", function() {
+            document.getElementById("editarTaxaDelivery").style.display = "none";
+            window.location.reload();
+            return;
+        });
+
     </script>
     
 </body>

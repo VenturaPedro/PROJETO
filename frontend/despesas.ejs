@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
@@ -88,6 +89,38 @@
                 </tbody>
             </table>
         </div>
+        <div id="editarDespesaPopup">
+            <span id="fecharPopupEdicaoDespesa" onclick="fecharPopupEdicaoDespesa()"><i class="fa-solid fa-circle-xmark"></i></span>
+            <h2>Editar Despesa</h2>
+            <input type="hidden" id="edit-despesa-id"><br>
+            <form action="/editar-despesa" method="post">
+                <div>
+                    <label for="descricaoDespesaEditada">Descrição:</label><br>
+                    <input type="text" id="descricaoDespesaEditada" name="descricaoDespesaEditada" required size="30">
+        
+                    <label for="lancamentoDespesaEditada">Lançamento:</label><br>
+                    <input type="date" id="lancamentoDespesaEditada" name="lancamentoDespesaEditada">
+        
+                    <label for="valorDespesaEditada">Valor:</label><br>
+                    <input type="number" id="valorDespesaEditada" name="valorDespesaEditada" step="0.01" min="0">
+        
+                    <label for="vencimentoDespesaEditada">Vencimento:</label><br>
+                    <input type="date" id="vencimentoDespesaEditada" name="vencimentoDespesaEditada">
+        
+                    <label for="tipoDespesaEditada">Tipo:</label><br>
+                    <input type="text" id="tipoDespesaEditada" name="tipoDespesaEditada">
+        
+                    <label for="obsDespesaEditada">Observação:</label><br>
+                    <input type="text" id="obsDespesaEditada" name="obsDespesaEditada" style="width: 80%; height: 50px;">
+                </div>
+                <div>
+                    <br>
+                    <button id="btn-salvarEdicaoDespesa">Salvar</button>
+                    <button id="btn-cancelarEdicaoDespesa" onclick="fecharPopupEdicaoDespesa()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+        
     </section>
     <script>
         if (sessionStorage.getItem("role")!= "admin") {
@@ -117,6 +150,71 @@
                 });
             }
         }
+
+
+        async function editarDespesa(despesaId) {
+            console.log(`Editar despesa com ID ${despesaId}`);
+            const confirmacao = confirm(`Tem certeza que deseja editar a despesa com ID ${despesaId}?`);
+            if (confirmacao) {
+                const response = await axios.get("/api/listar-despesas");
+                const despesas = response.data.despesa;
+
+                for (despesa of despesas) {
+                    if (despesa.ID == despesaId) {
+                        console.log("despesa", despesa);
+                        document.getElementById('edit-despesa-id').value = despesa.ID;
+                        document.getElementById('descricaoDespesaEditada').value = despesa.Descricao;
+                        document.getElementById('lancamentoDespesaEditada').value = despesa.Lancamento;
+                        document.getElementById('valorDespesaEditada').value = despesa.Valor;
+                        document.getElementById('vencimentoDespesaEditada').value = despesa.Vencimento;
+                        document.getElementById('tipoDespesaEditada').value = despesa.Tipo;
+                        document.getElementById('obsDespesaEditada').value = despesa.Observacao;
+                        break;
+                    }
+                }
+                
+                // Exibir o popup de edição imediatamente
+                document.getElementById("editarDespesaPopup").style.display = "block";
+            }
+        }
+
+        function fecharPopupEdicaoDespesa() {
+            document.getElementById("editarDespesaPopup").style.display = "none";
+            window.location.reload();
+        }
+
+        document.getElementById("btn-salvarEdicaoDespesa").addEventListener("click", async function() {
+            const dadosEditados = {
+                despesaId: document.getElementById("edit-despesa-id").value, 
+                descricaoDespesaEditada: document.getElementById("descricaoDespesaEditada").value, 
+                lancamentoDespesaEditada: document.getElementById("lancamentoDespesaEditada").value, 
+                valorDespesaEditada: document.getElementById("valorDespesaEditada").value, 
+                vencimentoDespesaEditada: document.getElementById("vencimentoDespesaEditada").value, 
+                tipoDespesaEditada: document.getElementById("tipoDespesaEditada").value, 
+                obsDespesaEditada: document.getElementById("obsDespesaEditada").value, 
+            };
+
+            await fetch('/editar-despesa', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dadosEditados),
+            })
+            .then(() => {
+                document.getElementById("editarDespesaPopup").style.display = "none";
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Erro ao editar despesa:', error);
+            });
+        });
+
+        document.getElementById("btn-cancelarEdicaoDespesa").addEventListener("click", function() {
+            document.getElementById("editarDespesaPopup").style.display = "none";
+            window.location.reload();
+            return;
+        });
 
 
     </script>

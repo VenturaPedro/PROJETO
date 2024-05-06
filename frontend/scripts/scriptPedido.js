@@ -9,7 +9,7 @@ document.getElementById("novo-pedido").addEventListener("click", function() {
     preencherFormaPagamento(); 
 });
 function fecharPopupPedido() {
-    document.getElementById("modal-pedido").className.replace(/\bblock\b/,'');
+    document.getElementById("modal-pedido").style.display = "none";
     window.location.reload();
 }
 
@@ -36,6 +36,7 @@ function buscarItens() {
 
     if (query.length >= 3) {
         const filteredItems = filterItems(query);
+        console.log("filteredItems", filteredItems)
         updateSearchResults(filteredItems);
     } else {
         const searchResults = document.getElementById("resultadoBusca");
@@ -77,6 +78,8 @@ async function addToTable(item) {
             valor
         };
 
+        console.log('selectedItem', selectedItem)
+
         itemsPedido.push(selectedItem);
     } catch (error) {
         console.error('Erro ao adicionar item à tabela:', error);
@@ -85,11 +88,11 @@ async function addToTable(item) {
 
 
 
-function fecharPopupPedido() {
-    document.getElementsByClassName("modal-pedido").style.display = "none";
-    window.location.reload();
-}
-
+// function fecharPopupPedido() {
+//     document.getElementsByClassName("modal-pedido").style.display = "none";
+//     window.location.reload();
+// }
+ 
 async function preencherCliente() {
     const getClientes = await axios.get("/api/listar-clientes");
 

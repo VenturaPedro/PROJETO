@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
@@ -81,6 +82,32 @@
                 </tbody>
             </table>
         </div>
+        <div id="editarMotoboy">
+            <span id="fecharPopupEdicaoMotoboy" onclick="fecharPopupEdicaoMotoboy()"><i class="fa-solid fa-circle-xmark"></i></span>
+            <h2>Edição de cadastro</h2>
+            <input type="hidden" id="edit-motoboy-id"><br>
+            <form action="/editar-cadastro-motoboy" method="post">
+                <div id="form-motoboy">
+                    <label for="nomeMotoboyEditado">Nome:</label><br>
+                    <input type="text" id="nomeMotoboyEditado" required size="25">
+        
+                    <label for="emailMotoboyEditado">E-mail:</label><br>
+                    <input type="text" id="emailMotoboyEditado" class="campoEmail" name="emailMotoboyEditado" placeholder="email@email.com" size="25">
+        
+                    <label for="telefoneMotoboyEditado">Telefone:</label><br>
+                    <input type="tel" id="telefoneMotoboyEditado" name="telefoneMotoboyEditado" placeholder="(99) 90000-0000" required size="20" maxlength="14">
+                    
+                    <label for="obsMotoboyEditado">Observações:</label><br>
+                    <input type="text" id="obsMotoboyEditado" style="width: 83%; height: 35px;">
+                </div>
+                <div>
+                    <br>
+                    <button id="btn-salvarEdicaoMotoboy">Salvar</button>
+                    <button id="btn-cancelarEdicaoMotoboy" onclick="fecharPopupEdicaoMotoboy()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+        
     </section>
     <script>
         async function excluirMotoboy(motoboyId) {
@@ -104,6 +131,73 @@
                 });
             }
         }
+
+
+
+        async function editarMotoboy(motoboyId){
+            console.log(`Editar motoboy com ID ${motoboyId}`);
+            
+            const confirmacao = confirm(`Tem certeza que deseja editar o motoboy com ID ${motoboyId}?`);
+            if(confirmacao){
+                const response = await axios.get("/api/listar-motoboy");
+                const motoboys = response.data.Motoboy;
+
+                for (motoboy of motoboys) {
+                    if (motoboy.ID == motoboyId) {
+                        console.log("motoboy", motoboy);
+                        document.getElementById('edit-motoboy-id').value = motoboy.ID;
+                        document.getElementById('nomeMotoboyEditado').value = motoboy.Nome;
+                        document.getElementById('emailMotoboyEditado').value = motoboy.Email;
+                        document.getElementById('telefoneMotoboyEditado').value = motoboy.Telefone;
+                        document.getElementById('obsMotoboyEditado').value = motoboy.Observacoes;
+                        break;
+                    }
+                }
+                
+                // Exibir o popup de edição imediatamente
+                document.getElementById("editarMotoboy").style.display = "block";
+            }
+        }
+
+        function fecharPopupEdicaoMotoboy(){
+            document.getElementById("editarMotoboy").style.display = "none";
+            window.location.reload();
+        }
+
+        document.getElementById("btn-salvarEdicaoMotoboy").addEventListener("click", async function() {
+            const dadosEditados = {
+                motoboyId: document.getElementById("edit-motoboy-id").value, 
+                novoNomeMotoboy: document.getElementById("nomeMotoboyEditado").value, 
+                novoEmailMotoboy: document.getElementById("emailMotoboyEditado").value, 
+                novoTelefoneMotoboy: document.getElementById("telefoneMotoboyEditado").value, 
+                novoObsMotoboy: document.getElementById("obsMotoboyEditado").value, 
+            };
+
+            await fetch('/editar-cadastro-motoboy', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dadosEditados),
+            })
+            .then(() => {
+                document.getElementById("editarMotoboy").style.display = "none";
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Erro ao editar motoboy:', error);
+            });
+        });
+
+        document.getElementById("btn-cancelarEdicaoMotoboy").addEventListener("click", function() {
+            document.getElementById("editarMotoboy").style.display = "none";
+            window.location.reload();
+            return;
+        });
+
+
+
+        
     </script>
     
 </body>

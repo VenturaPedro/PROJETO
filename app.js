@@ -449,6 +449,16 @@ app.get("/api/listar-atendentes", (req, res) => {
     });
 });
 
+app.get("/api/listar-motoboy", (req, res) => {
+    const sql = 'SELECT * FROM Motoboy';
+    db.query(sql, (err, results) => {
+        if(err){
+            return res.send(err)
+        }
+        return res.send({ Motoboy: results })
+    });
+});
+
 app.get("/api/listar-clientes", (req, res) => {
     const clienteId = req.query.clienteId
     const sql = 'SELECT * FROM clientes WHERE status = "ATIVO"';
@@ -456,7 +466,6 @@ app.get("/api/listar-clientes", (req, res) => {
         if(err){
             return res.send(err)
         }
-        console.log("retorno query braba", results)
           return res.send({ clientes: results })
     });
 });
@@ -468,7 +477,7 @@ app.get("/api/listar-cliente", (req, res) => {
         if(err){
             return res.send(err)
         }
-        console.log("retorno query braba", results)
+     
           return res.send({ cliente: results })
     });
 });
@@ -565,17 +574,20 @@ app.post("/api/salvar-pedido", async (req, res) => {
     });
 
     const promiseInsertProdutosPedido = new Promise((resolve, reject) => {
+        // B.o na resulção da promise
         const promises = itemsPedido.map((produtoPedido) => {
             const selectValorProduto = 'SELECT preco_venda FROM estoque WHERE id = ' + produtoPedido.id;
-    
+        
             return new Promise((resolve, reject) => {
                 db.query(selectValorProduto, (err, results) => {
                     if(err){
-                        reject(err);
+                        return reject(err);
                     }else{
+                        console.log('results', results)
+                        // B.o está retornando o resultado
                         const firstResult = results && results.length > 0 ? results[0] : null;
                         const valor = firstResult ? firstResult.valor : 0; // Certifique-se de definir valor corretamente
-                        resolve(valor);
+                        return resolve(valor);
                     }
                 });
             });
@@ -583,7 +595,12 @@ app.post("/api/salvar-pedido", async (req, res) => {
     
         Promise.all(promises)
             .then((valoresProdutos) => {
+                // B.o mas não está chegando aq
+                console.log('valoresProdutos', valoresProdutos)
                 const promiseInsertProdutos = valoresProdutos.map((preco_venda, index) => {
+                    console.log('itemsPedido', itemsPedido)
+                    console.log('index', index)
+                    console.log('preco_venda', preco_venda) 
                     const produtoPedido = itemsPedido[index];
                     const valorTotalProduto = isNaN(preco_venda) ? 0 : preco_venda * produtoPedido.quantidade;
                     valorTotalPedido += valorTotalProduto;
@@ -608,6 +625,9 @@ app.post("/api/salvar-pedido", async (req, res) => {
             .then(() => {
                 const sql = 'UPDATE pedido SET valor_total = ? WHERE ID = ?;';
                 db.query(sql, [ valorTotalPedido, insertedPedidoId], (err, result) => {
+                    console.log('valorTotalPedido:',valorTotalPedido)
+                    console.log('insertedPedidoId:',insertedPedidoId)
+                    console.log('result:',result)
                     if(err){
                         console.error('Erro ao inserir dados:', err);
                     }else{
@@ -1046,6 +1066,22 @@ app.post("/processar-cadastro-motoboy", (req, res) => {
     });
 });
 
+app.post("/editar-cadastro-motoboy", (req, res) => {
+    const motoboyId = req.body.motoboyId;
+    const { novoNomeMotoboy, novoEmailMotoboy, novoTelefoneMotoboy, novoObsMotoboy } = req.body;
+        
+    const sql = 'UPDATE Motoboy SET Nome=?, Email=?, Telefone=?, Observacoes=? WHERE id=?';
+    db.query(sql, [novoNomeMotoboy, novoEmailMotoboy, novoTelefoneMotoboy, novoObsMotoboy, motoboyId], async (err, result) => {
+        if(err){
+            console.error('Erro ao atualizar dados:', err);
+            res.sendStatus(500); // Erro interno do servidor
+        } else {
+            console.log('Dados atualizados com sucesso');
+            res.sendStatus(200); // OK
+        }
+    });
+});
+
 
 app.post("/processar-cadastro-taxa-delivery", (req, res) => {
     const { localTaxaDelivery, valorTaxaDelivery, obsTaxaDelivery } = req.body;
@@ -1062,6 +1098,23 @@ app.post("/processar-cadastro-taxa-delivery", (req, res) => {
     });
 });
 
+app.post("/editar-taxa-delivery", (req, res) => {
+    const taxaId = req.body.taxaId;
+    const { localTaxaEditada, valorTaxaEditada, obsTaxaEditada } = req.body;
+        
+    const sql = 'UPDATE TaxaDelivery SET Area=?, Valor=?, Observacoes=? WHERE ID=?';
+    db.query(sql, [localTaxaEditada, valorTaxaEditada, obsTaxaEditada, taxaId], async (err, result) => {
+        if(err){
+            console.error('Erro ao atualizar dados:', err);
+            res.sendStatus(500); // Erro interno do servidor
+        } else {
+            console.log('Dados atualizados com sucesso');
+            res.sendStatus(200); // OK
+        }
+    });
+});
+
+
 
 app.post("/processar-cadastro-categoria", (req, res) => {  
     const { nomeCategoria, obsCategoria} = req.body;
@@ -1077,6 +1130,23 @@ app.post("/processar-cadastro-categoria", (req, res) => {
         }
 });
 });
+
+app.post("/editar-categoria", (req, res) => {
+    const categoriaId = req.body.categoriaId;
+    const { nomeCategoriaEditada, obsCategoriaEditada } = req.body;
+        
+    const sql = 'UPDATE Categoria SET Nome=?, Observacoes=? WHERE ID=?';
+    db.query(sql, [nomeCategoriaEditada, obsCategoriaEditada, categoriaId], async (err, result) => {
+        if(err){
+            console.error('Erro ao atualizar dados:', err);
+            res.sendStatus(500); // Erro interno do servidor
+        } else {
+            console.log('Dados atualizados com sucesso');
+            res.sendStatus(200); // OK
+        }
+    });
+});
+
 
 app.post("/processar-cadastro-pagamento", (req, res) => {  
     const { nomePagamento, obsPagamento} = req.body;
@@ -1140,6 +1210,23 @@ app.post("/processar-cadastro-despesa", (req, res) => {
         }
 });
 });
+
+app.post("/editar-despesa", (req, res) => {
+    const despesaId = req.body.despesaId;
+    const { descricaoDespesaEditada, lancamentoDespesaEditada, valorDespesaEditada, vencimentoDespesaEditada, tipoDespesaEditada, obsDespesaEditada } = req.body;
+        
+    const sql = 'UPDATE Despesa SET Descricao=?, Lancamento=?, Valor=?, Vencimento=?, Tipo=?, Observacao=? WHERE ID=?';
+    db.query(sql, [descricaoDespesaEditada, lancamentoDespesaEditada, valorDespesaEditada, vencimentoDespesaEditada, tipoDespesaEditada, obsDespesaEditada, despesaId], async (err, result) => {
+        if(err){
+            console.error('Erro ao atualizar dados:', err);
+            res.sendStatus(500); // Erro interno do servidor
+        } else {
+            console.log('Dados atualizados com sucesso');
+            res.sendStatus(200); // OK
+        }
+    });
+});
+
 
 //MENSAGEM STATUS CONEXÃO
 app.listen(80, () => {

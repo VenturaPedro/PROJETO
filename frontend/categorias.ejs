@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
@@ -78,6 +79,26 @@
                 </tbody>
             </table>
         </div>
+        <div id="editarCategoriaPopup">
+            <span id="fecharPopupEdicaoCategoria" class="btnFecharPopup"onclick="fecharPopupEdicaoCategoria()"><i class="fa-solid fa-circle-xmark"></i></span>
+            <h2>Editar Categoria</h2>
+            <input type="hidden" id="edit-categoria-id"><br>
+            <form action="/editar-categoria" method="post">
+                <div>
+                    <label for="nomeCategoriaEditada">Nome:</label><br>
+                    <input type="text" id="nomeCategoriaEditada" name="nomeCategoriaEditada" required size="30">
+        
+                    <label for="obsCategoriaEditada">Observações:</label><br>
+                    <input type="text" id="obsCategoriaEditada" name="obsCategoriaEditada" style="width: 80%; height: 50px;">
+                </div>
+                <div>
+                    <br>
+                    <button id="btn-salvarEdicaoCategoria" class="btn-form">Salvar</button>
+                    <button id="btn-cancelarEdicaoCategoria" onclick="fecharPopupEdicaoCategoria()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+        
     </section>
     <script>
         if (sessionStorage.getItem("role")== "admin") {
@@ -114,6 +135,63 @@
                 });
             }
         }
+        async function editarCategoria(categoriaId){
+            console.log(`Editar categoria com ID ${categoriaId}`);
+            
+            const confirmacao = confirm(`Tem certeza que deseja editar a categoria com ID ${categoriaId}?`);
+            if(confirmacao){
+                const response = await axios.get("/api/listar-categorias");
+                const categorias = response.data.categoria;
+
+                for (categoria of categorias) {
+                    if (categoria.ID == categoriaId) {
+                        console.log("categoria", categoria);
+                        document.getElementById('edit-categoria-id').value = categoria.ID;
+                        document.getElementById('nomeCategoriaEditada').value = categoria.Nome;
+                        document.getElementById('obsCategoriaEditada').value = categoria.Observacoes;
+                        break;
+                    }
+                }
+                
+                // Exibir o popup de edição imediatamente
+                document.getElementById("editarCategoriaPopup").style.display = "block";
+            }
+        }
+
+        function fecharPopupEdicaoCategoria(){
+            document.getElementById("editarCategoriaPopup").style.display = "none";
+            window.location.reload();
+        }
+
+        document.getElementById("btn-salvarEdicaoCategoria").addEventListener("click", async function() {
+            const dadosEditados = {
+                categoriaId: document.getElementById("edit-categoria-id").value, 
+                nomeCategoriaEditada: document.getElementById("nomeCategoriaEditada").value, 
+                obsCategoriaEditada: document.getElementById("obsCategoriaEditada").value, 
+            };
+
+            await fetch('/editar-categoria', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dadosEditados),
+            })
+            .then(() => {
+                document.getElementById("editarCategoriaPopup").style.display = "none";
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Erro ao editar categoria:', error);
+            });
+        });
+
+        document.getElementById("btn-cancelarEdicaoCategoria").addEventListener("click", function() {
+            document.getElementById("editarCategoriaPopup").style.display = "none";
+            window.location.reload();
+            return;
+        });
+
     </script>
     
 </body>

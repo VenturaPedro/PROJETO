@@ -82,7 +82,7 @@
             </table>
         </div>
         <div id="editarAtendente">
-            <span id="fecharPopupEdicaoAtd" onclick="fecharPopupEdicaoAtd()">X</span>
+            <span id="fecharPopupEdicaoAtd" onclick="fecharPopupEdicaoAtd()"><i class="fa-solid fa-circle-xmark"></i></span>
             <h2>Edição de cadastro</h2>
             <input type="hidden" id="edit-atendente-id"><br>
             <form action="/editar-cadastro-atendente" method="post">
@@ -104,7 +104,7 @@
                 <div>
                     <br>
                     <button id="btn-salvarEdicaoAtd">Salvar</button>
-                    <button id="btn-cancelarEdicaoAtd">Cancelar</button>
+                    <button id="btn-cancelarEdicaoAtd" onclick="fecharPopupEdicaoAtd()">Cancelar</button>
                 </div>
             </form>
         </div>
@@ -132,30 +132,34 @@
                 });
             }
         }
-        async function editarAtendente(atendenteId){
-            console.log(`Editar atendente com ID ${atendenteId}`);
-            
-            const confirmacao = confirm(`Tem certeza que deseja editar o atendente com ID ${atendenteId}?`);
-            if(confirmacao){
-                const response = await axios.get("/api/listar-atendentes");
-                const atendentes = response.data.Atendentes;
+    async function editarAtendente(atendenteId){
+        console.log(`Editar atendente com ID ${atendenteId}`);
+        
+        const confirmacao = confirm(`Tem certeza que deseja editar o atendente com ID ${atendenteId}?`);
+        if(confirmacao){
+            const response = await axios.get("/api/listar-atendentes");
+            const atendentes = response.data.Atendentes;
 
-                for (atendente of atendentes) {
-                    if (atendente.ID == atendenteId) {
-                        console.log("atendente", atendente);
-                        document.getElementById('edit-atendente-id').value = atendente.ID;
-                        document.getElementById('nomeAtendenteEditado').value = atendente.Nome;
-                        document.getElementById('emailAtendenteEditado').value = atendente.Email;
-                        document.getElementById('telefoneAtendenteEditado').value = atendente.Telefone;
-                        document.getElementById('obsAtendenteEditado').value = atendente.Observacoes;
-                        break;
-                    }
+            for (atendente of atendentes) {
+                if (atendente.ID == atendenteId) {
+                    console.log("atendente", atendente);
+                    document.getElementById('edit-atendente-id').value = atendente.ID;
+                    document.getElementById('nomeAtendenteEditado').value = atendente.Nome;
+                    document.getElementById('emailAtendenteEditado').value = atendente.Email;
+                    document.getElementById('telefoneAtendenteEditado').value = atendente.Telefone;
+                    document.getElementById('obsAtendenteEditado').value = atendente.Observacoes;
+                    break;
                 }
-                
-                // Exibir o popup de edição imediatamente
-                document.getElementById("editarAtendente").style.display = "block";
             }
+            
+            // Exibir o popup de edição imediatamente
+            document.getElementById("editarAtendente").style.display = "block";
         }
+    }
+function fecharPopupEdicaoAtd(){
+    document.getElementById("editarAtendente").style.display = "none";
+    window.location.reload();
+}
 
         
 document.getElementById("btn-salvarEdicaoAtd").addEventListener("click", async function() {
@@ -183,10 +187,11 @@ document.getElementById("btn-salvarEdicaoAtd").addEventListener("click", async f
     });
     });
 
-    document.getElementById("btn-cancelarEdicaoAtd").addEventListener("click", function() {
-    document.getElementById("editarAtendente").style.display = "none";
-    return;
-    });
+    // document.getElementById("btn-cancelarEdicaoAtd").addEventListener("click", function() {
+    // document.getElementById("editarAtendente").style.display = "none";
+    // window.location.reload();
+    // return;
+    // });
     </script>
     
 </body>
