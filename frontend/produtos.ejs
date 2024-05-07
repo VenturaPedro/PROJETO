@@ -25,7 +25,7 @@
                 <a href="/listar-pedidos"><button id="pedido" class="btn"><i class="fa-solid fa-cash-register"></i><br>Pedidos</button></a>
             </div>
             <div class="menu-item">
-                <button class="btn"><i class="fa-solid fa-truck"></i><br>Entrega</button>
+                <a href="/listar-delivery"><button id="pedido" class="btn"><i class="fa-solid fa-truck"></i><br>Delivery</button>        
             </div>
             <div class="menu-item">
                 <a href="painel.html"><button class="btn"><i class="fa-solid fa-gears"></i><br>Painel</button></a>
@@ -71,18 +71,17 @@
                     <% produto.forEach(function(produto) { %>
                         <tr>                            
                             <!-- <td><%= produto.id %></td> -->
-                            <td><%= produto.nome %></td>
-                            <td>R$<%= produto.valor %></td>
+                            <td><%= produto.produto %></td>
+                            <td>R$<%= produto.preco_venda %></td>
                             <td><%= produto.descricao %></td>
-                            <td><%= produto.estoque %></td>
+                            <td><%= produto.quantidade_estoque %></td>
                             <td><%= produto.categoria %></td>
                             <td><%= produto.fornecedor %></td>
                             <td><button id="btn-editarProduto" class="btn-edit" onclick="editarProduto('<%= produto.id %>')"><i class="fa-solid fa-pen"></i></button></td>
                             <td><button id="btn-excluirProduto" class="btn-delete" onclick="excluirProduto('<%= produto.id %>')"><i class="fa-solid fa-trash"></i></button></td>
-                        
                         </tr>
                     <% }); %>
-                </tbody>
+                </tbody>                
             </table>
         </div>
     </section>

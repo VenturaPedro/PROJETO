@@ -162,19 +162,35 @@ app.post("/filtrar-produtos", (req, res) => {
         }
     });
 });
-
 app.get("/listar-produtos", (req, res) => {
-    const sql = 'SELECT * FROM produto';
+    const sql = `
+        SELECT 
+            p.id,
+            p.nome AS produto,
+            p.descricao, -- Adicionando o campo descrição
+            p.categoria, -- Adicionando o campo categoria
+            e.quantidade AS quantidade_estoque,
+            e.preco_compra,
+            e.preco_venda,
+            e.data_validade,
+            e.fornecedor,
+            e.Observacoes
+        FROM 
+            produto p
+        LEFT JOIN 
+            estoque e ON p.id = e.produto
+    `;
     db.query(sql, (err, results) => {
-        if(err){
-            console.error('Erro ao recuperar dados:', err);
-            res.send('Erro ao recuperar dados do banco de dados');
-        }else{
-            console.log('Recuperação dos dados completa:');
-            res.render('produtos', { produto: results });
+        if (err) {
+            console.error('Erro ao recuperar produtos:', err);
+            res.status(500).json({ error: 'Erro ao recuperar produtos' });
+        } else {
+            res.render('produtos', { produto: results }); // Alterando 'produto' para 'produtos'
         }
     });
+
 });
+
 
 app.post("/filtrar-estoques", (req, res) => {
     const termoBusca = req.body.filtroEstoque;
@@ -325,32 +341,32 @@ app.get("/listar-pedidos", (req, res) => {
     });
 });
 
-// app.get("/soma-valor-total-pedidos", (req, res) => {
-//     const sql = `SELECT SUM(valor_total) AS total FROM pedido`;
-//     db.query(sql, (err, result) => {
-//         if (err) {
-//             console.error('Erro ao calcular a soma do valor total dos pedidos:', err);
-//             res.status(500).send('Erro ao calcular a soma do valor total dos pedidos');
-//         } else {
-//             const total = result[0].total;
-//             res.json({ total });
-//         }
-//     });
-// });
+app.get("/listar-delivery", (req, res) => {
+    const sql = `select PD.ID, 
+                    PD.Data, 
+                    CL.Nome Cliente, 
+                    ATD.Nome Atendente,  
+                    PG.Nome FormaPagamento, 
+                    PD.valor_total, 
+                    PD.status_pedido
+                from pedido PD
+                    left join clientes CL
+                        on PD.CLIENTE_ID = CL.ID
+                    left join atendente ATD
+                        on PD.Atendente_ID = ATD.ID
+                    left join pagamento PG
+                        on PD.pagamento_ID = PG.ID;`;
+    db.query(sql, (err, results) => {
+        if(err){
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        }else{
+            console.log('Recuperação dos dados completa:');
+            res.render('telaDelivery', { pedidos: results });
+        }
+    });
+});
 
-// // Rota para obter o valor total das despesas
-// app.get("/soma-valor-total-despesas", (req, res) => {
-//     const sql = "SELECT SUM(Valor) AS total_despesas FROM despesa";
-//     db.query(sql, (err, results) => {
-//         if (err) {
-//             console.error("Erro ao recuperar o total das despesas:", err);
-//             res.status(500).send("Erro ao recuperar o total das despesas");
-//         } else {
-//             const totalDespesas = results[0].total_despesas || 0;
-//             res.json({ totalDespesas });
-//         }
-//     });
-// });
 
 // Rota para obter o valor total dos pedidos de um dia específico
 app.get("/soma-valor-total-pedidos-dia", (req, res) => {
@@ -556,7 +572,7 @@ app.post("/api/salvar-pedido", async (req, res) => {
     let insertedPedidoId = 0;
     let valorTotalPedido = 0;
     console.log('req.body', req.body)
-    const { atendenteId, clienteId, itemsPedido, formaPagamentoId, totalPedido } = req.body;
+    const { atendenteId, clienteId, itemsPedido, formaPagamentoId, totalPedido, valorFrete } = req.body;
 
     const insertPedido = `INSERT INTO PEDIDO 
             (Data, Atendente_ID, CLIENTE_ID, pagamento_ID, valor_total, status_pedido) 
@@ -576,7 +592,7 @@ app.post("/api/salvar-pedido", async (req, res) => {
     const promiseInsertProdutosPedido = new Promise((resolve, reject) => {
         // B.o na resulção da promise
         const promises = itemsPedido.map((produtoPedido) => {
-            const selectValorProduto = 'SELECT preco_venda FROM estoque WHERE id = ' + produtoPedido.id;
+            const selectValorProduto = 'SELECT preco_venda FROM estoque WHERE produto = ' + produtoPedido.id;
         
             return new Promise((resolve, reject) => {
                 db.query(selectValorProduto, (err, results) => {
@@ -586,7 +602,7 @@ app.post("/api/salvar-pedido", async (req, res) => {
                         console.log('results', results)
                         // B.o está retornando o resultado
                         const firstResult = results && results.length > 0 ? results[0] : null;
-                        const valor = firstResult ? firstResult.valor : 0; // Certifique-se de definir valor corretamente
+                        const valor = firstResult ? firstResult.preco_venda : 0; // Certifique-se de definir valor corretamente
                         return resolve(valor);
                     }
                 });
@@ -623,9 +639,12 @@ app.post("/api/salvar-pedido", async (req, res) => {
                 return Promise.all(promiseInsertProdutos);
             })
             .then(() => {
+                console.log('valorTotalPedido', valorTotalPedido)
+                console.log('valorFrete', valorFrete)
+                const valorTotal = valorTotalPedido + valorFrete;
                 const sql = 'UPDATE pedido SET valor_total = ? WHERE ID = ?;';
-                db.query(sql, [ valorTotalPedido, insertedPedidoId], (err, result) => {
-                    console.log('valorTotalPedido:',valorTotalPedido)
+                db.query(sql, [ valorTotal, insertedPedidoId], (err, result) => {
+                    console.log('valorTotal:',valorTotal)
                     console.log('insertedPedidoId:',insertedPedidoId)
                     console.log('result:',result)
                     if(err){
@@ -696,52 +715,6 @@ app.post("/api/salvar-pedido", async (req, res) => {
 
         
 });
-
-
-// app.post("/login", async (req, res) => {
-//     const username = req.body.usernameInput;
-//     const password = req.body.passwordInput;
-
-//     async function validateUser(username, password) {
-//         const sql = 'SELECT * FROM usuarios WHERE username = ?';
-//         return new Promise((resolve, reject) => {
-//             db.query(sql, [username], async (err, results) => {
-//                 if (err) {
-//                     reject(err);
-//                 } else {
-//                     if (results.length > 0) {
-//                         const user = results[0];
-
-//                         console.log('Senha informada:', password);
-//                         console.log('Senha armazenada no banco de dados:', user.password);
-
-//                         // Comparação direta das senhas
-//                         const passwordMatch = password === user.password;
-
-//                         console.log('Comparação de senha:', passwordMatch);
-
-//                         resolve(passwordMatch ? user : null);
-//                     } else {
-//                         resolve(null);
-//                     }
-//                 }
-//             });
-//         });
-//     }
-
-//     try{
-//         const user = await validateUser(username, password);
-
-//         if(user){
-//             res.redirect('/painel.html');
-//         }else{
-//             res.status(401).send('Nome de usuário ou senha incorretos.');
-//         }
-//     }catch(error){
-//         console.error('Erro ao validar usuário:', error);
-//         res.status(500).send('Erro ao processar a solicitação.');
-//     }
-// });
 
 app.post("/api/login", async (req, res) => {
     const username = req.body.username;
@@ -1224,6 +1197,17 @@ app.post("/editar-despesa", (req, res) => {
             console.log('Dados atualizados com sucesso');
             res.sendStatus(200); // OK
         }
+    });
+});
+
+app.get("/api/buscar-valor-frete/:idBairro", (req, res) => {
+    const idBairro = req.params.idBairro;
+    const sql = 'SELECT Valor FROM TaxaDelivery WHERE ID = ' + idBairro;
+    db.query(sql, (err, results) => {
+        if(err){
+            return res.send(err)
+        }
+          return res.send({ valorFrete: results })
     });
 });
 
