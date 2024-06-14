@@ -147,45 +147,81 @@ async function preencherFormaPagamento() {
 
 
 
+// async function lancarPedido() {
+//     const atendenteId = sessionStorage.getItem("userId");
+
+//     const clienteElement = document.getElementById("escolhaCliente");
+//     const clienteId = clienteElement.options[clienteElement.selectedIndex].value
+
+//     const formaPagamentoElement = document.getElementById("escolhaFormaPagamento");
+//     const formaPagamentoId = formaPagamentoElement.options[formaPagamentoElement.selectedIndex].value
+
+//     const valorFrete = document.getElementById("valor-frete").innerText.replace(/\R\$/g, "") * 1;
+
+//     const pedido = JSON.stringify({ 
+//         atendenteId,
+//         clienteId,
+//         formaPagamentoId,
+//         itemsPedido,
+//         valorFrete
+//     });
+
+//     const axiosConfig = {
+//         headers: {
+//         'Content-Type': 'application/json'
+//         }
+//     };
+
+//     console.log("pedido", pedido)
+
+//     try {
+//         const retornoPedido = await axios.post("/api/salvar-pedido", pedido, axiosConfig)
+
+//         console.log('retornoPedido 222', retornoPedido)
+
+//         if(formaPagamentoId == 3){
+//             valorInicialCaixa = parseFloat(localStorage.getItem("valorCaixa")) + retornoPedido.data.valorTotalPedido;
+            
+//             parseFloat(localStorage.setItem("valorCaixa", valorInicialCaixa.toFixed(2)));        
+//         }
+
+//         console.log(retornoPedido); // Verifica se retornoPedido contém os dados esperados
+
+//         fecharPopupPedido();
+//     } catch (error) {
+//         console.error('Erro ao lançar pedido:', error);
+//     }
+// }
 async function lancarPedido() {
     const atendenteId = sessionStorage.getItem("userId");
-
     const clienteElement = document.getElementById("escolhaCliente");
-    const clienteId = clienteElement.options[clienteElement.selectedIndex].value
-
+    const clienteId = clienteElement.options[clienteElement.selectedIndex].value;
     const formaPagamentoElement = document.getElementById("escolhaFormaPagamento");
-    const formaPagamentoId = formaPagamentoElement.options[formaPagamentoElement.selectedIndex].value
-
-    const valorFrete = document.getElementById("valor-frete").innerText.replace(/\R\$/g, "") * 1;
-
-    const pedido = JSON.stringify({ 
+    const formaPagamentoId = formaPagamentoElement.options[formaPagamentoElement.selectedIndex].value;
+    const valorFrete = parseFloat(document.getElementById("valor-frete").innerText.replace("R$", "").trim());
+    const pedido = JSON.stringify({
         atendenteId,
         clienteId,
         formaPagamentoId,
         itemsPedido,
         valorFrete
     });
-
     const axiosConfig = {
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json'
         }
     };
-
-    console.log("pedido", pedido)
-
+    console.log("pedido", pedido);
     try {
-        const retornoPedido = await axios.post("/api/salvar-pedido", pedido, axiosConfig)
+        const retornoPedido = await axios.post("/api/salvar-pedido", pedido, axiosConfig);
+        console.log('retornoPedido 222', retornoPedido);
 
-        console.log('retornoPedido', retornoPedido)
-
-        if(formaPagamentoId == 3){
-            valorInicialCaixa = parseFloat(localStorage.getItem("valorCaixa")) + retornoPedido.data.valorTotalPedido;
-            parseFloat(localStorage.setItem("valorCaixa", valorInicialCaixa.toFixed(2)));        
+        let valorTotalComFrete = retornoPedido.data.valorTotalPedido + valorFrete;
+        if (formaPagamentoId == 3) {
+            valorInicialCaixa = parseFloat(localStorage.getItem("valorCaixa")) + valorTotalComFrete;
+            localStorage.setItem("valorCaixa", valorInicialCaixa.toFixed(2));
         }
-
-        console.log(retornoPedido); // Verifica se retornoPedido contém os dados esperados
-
+        console.log("Caixa atualizado com sucesso:", valorInicialCaixa);
         fecharPopupPedido();
     } catch (error) {
         console.error('Erro ao lançar pedido:', error);

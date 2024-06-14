@@ -26,7 +26,7 @@
                 <a href="/listar-pedidos"><button id="pedido" class="btn"><i class="fa-solid fa-cash-register"></i><br>Pedidos</button></a>
             </div>
             <div class="menu-item">
-                <a href="/listar-delivery"><button id="pedido" class="btn"><i class="fa-solid fa-truck"></i><br>Delivery</button>
+                <a href="/listar-delivery"><button id="pedido" class="btn"><i class="fa-solid fa-truck"></i><br>Delivery</button></a>
             </div>
             <div class="menu-item">
                 <a href="painel.html"><button class="btn"><i class="fa-solid fa-gears"></i><br>Painel</button></a>
@@ -40,14 +40,13 @@
         
 
         <div id="tabela-pedidos">
-            <h1>Lista de Pedidos</h1>
+            <h1>Pedidos Balcão</h1>
             <table>
                 <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Mº</th>
                     <th>Data</th>
                     <th>Atendente</th>
-                    <th>Cliente</th>
                     <th>Forma de pagamento</th>
                     <th>Valor Total</th>
                     
@@ -64,7 +63,6 @@
                                 timeZone: 'America/Sao_Paulo',
                             }).format(pedido.Data) %></td>
                             <td><%= pedido.Atendente %></td>
-                            <td><%= pedido.Cliente %></td>
                             <td><%= pedido.FormaPagamento %></td>
                             <td>R$<%= pedido.valor_total %></td>
                             
@@ -87,28 +85,15 @@
         
                     <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
                         <div class="row">
-                            <!-- Coluna 1 -->
-                            <div class="col-md-6">
-                                <div class="d-flex pb-3">
-                                    <!-- Conteúdo da primeira coluna aqui -->
-                                    <div class="cliente-pedido">
-                                        <h5>Cliente</h5>
-                                        <div id="form-cliente-pedido">
-                                            <select class="custom-select" id="escolhaCliente" name="escolhaCliente" required size="5"></select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Coluna 2 -->
                             <div class="col-md-6">
                                 <h5>Itens do Pedido</h5>
-                                <div class="d-flex">
-                                    <!-- Conteúdo da segunda coluna aqui -->
-                                    <nav class="navbar navbar-light bg-light m-0">
-                                        <h6>Quantidade:</h6>
-                                        <input class="form-control" id="quantidadeItens" type="text" placeholder="Insira a quantidade" aria-label="Quantidade"/>
-                                    </nav>
-                                </div>
+                                <nav class="navbar navbar-light bg-light m-0">
+                                    <h6>Quantidade:</h6>
+                                    <input class="form-control" id="quantidadeItens" type="text" placeholder="Insira a quantidade" aria-label="Quantidade"/>
+                                </nav>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>&nbsp;</h5> <!-- Espaço em branco para manter a altura igual -->
                                 <nav class="navbar navbar-light bg-light m-0">
                                     <h6>Busca:</h6>
                                     <form class="form-inline">
@@ -117,6 +102,7 @@
                                 </nav>
                             </div>
                         </div>
+                        
                         <br>
                         <ul class="list-group" id="resultadoBusca"></ul>
         
@@ -139,10 +125,7 @@
                                 <select class="custom-select" id="escolhaFormaPagamento" name="escolhaFormaPagamento" style="width: auto;" required size="4"></select>
                             </div>
                         </div>
-                        <div class="frete">
-                            <h5>Frete</h5>
-                            <span id="valor-frete">R$0,00</span>
-                        </div>
+                        
                     </div>
         
                     <div class="modal-footer">

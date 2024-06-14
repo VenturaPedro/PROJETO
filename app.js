@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
-const { body, validationResult } = require('express-validator');
+// const { body, validationResult } = require('express-validator');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json())
 const path = require('path');
@@ -318,14 +318,10 @@ app.get("/listar-despesas", (req, res) => {
 app.get("/listar-pedidos", (req, res) => {
     const sql = `select PD.ID, 
                     PD.Data, 
-                    CL.Nome Cliente, 
                     ATD.Nome Atendente,  
                     PG.Nome FormaPagamento, 
-                    PD.valor_total, 
-                    PD.status_pedido
-                from pedido PD
-                    left join clientes CL
-                        on PD.CLIENTE_ID = CL.ID
+                    PD.valor_total
+                from pedidoBalcao PD
                     left join atendente ATD
                         on PD.Atendente_ID = ATD.ID
                     left join pagamento PG
@@ -340,6 +336,7 @@ app.get("/listar-pedidos", (req, res) => {
         }
     });
 });
+
 
 app.get("/listar-delivery", (req, res) => {
     const sql = `select PD.ID, 
@@ -800,6 +797,231 @@ app.post("/api/login", async (req, res) => {
 });
 
 
+app.post("/api/salvar-pedido-balcao", async (req, res) => {
+    // let insertedPedidoId = 0;
+    // let valorTotalPedido = 0;
+    // console.log('req.body', req.body)
+    // const { atendenteId, itemsPedido, formaPagamentoId, totalPedido } = req.body;
+
+    // const insertPedido = `INSERT INTO pedidoBalcao 
+    //         (Data, Atendente_ID, pagamento_ID, valor_total) 
+    //     VALUES 
+    //         (NOW(), ?, ?, ?)`;
+    // const promiseInsertPedido = new Promise((resolve, reject) => {
+    //     db.query(insertPedido, [atendenteId, formaPagamentoId, totalPedido], (err, results) => {
+    //         if(err){
+    //             reject(err);
+    //         }else{
+    //             insertedPedidoId = results.insertId;
+    //             resolve();
+    //         }
+    //     });
+    // });
+
+    // const promiseInsertProdutosPedido = new Promise((resolve, reject) => {
+    //     const promises = itemsPedido.map((produtoPedido) => {
+    //         const selectValorProduto = 'SELECT preco_venda FROM estoque WHERE produto = ' + produtoPedido.id;
+        
+    //         return new Promise((resolve, reject) => {
+    //             db.query(selectValorProduto, (err, results) => {
+    //                 if(err){
+    //                     return reject(err);
+    //                 }else{
+    //                     const firstResult = results && results.length > 0 ? results[0] : null;
+    //                     const precoVenda = firstResult ? firstResult.preco_venda : 0;
+    //                     const valorTotalProduto = isNaN(precoVenda) ? 0 : precoVenda * produtoPedido.quantidade;
+    //                     valorTotalPedido += valorTotalProduto;
+    //                     const insertProdutosPedido = `INSERT INTO PRODUTOS_PEDIDO_BALCAO
+    //                             (QUANTIDADE, PEDIDO_ID, PRODUTO_ID, VALOR_TOTAL) 
+    //                         VALUES 
+    //                             (?, ?, ?, ?)`;
+
+    //                     db.query(insertProdutosPedido, [produtoPedido.quantidade, insertedPedidoId, produtoPedido.id, valorTotalProduto], (err, result) => {
+    //                         if(err){
+    //                             reject(err);
+    //                         }else{
+    //                             resolve();
+    //                         }
+    //                     });
+    //                 }
+    //             });
+    //         });
+    //     });
+
+    //     Promise.all(promises)
+    //         .then(() => {
+    //             resolve();
+    //         })
+    //         .catch((err) => {
+    //             reject(err); 
+    //         });
+    // });
+    
+
+    // Promise.all([promiseInsertPedido, promiseInsertProdutosPedido])
+    // .then(() => {
+    //     console.log("insertedPedidoId", insertedPedidoId);
+
+    //     // Outras operações relacionadas ao pedido...
+
+    //     res.json({ 
+    //         idPedido: insertedPedidoId,
+    //         valorTotalPedido
+    //     });
+    // })
+    // .catch((err) => {
+    //     console.error('Erro ao processar pedido:', err);
+    //     res.status(400).send('Erro ao processar o pedido: ' + err);
+    // });
+    let insertedPedidoId = 0;
+    let valorTotalPedido = 0;
+    console.log('req.body', req.body)
+    const { atendenteId, itemsPedido, formaPagamentoId, totalPedido } = req.body;
+
+    const insertPedido = `INSERT INTO pedidoBalcao 
+            (Data, Atendente_ID, pagamento_ID, valor_total) 
+        VALUES 
+            (NOW(), ?, ?, ?)`;
+    const promiseInsertPedido = new Promise((resolve, reject) => {
+        db.query(insertPedido, [atendenteId, formaPagamentoId, totalPedido], (err, results) => {
+            if(err){
+                reject(err);
+            }else{
+                insertedPedidoId = results.insertId;
+                resolve();
+            }
+        });
+    });
+
+    const promiseInsertProdutosPedido = new Promise((resolve, reject) => {
+        // B.o na resulção da promise
+        const promises = itemsPedido.map((produtoPedido) => {
+            const selectValorProduto = 'SELECT preco_venda FROM estoque WHERE produto = ' + produtoPedido.id;
+        
+            return new Promise((resolve, reject) => {
+                db.query(selectValorProduto, (err, results) => {
+                    if(err){
+                        return reject(err);
+                    }else{
+                        console.log('results', results)
+                        // B.o está retornando o resultado
+                        const firstResult = results && results.length > 0 ? results[0] : null;
+                        const valor = firstResult ? firstResult.preco_venda : 0; // Certifique-se de definir valor corretamente
+                        return resolve(valor);
+                    }
+                });
+            });
+        });
+    
+        Promise.all(promises)
+            .then((valoresProdutos) => {
+                // B.o mas não está chegando aq
+                console.log('valoresProdutos', valoresProdutos)
+                const promiseInsertProdutos = valoresProdutos.map((preco_venda, index) => {
+                    console.log('itemsPedido', itemsPedido)
+                    console.log('index', index)
+                    console.log('preco_venda', preco_venda) 
+                    const produtoPedido = itemsPedido[index];
+                    const valorTotalProduto = isNaN(preco_venda) ? 0 : preco_venda * produtoPedido.quantidade;
+                    valorTotalPedido += valorTotalProduto;
+                    const insertProdutosPedido = `INSERT INTO PRODUTOS_PEDIDO_BALCAO 
+                            (QUANTIDADE, PEDIDO_ID, PRODUTO_ID, VALOR_TOTAL) 
+                        VALUES 
+                            (?, ?, ?, ?)`;
+    
+                    return new Promise((resolve, reject) => {
+                        db.query(insertProdutosPedido, [produtoPedido.quantidade, insertedPedidoId, produtoPedido.id, valorTotalProduto], (err, result) => {
+                            if(err){
+                                reject(err);
+                            }else{
+                                console.log('Dados inseridos com sucesso', result);
+                                resolve();
+                            }
+                        });
+                    });
+                });
+                return Promise.all(promiseInsertProdutos);
+            })
+            .then(() => {
+                console.log('valorTotalPedido', valorTotalPedido)
+                
+                const valorTotal = valorTotalPedido;
+                const sql = 'UPDATE pedidoBalcao SET valor_total = ? WHERE ID = ?;';
+                db.query(sql, [ valorTotal, insertedPedidoId], (err, result) => {
+                    console.log('valorTotal:',valorTotal)
+                    console.log('insertedPedidoId:',insertedPedidoId)
+                    console.log('result:',result)
+                    if(err){
+                        console.error('Erro ao inserir dados:', err);
+                    }else{
+                        console.log('Dados inseridos com sucesso');
+                    }
+                });
+                resolve();
+            })
+            .catch((err) => {
+                reject(err); 
+            });
+    });
+    
+
+    Promise.all([promiseInsertPedido, promiseInsertProdutosPedido])
+    .then(() => {
+        console.log("insertedPedidoId", insertedPedidoId);
+
+        // Atualizar o estoque para cada produto vendido
+        const promiseAtualizarEstoque = itemsPedido.map((produtoPedido) => {
+            return new Promise((resolve, reject) => {
+                const updateEstoque = 'UPDATE estoque SET quantidade = quantidade - ? WHERE produto = ?';
+                db.query(updateEstoque, [produtoPedido.quantidade, produtoPedido.id], (err, result) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        console.log('Estoque atualizado com sucesso para o produto', produtoPedido.id);
+                        resolve();
+                    }
+                });
+            });
+        });
+
+        // Verificar se há estoque suficiente para cada produto
+        const promiseVerificarEstoque = itemsPedido.map((produtoPedido) => {
+            return new Promise((resolve, reject) => {
+                const selectEstoque = 'SELECT quantidade FROM estoque WHERE produto = ?';
+                db.query(selectEstoque, [produtoPedido.id], (err, results) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        const quantidadeDisponivel = results && results.length > 0 ? results[0].quantidade : 0;
+                        if (quantidadeDisponivel < produtoPedido.quantidade) {
+                            reject('Estoque insuficiente para o produto ' + produtoPedido.id);
+                        } else {
+                            resolve();
+                        }
+                    }
+                });
+            });
+        });
+
+        // Executar as promessas em paralelo
+        return Promise.all([...promiseAtualizarEstoque, ...promiseVerificarEstoque]);
+    })
+    .then(() => {
+        res.json({ 
+            idPedido: insertedPedidoId,
+            valorTotalPedido
+        });
+    })
+    .catch((err) => {
+        console.error('Erro ao processar pedido:', err);
+        res.status(400).send('Erro ao processar o pedido: ' + err);
+    });
+
+        
+
+});
+
+
 
 app.post("/excluir-cliente", (req, res) => {
     const clienteId = req.body.clienteId; 
@@ -811,7 +1033,7 @@ app.post("/excluir-cliente", (req, res) => {
             res.sendStatus(500).send('Erro ao modificar status do cliente no banco de dados');
         }else{
             console.log(`Status do cliente ${clienteId} modificado para INATIVO com sucesso`);
-            res.sendStatus(200).send(`Status do cliente ${clienteId} modificado para INATIVO com sucesso`);
+            res.send(`Status do cliente ${clienteId} modificado para INATIVO com sucesso`);
         }
     });
 });
@@ -825,8 +1047,8 @@ app.post("/ativar-cliente", (req, res) => {
             console.error('Erro ao modificar status do cliente:', err);
             res.sendStatus(500).send('Erro ao modificar status do cliente no banco de dados');
         }else{
-            console.log(`Status do cliente ${clienteId} modificado para ATIVO com sucesso`);
-            res.sendStatus(200).send(`Status do cliente ${clienteId} modificado para ATIVO com sucesso`);
+            // console.log(`Status do cliente ${clienteId} modificado para ATIVO com sucesso`);
+            res.send(`Status do cliente ${clienteId} modificado para ATIVO com sucesso`);
         }
     });
 });

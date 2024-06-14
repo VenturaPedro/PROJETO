@@ -601,3 +601,20 @@ button {
     color: #FFFFFF; 
     transform: scale(1.1); 
 }
+
+#btn-help {
+    height: 10vh;
+    width: 10vh;
+    position: absolute;
+    top: 10px;
+    left: 1450px;
+    font-size: 30px;
+    color: #ffffff; /* Ajuste a cor conforme necessário */
+    text-decoration: none;
+    background-color: #210124;
+}
+
+#btn-help:hover {
+    background-color: #ffffff;
+    color: #210124; /* Ajuste a cor de hover conforme necessário */
+}

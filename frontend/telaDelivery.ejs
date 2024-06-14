@@ -40,18 +40,18 @@
         
 
         <div id="tabela-pedidos">
-            <h1>Lista de Delivery</h1>
+            <h1>Pedidos Delivery</h1>
             <table>
                 <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Nº</th>
                     <th>Data</th>
                     <th>Atendente</th>
                     <th>Cliente</th>
                     <th>Forma de pagamento</th>
                     <th>Valor Total</th>
                     
-                    <th colspan="2">Opções</th>
+                    <!-- <th colspan="2">Opções</th> -->
                 </tr>
                 </thead>    
                 <tbody>
@@ -68,8 +68,8 @@
                             <td><%= pedido.FormaPagamento %></td>
                             <td>R$<%= pedido.valor_total %></td>
                             
-                            <td><button id="btn-editarPedido" class="btn-edit" onclick="editarPedido('<%= pedido.ID %>')"><i class="fa-solid fa-pen"></button></td>
-                            <td><button id="btn-excluirPedido" class="btn-delete" onclick="excluirPedido('<%= pedido.ID %>')"><i class="fa-solid fa-trash"></button></td>
+                            <!-- <td><button id="btn-editarPedido" class="btn-edit" onclick="editarPedido('<%= pedido.ID %>')"><i class="fa-solid fa-pen"></button></td>
+                            <td><button id="btn-excluirPedido" class="btn-delete" onclick="excluirPedido('<%= pedido.ID %>')"><i class="fa-solid fa-trash"></button></td> -->
                         </tr>
                     <% }); %>
                 </tbody>
