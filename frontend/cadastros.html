@@ -80,7 +80,7 @@
                     <input type="text" id="complementoCliente" name="complementoCliente" placeholder="Apt / Bloco / Quadra" size="25">
 
                     <label for="numeroCliente">Nº:</label>
-                    <input type="number" id="numeroCliente" name="numeroCliente" style="width: 50px;">
+                    <input type="number" id="numeroCliente" name="numeroCliente" min="1" style="width: 50px;">
 
                     <label for="bairroCliente">Bairro/Região</label><br>
                     <select id="bairroCliente" name="bairroCliente" required style="width: 180px; height: 45px">
@@ -91,7 +91,7 @@
                     <input type="text" id="estadoCliente" name="estadoCliente" style="width: 100px;">
 
                     <label for="cepCliente">CEP:</label><br>
-                    <input type="number" id="cepCliente" name="cepCliente"  style="width: 100px;">
+                    <input type="number" id="cepCliente" name="cepCliente" min="1" style="width: 100px;">
                 </div>
                 <div>
                     <br>
@@ -169,7 +169,7 @@
                     <input type="text" id="localTaxaDelivery" name="localTaxaDelivery" required size="25">
 
                     <label for="valorTaxaDelivery">Insira o valor da taxa(R$):</label><br>
-                    <input type="number" id="valorTaxaDelivery" name="valorTaxaDelivery" >
+                    <input type="number" min="1" id="valorTaxaDelivery" name="valorTaxaDelivery" >
 
                     <label for="obsTaxaDelivery">Observações:</label><br>
                     <input type="text" id="obsTaxaDelivery" name="obsTaxaDelivery" style="width: 83%; height: 35px;">
@@ -225,7 +225,7 @@
                     <input type="date" id="lancamentoDespesa" name="lancamentoDespesa" required size="25"/>
 
                     <label for="valorDespesa">Valor R$</label><br>
-                    <input type="number" id="valorDespesa" name="valorDespesa" required size="20">
+                    <input type="number" min="1" id="valorDespesa" name="valorDespesa" required size="20">
 
                     <label for="vencimentoDespesa">Data de Vencimento:</label><br>
                     <input type="date" id="vencimentoDespesa" name="vencimentoDespesa">

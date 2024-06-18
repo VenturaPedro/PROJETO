@@ -106,7 +106,7 @@
                                     <!-- Conteúdo da segunda coluna aqui -->
                                     <nav class="navbar navbar-light bg-light m-0">
                                         <h6>Quantidade:</h6>
-                                        <input class="form-control" id="quantidadeItens" type="text" placeholder="Insira a quantidade" aria-label="Quantidade"/>
+                                        <input class="form-control" id="quantidadeItens" type="number" min="1" placeholder="Insira a quantidade" aria-label="Quantidade"/>
                                     </nav>
                                 </div>
                                 <nav class="navbar navbar-light bg-light m-0">
@@ -133,17 +133,34 @@
         
                             <tbody id="itensSelecionados"></tbody>
                         </table>
-                        <div class="forma-pagamento-pedido">
-                            <h5>Forma de Pagamento</h5>
-                            <div id="form-forma-pagamento">
-                                <select class="custom-select" id="escolhaFormaPagamento" name="escolhaFormaPagamento" style="width: auto;" required size="4"></select>
+                        
+                        
+                        
+                        <div class="row">
+                            <!-- Coluna 1 -->
+                            <div class="col-md-6">
+                                <div class="d-flex pb-3">
+                                    <!-- Conteúdo da primeira coluna aqui -->
+                                    <div class="frete">
+                                        <h5>Frete</h5>
+                                        <span id="valor-frete">R$0,00</span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <!-- Coluna 2 -->
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <!-- Conteúdo da segunda coluna aqui -->
+                                    <div class="forma-pagamento-pedido">
+                                        <h5>Forma de Pagamento</h5>
+                                        <div id="form-forma-pagamento">
+                                            <select class="custom-select" id="escolhaFormaPagamento" name="escolhaFormaPagamento" style="width: auto;" required size="4"></select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="frete">
-                            <h5>Frete</h5>
-                            <span id="valor-frete">R$0,00</span>
-                        </div>
-                        
                     </div>
         
                     <div class="modal-footer">

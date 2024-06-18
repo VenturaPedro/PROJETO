@@ -56,7 +56,8 @@ app.get("/cadastrar",(req, res) => {
 
 app.post("/listar-clientes", (req, res) => {
     const termoBusca = req.body.filtro;
-    const sql = `SELECT CL.*, TD.Area FROM clientes CL LEFT JOIN TaxaDelivery TD ON CL.idBairro = TD.id WHERE status = "ATIVO" AND (nome LIKE '%${termoBusca}%' OR email LIKE '%${termoBusca}%' OR cpf LIKE '%${termoBusca}%' OR telefone LIKE '%${termoBusca}%')`;
+    const sql = `SELECT CL.*, TD.Area FROM clientes CL LEFT JOIN TaxaDelivery TD ON CL.idBairro = TD.id WHERE status = "ATIVO" AND (nome LIKE '%${termoBusca}%' OR email LIKE '%${termoBusca}%' OR cpf LIKE '%${termoBusca}%' OR telefone LIKE '%${termoBusca}%') ORDER BY 
+            CL.nome ASC`;
     db.query(sql, (err, results) => {
         if (err) {
             console.error('Erro ao recuperar dados:', err);
@@ -67,9 +68,20 @@ app.post("/listar-clientes", (req, res) => {
         }
     });
 });
-
 app.get("/listar-clientes", (req, res) => {
-    const sql = 'SELECT CL.*, TD.Area FROM clientes CL LEFT JOIN TaxaDelivery TD ON CL.idBairro = TD.id WHERE status = "ATIVO"';
+    const sql = `
+        SELECT 
+            CL.*, 
+            TD.Area 
+        FROM 
+            clientes CL 
+        LEFT JOIN 
+            TaxaDelivery TD ON CL.idBairro = TD.id 
+        WHERE 
+            status = "ATIVO"
+        ORDER BY 
+            CL.nome ASC
+    `;
     db.query(sql, (err, results) => {
         if(err){
             console.error('Erro ao recuperar dados:', err);
@@ -81,8 +93,21 @@ app.get("/listar-clientes", (req, res) => {
     });
 });
 
+// app.get("/listar-clientes", (req, res) => {
+//     const sql = 'SELECT CL.*, TD.Area FROM clientes CL LEFT JOIN TaxaDelivery TD ON CL.idBairro = TD.id WHERE status = "ATIVO"';
+//     db.query(sql, (err, results) => {
+//         if(err){
+//             console.error('Erro ao recuperar dados:', err);
+//             res.send('Erro ao recuperar dados do banco de dados');
+//         }else{
+//             console.log('Recuperação dos dados completa:');
+//             res.render('telaPrincipal', { clientes: results });
+//         }
+//     });
+// });
+
 app.get("/listar-clientes-inativos", (req, res) => {
-    const sql = 'SELECT CL.*, TD.Area FROM clientes CL LEFT JOIN TaxaDelivery TD ON CL.idBairro = TD.id WHERE status = "INATIVO"';
+    const sql = `SELECT CL.*, TD.Area FROM clientes CL LEFT JOIN TaxaDelivery TD ON CL.idBairro = TD.id WHERE status = "INATIVO" ORDER BY CL.nome ASC`;
     db.query(sql, (err, results) => {
         if(err){
             console.error('Erro ao recuperar dados:', err);
@@ -96,7 +121,7 @@ app.get("/listar-clientes-inativos", (req, res) => {
 
 app.post("/filtrar-atendentes", (req, res) => {
     const termoBusca = req.body.filtroAtd;
-    const sql = `SELECT * FROM Atendente WHERE Nome LIKE '%${termoBusca}%' OR Email LIKE '%${termoBusca}%' OR Telefone LIKE '%${termoBusca}%' OR Observacoes LIKE '%${termoBusca}%'`;
+    const sql = `SELECT * FROM Atendente WHERE Nome LIKE '%${termoBusca}%' OR Email LIKE '%${termoBusca}%' OR Telefone LIKE '%${termoBusca}%' OR Observacoes LIKE '%${termoBusca}%' ORDER BY Atendente.Nome ASC`;
     db.query(sql, (err, results) => {
         if (err) {
             console.error('Erro ao recuperar dados:', err);
@@ -110,7 +135,7 @@ app.post("/filtrar-atendentes", (req, res) => {
 
 
 app.get("/listar-atendentes", (req, res) => {
-    const sql = 'SELECT * FROM Atendente';
+    const sql = 'SELECT * FROM Atendente ORDER BY Atendente.Nome ASC';
     db.query(sql, (err, results) => {
         if(err){
             console.error('Erro ao recuperar dados:', err);
@@ -124,7 +149,7 @@ app.get("/listar-atendentes", (req, res) => {
 
 app.post("/filtrar-motoboys", (req, res) => {
     const termoBusca = req.body.filtroMotoboys;
-    const sql = `SELECT * FROM Motoboy WHERE Nome LIKE '%${termoBusca}%' OR Email LIKE '%${termoBusca}%' OR Observacoes LIKE '%${termoBusca}%' OR Telefone LIKE '%${termoBusca}%'`;
+    const sql = `SELECT * FROM Motoboy WHERE Nome LIKE '%${termoBusca}%' OR Email LIKE '%${termoBusca}%' OR Observacoes LIKE '%${termoBusca}%' OR Telefone LIKE '%${termoBusca}%' ORDER BY Motoboy.Nome ASC`;
     db.query(sql, (err, results) => {
         if (err) {
             console.error('Erro ao recuperar dados:', err);
@@ -151,24 +176,12 @@ app.get("/listar-motoboy", (req, res) => {
 
 app.post("/filtrar-produtos", (req, res) => {
     const termoBusca = req.body.filtroProdutos;
-    const sql = `SELECT * FROM produto WHERE nome LIKE '%${termoBusca}%' OR valor LIKE '%${termoBusca}%' OR descricao LIKE '%${termoBusca}%' OR estoque LIKE '%${termoBusca}%' OR categoria LIKE '%${termoBusca}%' OR fornecedor LIKE '%${termoBusca}%'`;
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error('Erro ao recuperar dados:', err);
-            res.send('Erro ao recuperar dados do banco de dados');
-        } else {
-            console.log('Recuperação dos dados completa:');
-            res.render('produtos', { produto: results });
-        }
-    });
-});
-app.get("/listar-produtos", (req, res) => {
     const sql = `
         SELECT 
             p.id,
             p.nome AS produto,
-            p.descricao, -- Adicionando o campo descrição
-            p.categoria, -- Adicionando o campo categoria
+            p.descricao,
+            p.categoria,
             e.quantidade AS quantidade_estoque,
             e.preco_compra,
             e.preco_venda,
@@ -179,6 +192,48 @@ app.get("/listar-produtos", (req, res) => {
             produto p
         LEFT JOIN 
             estoque e ON p.id = e.produto
+        WHERE 
+            p.nome LIKE '%${termoBusca}%' OR 
+            p.descricao LIKE '%${termoBusca}%' OR 
+            e.quantidade LIKE '%${termoBusca}%' OR 
+            e.preco_compra LIKE '%${termoBusca}%' OR 
+            e.preco_venda LIKE '%${termoBusca}%' OR 
+            e.data_validade LIKE '%${termoBusca}%' OR 
+            e.fornecedor LIKE '%${termoBusca}%' OR 
+            e.Observacoes LIKE '%${termoBusca}%'
+        ORDER BY 
+            p.nome ASC
+    `;
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Erro ao recuperar dados:', err);
+            res.send('Erro ao recuperar dados do banco de dados');
+        } else {
+            console.log('Recuperação dos dados completa:');
+            res.render('produtos', { produto: results });
+        }
+    });
+});
+
+app.get("/listar-produtos", (req, res) => {
+    const sql = `
+        SELECT 
+            p.id,
+            p.nome AS produto,
+            p.descricao,
+            p.categoria,
+            e.quantidade AS quantidade_estoque,
+            e.preco_compra,
+            e.preco_venda,
+            e.data_validade,
+            e.fornecedor,
+            e.Observacoes
+        FROM 
+            produto p
+        LEFT JOIN 
+            estoque e ON p.id = e.produto
+        ORDER BY 
+            p.nome ASC
     `;
     db.query(sql, (err, results) => {
         if (err) {
@@ -188,7 +243,6 @@ app.get("/listar-produtos", (req, res) => {
             res.render('produtos', { produto: results }); // Alterando 'produto' para 'produtos'
         }
     });
-
 });
 
 
@@ -229,6 +283,8 @@ app.post("/filtrar-estoques", (req, res) => {
             e.data_validade LIKE '%${termoBusca}%' OR 
             e.fornecedor LIKE '%${termoBusca}%' OR 
             e.Observacoes LIKE '%${termoBusca}%'
+        ORDER BY 
+            p.nome ASC
     `;
     db.query(sql, (err, results) => {
         if (err) {
@@ -269,6 +325,8 @@ app.get("/listar-estoques", (req, res) => {
             estoque e
         JOIN 
             produto p ON e.produto = p.id
+        ORDER BY 
+            p.nome ASC
     `;
     db.query(sql, (err, results) => {
         if (err) {
@@ -379,53 +437,64 @@ app.get("/listar-despesas", (req, res) => {
 });
 
 app.get("/listar-pedidos", (req, res) => {
-    const sql = `select PD.ID, 
-                    PD.Data, 
-                    ATD.Nome Atendente,  
-                    PG.Nome FormaPagamento, 
-                    PD.valor_total
-                from pedidoBalcao PD
-                    left join atendente ATD
-                        on PD.Atendente_ID = ATD.ID
-                    left join pagamento PG
-                        on PD.pagamento_ID = PG.ID;`;
+    const sql = `
+        SELECT 
+            PD.ID, 
+            PD.Data, 
+            ATD.Nome AS Atendente, 
+            PG.Nome AS FormaPagamento, 
+            PD.valor_total 
+        FROM 
+            pedidoBalcao PD
+        LEFT JOIN 
+            atendente ATD ON PD.Atendente_ID = ATD.ID
+        LEFT JOIN 
+            pagamento PG ON PD.pagamento_ID = PG.ID
+        ORDER BY 
+            PD.Data DESC
+    `;
     db.query(sql, (err, results) => {
-        if(err){
+        if (err) {
             console.error('Erro ao recuperar dados:', err);
             res.send('Erro ao recuperar dados do banco de dados');
-        }else{
-            console.log('Recuperação dos dados completa:');
+        } else {
             res.render('telaPedidos', { pedidos: results });
         }
     });
 });
 
 
+
 app.get("/listar-delivery", (req, res) => {
-    const sql = `select PD.ID, 
-                    PD.Data, 
-                    CL.Nome Cliente, 
-                    ATD.Nome Atendente,  
-                    PG.Nome FormaPagamento, 
-                    PD.valor_total, 
-                    PD.status_pedido
-                from pedido PD
-                    left join clientes CL
-                        on PD.CLIENTE_ID = CL.ID
-                    left join atendente ATD
-                        on PD.Atendente_ID = ATD.ID
-                    left join pagamento PG
-                        on PD.pagamento_ID = PG.ID;`;
+    const sql = `
+        SELECT 
+            PD.ID, 
+            PD.Data, 
+            ATD.Nome AS Atendente, 
+            CL.Nome AS Cliente, 
+            PG.Nome AS FormaPagamento, 
+            PD.valor_total 
+        FROM 
+            pedido PD
+        LEFT JOIN 
+            clientes CL ON PD.CLIENTE_ID = CL.ID
+        LEFT JOIN 
+            atendente ATD ON PD.Atendente_ID = ATD.ID
+        LEFT JOIN 
+            pagamento PG ON PD.pagamento_ID = PG.ID
+        ORDER BY 
+            PD.Data DESC
+    `;
     db.query(sql, (err, results) => {
-        if(err){
+        if (err) {
             console.error('Erro ao recuperar dados:', err);
             res.send('Erro ao recuperar dados do banco de dados');
-        }else{
-            console.log('Recuperação dos dados completa:');
+        } else {
             res.render('telaDelivery', { pedidos: results });
         }
     });
 });
+
 
 
 // Rota para obter o valor total dos pedidos de um dia específico
@@ -1427,7 +1496,7 @@ app.post("/processar-cadastro-pagamento", (req, res) => {
 app.post("/processar-cadastro-produto",(req, res) => {
     const { nomeProduto, descricaoProduto, categoriaProduto} = req.body;
     
-    const sql = 'INSERT INTO produto (nome, descricao, estoque, categoria, fornecedor) VALUES (?, ?, ?)';
+    const sql = 'INSERT INTO produto (nome, descricao, categoria) VALUES (?, ?, ?)';
     db.query(sql, [ nomeProduto, descricaoProduto, categoriaProduto], (err, result) => {
         if(err){
         console.error('Erro ao inserir dados:', err);

@@ -593,7 +593,9 @@ select{
     cursor: pointer;
 }
 
-
+#quantidadeItens{
+    font-size: 15px;
+}
 
 #sangria-container {
     margin-top: 20px;
