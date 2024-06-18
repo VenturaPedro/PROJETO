@@ -43,6 +43,9 @@
             <a href="/listar-pagamentos"><button class="btn-listas">Pagamentos</button></a>
             <a href="/listar-despesas"><button class="btn-listas">Despesas</button></a>
             <a href="/listar-estoques"><button class="btn-listas">Estoque</button></a>  
+            <nav>
+                <button id="btn-help"><i class="fa-solid fa-circle-info"></i></button>
+            </nav>
             <br><br>
         </div>
         <div id="tabela-estoque">
@@ -91,6 +94,9 @@
         </div>
     </section>
     <script>
+        document.getElementById('btn-help').addEventListener('click', function() {
+            window.open('https://youtu.be/yVOXm5V76Tw', '_blank');
+        });
         $('#valorProduto').inputmask('currency', { prefix: 'R$ ' });
         async function excluirEstoque(estoqueId) {
             console.log(`Excluir Lote de Estoque com ID ${estoqueId}`);
@@ -113,6 +119,7 @@
                 });
             }
         }
+        
     </script>
     
 </body>

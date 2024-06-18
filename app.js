@@ -1189,13 +1189,18 @@ app.post("/ativar-cliente", (req, res) => {
 app.post("/excluir-atendente", (req, res) => {
     const atendenteId = req.body.atendenteId; 
     const sql = 'DELETE FROM Atendente WHERE id = ?';
+
     db.query(sql, [atendenteId], (err, result) => {
-        if(err){
+        if (err) {
             console.error('Erro ao excluir atendente:', err);
-            res.sendStatus(500).send('Erro ao excluir atendente do banco de dados');
-        }else{;
+            if (!res.headersSent) {
+                return res.status(500).send('Erro ao excluir atendente do banco de dados');
+            }
+        } else {
             console.log('Atendente excluído com sucesso');
-            res.sendStatus(200).send(`Atendente ${atendenteId} excluído com sucesso `);
+            if (!res.headersSent) {
+                return res.status(200).send(`Atendente ${atendenteId} excluído com sucesso`);
+            }
         }
     });
 });

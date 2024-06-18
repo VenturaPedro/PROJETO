@@ -1,6 +1,11 @@
 let valorInicialCaixa = 0;
 let statusCaixa = "fechado";
 
+document.getElementById('btn-help').addEventListener('click', function() {
+    window.open('https://youtu.be/sB7RgwIW8kA', '_blank');
+});
+
+
 window.addEventListener('load', function(){
     if(localStorage.getItem("statusCaixa") == "aberto"){
         
@@ -10,12 +15,7 @@ window.addEventListener('load', function(){
         document.getElementById("caixaStatus").innerHTML = "Aberto";
         document.getElementById("valorAbertura").disabled = true;
         document.getElementById("abrirCaixa").disabled = true;
-    }
-    if(localStorage.getItem("statusCaixa") == "fechado"){
-        
-        document.getElementById("fecharCaixa").disabled = true;
-    }
-});
+    }});
 
 // Função para abrir o caixa
 function abrirCaixa() {
@@ -57,7 +57,6 @@ function fecharCaixa(){
 
 
 function sangria(){
-
     let valorSangria = parseFloat(document.getElementById("valorSangria").value);
     if(isNaN(valorSangria) || valorSangria < 0){
         alert("O valor da sangria deve ser um número válido e maior ou igual a 0.");

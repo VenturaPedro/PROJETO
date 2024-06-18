@@ -33,6 +33,9 @@
         </div> 
     </nav>
     <main id="painel-main-prod">
+        <nav>
+            <button id="btn-help"><i class="fa-solid fa-circle-info"></i></button>
+        </nav>
         <div id="btn-painel-cadastros">
             <nav id="painel-1">
                 <button id="btn-relatorioDia"><i class="fa-solid fa-calendar-day"></i><br>Relatório Diário</button>
@@ -108,6 +111,10 @@
         <!-- Seu código de rodapé -->
     </footer>
     <script>
+
+document.getElementById('btn-help').addEventListener('click', function() {
+    window.open('https://youtu.be/LXANE_kz1oE', '_blank');
+});
     document.getElementById("btn-relatorioDia").addEventListener("click", function(){
         document.getElementById("painel-relatorios1").style.display = "block";
     });

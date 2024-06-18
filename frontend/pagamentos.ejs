@@ -43,6 +43,9 @@
             <a href="/listar-pagamentos"><button class="btn-listas">Pagamentos</button></a>
             <a href="/listar-despesas"><button id="btn-listar-despesas"class="btn-listas d-none">Despesas</button></a> 
             <a href="/listar-estoques"><button id="btn-listar-estoques"class="btn-listas d-none">Estoque</button></a>  
+            <nav>
+                <button id="btn-help"><i class="fa-solid fa-circle-info"></i></button>
+            </nav>
             <br><br>
         </div>
         <div id="tabela-pagamentos">
@@ -63,7 +66,7 @@
                             <!-- <td><%= pagamento.ID %></td> -->
                             <td><%= pagamento.Nome %></td>
                             <td><%= pagamento.Observacoes %></td>
-                            <td><button id="btn-editarPagamento" class="btn-edit" onclick="editarPagamento('<%= pagamento.ID %>')"><i class="fa-solid fa-pen"></button></td>
+                            <!-- <td><button id="btn-editarPagamento" class="btn-edit" onclick="editarPagamento('<%= pagamento.ID %>')"><i class="fa-solid fa-pen"></button></td> -->
                             <td><button id="btn-excluirPagamento" class="btn-delete" onclick="excluirPagamento('<%= pagamento.ID %>')"><i class="fa-solid fa-trash"></button></td>
                         
                         </tr>
@@ -107,6 +110,9 @@
                 });
             }
         }
+        document.getElementById('btn-help').addEventListener('click', function() {
+            window.open('https://youtu.be/yVOXm5V76Tw', '_blank');
+        });
     </script>
     
 </body>

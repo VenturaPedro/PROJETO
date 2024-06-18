@@ -43,6 +43,9 @@
             <a href="/listar-pagamentos"><button class="btn-listas">Pagamentos</button></a>
             <a href="/listar-despesas"><button id="btn-listar-despesas"class="btn-listas d-none">Despesas</button></a> 
             <a href="/listar-estoques"><button id="btn-listar-estoques"class="btn-listas d-none">Estoque</button></a>  
+            <nav>
+                <button id="btn-help"><i class="fa-solid fa-circle-info"></i></button>
+            </nav>
             <br><br>
         </div>
         <div id="tabela-produto">
@@ -120,6 +123,9 @@
                 });
             }
         }
+        document.getElementById('btn-help').addEventListener('click', function() {
+            window.open('https://youtu.be/yVOXm5V76Tw', '_blank');
+        });
     </script>
     
 </body>

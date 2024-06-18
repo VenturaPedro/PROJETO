@@ -34,7 +34,7 @@
         <p>Valor do Caixa: R$ <span id="valorInicial">0.00</span></p>
         <label for="valorAbertura">Informe o valor de abertura do caixa:</label>
         <br>
-        <input type="number" step="0.01" id="valorAbertura" required style="width: 150px; height: 25px;"><br>
+        <input type="number" step="0.01" min="1" id="valorAbertura" required style="width: 150px; height: 25px;"><br>
         <span>
             <button id="abrirCaixa" onclick="abrirCaixa()">Abrir Caixa</button>
             <button id="fecharCaixa" onclick="fecharCaixa()">Fechar Caixa</button>

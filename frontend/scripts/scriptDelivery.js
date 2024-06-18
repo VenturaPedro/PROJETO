@@ -86,7 +86,9 @@ async function addToTable(item) {
     }
 }
 
-
+document.getElementById('btn-help').addEventListener('click', function() {
+    window.open('https://youtu.be/H16CKkpcItU', '_blank');
+});
 
 // function fecharPopupPedido() {
 //     document.getElementsByClassName("modal-pedido").style.display = "none";

@@ -75,6 +75,10 @@ async function lancarPedido() {
     }
 }
 
+document.getElementById('btn-help').addEventListener('click', function() {
+    window.open('https://youtu.be/H16CKkpcItU', '_blank');
+});
+
 function filterItems(query) {
     return items.filter(item => item.nome.toLowerCase().includes(query.toLowerCase()));
 }

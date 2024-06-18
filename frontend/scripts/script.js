@@ -1,6 +1,10 @@
 if (!sessionStorage.getItem("role")) {
     location.href = "/login";
 }
+document.getElementById('btn-help').addEventListener('click', function() {
+    window.open('https://youtu.be/Mje-UNB1hBQ', '_blank');
+});
+
 
 document.getElementById("btn-cadastrarCliente").addEventListener("click", function(){
     document.getElementById("cadastrar-cliente").style.display = "block";
@@ -164,7 +168,6 @@ $('#telefoneMotoboy').inputmask('(99)99999-999[9]', { greedy: false });
 
 // Máscaras para Campos do Formulário de Produto
 $('#valorProduto').inputmask('currency', { prefix: 'R$ ' });
-
 
 
 
