@@ -95,29 +95,73 @@ document.getElementById('btn-help').addEventListener('click', function() {
 //     window.location.reload();
 // }
  
+// async function preencherCliente() {
+//     const getClientes = await axios.get("/api/listar-clientes");
+
+//     const clienteBanco = getClientes.data.clientes;
+
+//     const selectCliente = document.getElementById("escolhaCliente") ;
+
+//     for (Cliente of clienteBanco) {
+//         let novaCliente = new Option(Cliente.nome, Cliente.id);
+//         selectCliente.add(novaCliente);
+//     }
+
+//     selectCliente.addEventListener("change", async function () {
+//         const clienteSelecionado = selectCliente.value;
+//         const dadosClienteSelecionado = clienteBanco[clienteSelecionado - 1]
+
+//         const getValorFrete = await axios.get("/api/buscar-valor-frete/" + dadosClienteSelecionado.idBairro );
+
+//         const frenteCliente = document.getElementById("valor-frete");
+//         frenteCliente.innerHTML = "R$" + getValorFrete.data.valorFrete[0].Valor;
+//     });
+// }
+
 async function preencherCliente() {
-    const getClientes = await axios.get("/api/listar-clientes");
-
-    const clienteBanco = getClientes.data.clientes;
-
-    const selectCliente = document.getElementById("escolhaCliente") ;
-
-    for (Cliente of clienteBanco) {
-        let novaCliente = new Option(Cliente.nome, Cliente.id);
-        selectCliente.add(novaCliente);
+    try {
+        const getClientes = await axios.get("/api/listar-clientes");
+        clientes = getClientes.data.clientes;
+    } catch (error) {
+        console.error('Erro ao obter clientes:', error);
     }
+}
 
-    selectCliente.addEventListener("change", async function () {
-        const clienteSelecionado = selectCliente.value;
-        const dadosClienteSelecionado = clienteBanco[clienteSelecionado - 1]
+document.getElementById('inputBuscaCliente').addEventListener('input', function() {
+    const query = this.value.trim().toLowerCase();
+    const results = clientes.filter(cliente => cliente.nome.toLowerCase().includes(query));
+    updateClienteSearchResults(results);
+});
 
-        const getValorFrete = await axios.get("/api/buscar-valor-frete/" + dadosClienteSelecionado.idBairro );
+function updateClienteSearchResults(results) {
+    const searchResults = document.getElementById("resultadoBuscaCliente");
+    searchResults.innerHTML = "";
 
-        const frenteCliente = document.getElementById("valor-frete");
-        frenteCliente.innerHTML = "R$" + getValorFrete.data.valorFrete[0].Valor;
+    results.forEach(cliente => {
+        const listItem = document.createElement("li");
+        listItem.classList.add("list-group-item");
+        listItem.textContent = cliente.nome;
+        listItem.onclick = () => selectCliente(cliente);
+        searchResults.appendChild(listItem);
     });
 }
 
+function selectCliente(cliente) {
+    const searchInput = document.getElementById("inputBuscaCliente");
+    searchInput.value = cliente.nome;
+    searchInput.setAttribute('data-cliente-id', cliente.id);
+    document.getElementById("resultadoBuscaCliente").innerHTML = "";
+
+    // Atualizar valor do frete
+    axios.get("/api/buscar-valor-frete/" + cliente.idBairro)
+        .then(response => {
+            const valorFrete = response.data.valorFrete[0].Valor;
+            document.getElementById("valor-frete").innerText = "R$" + valorFrete;
+        })
+        .catch(error => {
+            console.error('Erro ao buscar valor do frete:', error);
+        });
+}
 
 async function preencherItens() {
     const getItems = await axios.get("/api/listar-produtos");
@@ -151,56 +195,48 @@ async function preencherFormaPagamento() {
 
 // async function lancarPedido() {
 //     const atendenteId = sessionStorage.getItem("userId");
-
 //     const clienteElement = document.getElementById("escolhaCliente");
-//     const clienteId = clienteElement.options[clienteElement.selectedIndex].value
-
+//     const clienteId = clienteElement.options[clienteElement.selectedIndex].value;
 //     const formaPagamentoElement = document.getElementById("escolhaFormaPagamento");
-//     const formaPagamentoId = formaPagamentoElement.options[formaPagamentoElement.selectedIndex].value
-
-//     const valorFrete = document.getElementById("valor-frete").innerText.replace(/\R\$/g, "") * 1;
-
-//     const pedido = JSON.stringify({ 
+//     const formaPagamentoId = formaPagamentoElement.options[formaPagamentoElement.selectedIndex].value;
+//     const valorFrete = parseFloat(document.getElementById("valor-frete").innerText.replace("R$", "").trim());
+//     const pedido = JSON.stringify({
 //         atendenteId,
 //         clienteId,
 //         formaPagamentoId,
 //         itemsPedido,
 //         valorFrete
 //     });
-
 //     const axiosConfig = {
 //         headers: {
-//         'Content-Type': 'application/json'
+//             'Content-Type': 'application/json'
 //         }
 //     };
-
-//     console.log("pedido", pedido)
-
+//     console.log("pedido", pedido);
 //     try {
-//         const retornoPedido = await axios.post("/api/salvar-pedido", pedido, axiosConfig)
+//         const retornoPedido = await axios.post("/api/salvar-pedido", pedido, axiosConfig);
+//         console.log('retornoPedido 222', retornoPedido);
 
-//         console.log('retornoPedido 222', retornoPedido)
-
-//         if(formaPagamentoId == 3){
-//             valorInicialCaixa = parseFloat(localStorage.getItem("valorCaixa")) + retornoPedido.data.valorTotalPedido;
-            
-//             parseFloat(localStorage.setItem("valorCaixa", valorInicialCaixa.toFixed(2)));        
+//         let valorTotalComFrete = retornoPedido.data.valorTotalPedido + valorFrete;
+//         if (formaPagamentoId == 3) {
+//             valorInicialCaixa = parseFloat(localStorage.getItem("valorCaixa")) + valorTotalComFrete;
+//             localStorage.setItem("valorCaixa", valorInicialCaixa.toFixed(2));
 //         }
-
-//         console.log(retornoPedido); // Verifica se retornoPedido contém os dados esperados
-
+//         console.log("Caixa atualizado com sucesso:", valorInicialCaixa);
 //         fecharPopupPedido();
 //     } catch (error) {
 //         console.error('Erro ao lançar pedido:', error);
 //     }
 // }
+
+
 async function lancarPedido() {
     const atendenteId = sessionStorage.getItem("userId");
-    const clienteElement = document.getElementById("escolhaCliente");
-    const clienteId = clienteElement.options[clienteElement.selectedIndex].value;
+    const clienteId = document.getElementById("inputBuscaCliente").getAttribute('data-cliente-id');
     const formaPagamentoElement = document.getElementById("escolhaFormaPagamento");
     const formaPagamentoId = formaPagamentoElement.options[formaPagamentoElement.selectedIndex].value;
     const valorFrete = parseFloat(document.getElementById("valor-frete").innerText.replace("R$", "").trim());
+
     const pedido = JSON.stringify({
         atendenteId,
         clienteId,
@@ -208,11 +244,13 @@ async function lancarPedido() {
         itemsPedido,
         valorFrete
     });
+
     const axiosConfig = {
         headers: {
             'Content-Type': 'application/json'
         }
     };
+
     console.log("pedido", pedido);
     try {
         const retornoPedido = await axios.post("/api/salvar-pedido", pedido, axiosConfig);
@@ -229,4 +267,3 @@ async function lancarPedido() {
         console.error('Erro ao lançar pedido:', error);
     }
 }
-
