@@ -132,7 +132,7 @@ input[type="number"]{
 .menu-item button:hover {
     background-color: #750D37; 
     color: #FFFFFF; 
-    transform: scale(1.1); 
+    /* transform: scale(1);  */
 }
 
 .menu-item i:hover {
@@ -168,7 +168,7 @@ nav button{
 #btn-painel button:hover, #btn-painel-cadastros button:hover{
     background-color: #210124; 
     color: #FFFFFF; 
-    transform: scale(1.1); 
+    /* transform: scale(1.1);  */
     font-size: 20px;
 }
 
@@ -177,7 +177,7 @@ nav button{
     margin: 0% 5%;
     display: none;
     position: fixed;
-    width: 75vh;
+    width: 85vh;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -188,7 +188,13 @@ nav button{
     z-index: 1000;
     border-radius: 25px;
 }
+#bairroCliente{
+    font-size: 15px;
+    /* padding: 1.5px; */
+    display: flex;
+    margin: 0px;   
 
+}
 #cadastrar-cliente h2, h3, button#btn-submitCliente{
     margin: 0px 30px;
 }
@@ -210,7 +216,7 @@ nav button{
     display: none;
     position: fixed;
     width: 80vh;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 15px 5px 15px 15px;
@@ -245,34 +251,34 @@ nav button{
 
 #fecharPopupCli, #fecharPopupEdicaoCli, #fecharPopupEstoque, #fecharPopupAtd, #fecharPopupEdicaoAtd, #fecharPopupBoy,#fecharPopupEdicaoMotoboy, 
 #fecharPopupProduto, #fecharPopupTaxa, #fecharPopupEdicaoTaxa, #fecharPopupCategoria, #fecharPopupPagamento, 
-#fecharPopupAtendentePedido, #fecharPopupDespesa, #fecharPopupRelatorioMensal, #fecharPopupRelatorioDiario{
+#fecharPopupAtendentePedido, #fecharPopupDespesa, #fecharPopupRelatorioMensal, #fecharPopupRelatorioDiario, #fecharPopupEdicaoDespesa{
     position: absolute;
     top: 10px;
     right: 10px;
     cursor: pointer;
     font-size: 25px;
 }
-#form-cliente1{
+.form-cliente1{
     display: block;
     columns: 80px 2;
     padding: 0px 30px;
 }
 
-#form-cliente1 input{
+.form-cliente1 input, .form-cliente1 select{
     margin: 0px;  
     font-size: 15px;
     padding: 1.5px; 
     
 }
 
-#form-cliente2{
+.form-cliente2{
     display: block;
-    columns: 80px 2;
+    columns: 180px 2;
     padding: 0px 30px;
 }
 
-#form-cliente2 input{
-    font-size: 12px;
+.form-cliente2 input{
+    font-size: 15px;
     padding: 1.5px;
     display: flex;
     margin: 0px;   
@@ -336,6 +342,30 @@ nav button{
 }
 
 #cadastrar-atendente input, #cadastrar-motoboy input, #cadastrar-taxa-delivery input, #cadastrar-categoria input, #cadastrar-pagamento input, #cadastrar-despesa input, #editarDespesaPopup input{
+    font-size: 14px;
+    padding: 2px;
+    display: flex;
+    margin: 0px;   
+}
+
+#editarDespesaPopup{
+    font-size: 18px;
+    margin: 0% 4%;
+    display: none;
+    position: fixed;
+    width:50vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 25px 25px 25px 35px;
+    background: #fff;
+    border: 1px solid #000000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    border-radius: 25px;
+}
+
+#editarDespesaPopup input{
     font-size: 14px;
     padding: 2px;
     display: flex;

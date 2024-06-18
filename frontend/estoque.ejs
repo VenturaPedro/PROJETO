@@ -72,8 +72,8 @@
                     <% estoque.forEach(function(estoque) { %>
                         <tr>                            
                             <!-- <td><%= estoque.id %></td> -->
-                            <td><%= estoque.produto %></td>
-                            <td><%= estoque.quantidade %></td>
+                            <td><%= estoque.produto_nome %></td>
+                            <td><%= estoque.estoque_atual %></td>
                             <td>R$<%= estoque.preco_compra %></td>
                             <td>R$<%= estoque.preco_venda %></td>
                             <td><%= new Intl.DateTimeFormat('pt-BR', {

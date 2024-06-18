@@ -1,15 +1,54 @@
 let items = [];
 let itemsPedido = [];
 
+
 document.getElementById("novo-pedido").addEventListener("click", function() {
     document.getElementById("modal-pedido").style.display = "block";
 
     preencherItens();
     preencherFormaPagamento(); 
 });
+// document.getElementById("addItemButton").addEventListener("click", function() {
+//     var quantidade = parseInt(document.getElementById("quantidadeInput").value);
+//     var produto = document.getElementById("produtoSelecionado");
+//     var produtoId = produto.getAttribute("data-id");
+//     var descricao = produto.getAttribute("data-descricao");
+//     var valorUnitario = parseFloat(produto.getAttribute("data-valor"));
+
+//     if (!isNaN(quantidade) && quantidade > 0) {
+//         var totalProduto = quantidade * valorUnitario;
+
+//         var tabelaItens = document.getElementById("tabelaItensPedido");
+//         var novaLinha = tabelaItens.insertRow();
+//         novaLinha.insertCell(0).innerText = produtoId;
+//         novaLinha.insertCell(1).innerText = quantidade;
+//         novaLinha.insertCell(2).innerText = descricao;
+//         novaLinha.insertCell(3).innerText = `R$ ${valorUnitario.toFixed(2)}`;
+//         novaLinha.insertCell(4).innerText = `R$ ${totalProduto.toFixed(2)}`;
+
+//         atualizarValorTotal();
+//     }
+// });
+
+// function atualizarValorTotal() {
+//     var tabelaItens = document.getElementById("tabelaItensPedido");
+//     var linhas = tabelaItens.getElementsByTagName("tr");
+//     var valorTotal = 0;
+
+//     for (var i = 0; i < linhas.length; i++) {
+//         var celulas = linhas[i].getElementsByTagName("td");
+//         if (celulas.length > 0) {
+//             var totalProduto = parseFloat(celulas[4].innerText.replace("R$", "").trim());
+//             valorTotal += totalProduto;
+//         }
+//     }
+
+//     document.getElementById("valorTotalPedido").innerText = `R$ ${valorTotal.toFixed(2)}`;
+// }
 
 function fecharPopupPedido() {
     document.getElementById("modal-pedido").style.display = "none";
+    window.location.reload()
 }
 
 async function preencherItens() {

@@ -51,7 +51,7 @@
         <div id="tabela-clientes">
                 <div class="flex-container">
                     <div id="pt1">
-                        <h1>Lista de Clientes</h1>
+                        <h1>Clientes</h1>
                     </div>
                     <div id="pt2">
                         <a href="/listar-clientes"><button class="btn-status">ATIVOS</button></a>
@@ -116,9 +116,9 @@
         <div id="editarCliente">
             <span id="fecharPopupEdicaoCli" onclick="fecharPopupEdicaoCli()"><i class="fa-solid fa-circle-xmark"></i></span>
             <h2>Edição de cadastro</h2>
-            <input type="hidden" id="edit-cliente-id"><br>
+            <input type="hidden" id="edit-cliente-id">
             <form action="/editar-cadastro-cliente" method="post">
-                <div id="form-cliente1">
+                <div class="form-cliente1">
                     <label for="nomeClienteEditado">Nome:</label><br>
                     <input type="text" id="nomeClienteEditado"><br>
     
@@ -132,8 +132,8 @@
                     <input type="tel" id="telefoneClienteEditado" placeholder="(99) 90000-0000" required size="20" maxlength="14"><br>
                 </div>
                 <br>
-                <h3>Endereço</h3><br>
-                <div id="form-cliente2">
+                <h3>Endereço</h3>
+                <div class="form-cliente2">
                     <label for="logradouroClienteEditado">Logradouro:</label>
                     <input type="text" id="logradouroClienteEditado" size="25">
     
@@ -160,7 +160,7 @@
                 <div>
                     <br>
                     <button id="btn-salvarEdicao">Salvar</button>
-                    <button id="btn-cancelarEdicao">Cancelar</button>
+                    <!-- <button id="btn-cancelarEdicao" onclick="fecharPopupEdicaoCli()">Cancelar</button> -->
                 </div>
             </form>
         </div>
@@ -275,10 +275,17 @@ document.getElementById("btn-salvarEdicao").addEventListener("click", async func
         console.error('Erro ao editar cliente:', error);
     });
     });
-
+    function cancelarPopupEdicaoCli(){
     document.getElementById("btn-cancelarEdicao").addEventListener("click", function() {
     document.getElementById("editarCliente").style.display = "none";
+    window.location.href = '/listar-clientes';
     });
+    }
+
+    function fecharPopupEdicaoCli(){
+    document.getElementById("editarCliente").style.display = "none";
+    window.location.reload();
+    }
 
     async function excluirCliente(clienteId){
         console.log(`Inativar cliente com ID ${clienteId}`);

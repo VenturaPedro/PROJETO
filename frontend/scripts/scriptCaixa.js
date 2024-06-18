@@ -18,23 +18,26 @@ window.addEventListener('load', function(){
 });
 
 // Função para abrir o caixa
-function abrirCaixa(){
+function abrirCaixa() {
     console.log("teste", localStorage.getItem("statusCaixa"));
 
-    statusCaixa = "aberto";
-
+    var statusCaixa = "aberto";
     document.getElementById("caixaStatus").innerHTML = "Aberto";
 
-    valorInicialCaixa = parseFloat(document.getElementById("valorAbertura").value);
+    var valorInicialCaixa = parseFloat(document.getElementById("valorAbertura").value);
 
-    document.getElementById("valorInicial").innerHTML = "R$ " + valorInicialCaixa.toFixed(2);
+    // Verifica se valorInicialCaixa é NaN (Not a Number), se for, define como 0
+    if (isNaN(valorInicialCaixa)) {
+        valorInicialCaixa = 0;
+    }
 
+    document.getElementById("valorInicial").innerHTML = valorInicialCaixa.toFixed(2);
     document.getElementById("valorAbertura").disabled = true;
 
-    localStorage.setItem("valorCaixa", valorInicialCaixa);
-
+    localStorage.setItem("valorCaixa", valorInicialCaixa.toFixed(2));
     localStorage.setItem("statusCaixa", statusCaixa);
 }
+
   
 function fecharCaixa(){
     statusCaixa = "fechado";

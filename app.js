@@ -51,12 +51,12 @@ app.get("/painel",(req, res) => {
 });
 
 app.get("/cadastrar",(req, res) => {
-    res.sendFile(__dirname + "/frontend/cadastros.html");z
+    res.sendFile(__dirname + "/frontend/cadastros.html");
 });
 
 app.post("/listar-clientes", (req, res) => {
     const termoBusca = req.body.filtro;
-    const sql = `SELECT * FROM clientes WHERE status = "ATIVO" AND (nome LIKE '%${termoBusca}%' OR email LIKE '%${termoBusca}%' OR cpf LIKE '%${termoBusca}%' OR telefone LIKE '%${termoBusca}%')`;
+    const sql = `SELECT CL.*, TD.Area FROM clientes CL LEFT JOIN TaxaDelivery TD ON CL.idBairro = TD.id WHERE status = "ATIVO" AND (nome LIKE '%${termoBusca}%' OR email LIKE '%${termoBusca}%' OR cpf LIKE '%${termoBusca}%' OR telefone LIKE '%${termoBusca}%')`;
     db.query(sql, (err, results) => {
         if (err) {
             console.error('Erro ao recuperar dados:', err);
@@ -82,7 +82,7 @@ app.get("/listar-clientes", (req, res) => {
 });
 
 app.get("/listar-clientes-inativos", (req, res) => {
-    const sql = 'SELECT * FROM clientes WHERE status = "INATIVO"';
+    const sql = 'SELECT CL.*, TD.Area FROM clientes CL LEFT JOIN TaxaDelivery TD ON CL.idBairro = TD.id WHERE status = "INATIVO"';
     db.query(sql, (err, results) => {
         if(err){
             console.error('Erro ao recuperar dados:', err);
@@ -192,9 +192,44 @@ app.get("/listar-produtos", (req, res) => {
 });
 
 
+// app.post("/filtrar-estoques", (req, res) => {
+//     const termoBusca = req.body.filtroEstoque;
+//     const sql = `SELECT * FROM estoque WHERE produto LIKE '%${termoBusca}%' OR quantidade LIKE '%${termoBusca}%' OR preco_compra LIKE '%${termoBusca}%' OR preco_venda LIKE '%${termoBusca}%' OR data_validade LIKE '%${termoBusca}%' OR fornecedor LIKE '%${termoBusca}%' OR Observacoes LIKE '%${termoBusca}%'`;
+//     db.query(sql, (err, results) => {
+//         if (err) {
+//             console.error('Erro ao recuperar dados:', err);
+//             res.send('Erro ao recuperar dados do banco de dados');
+//         } else {
+//             console.log('Recuperação dos dados completa:');
+//             res.render('estoque', { estoque: results });
+//         }
+//     });
+// });
 app.post("/filtrar-estoques", (req, res) => {
     const termoBusca = req.body.filtroEstoque;
-    const sql = `SELECT * FROM estoque WHERE produto LIKE '%${termoBusca}%' OR quantidade LIKE '%${termoBusca}%' OR preco_compra LIKE '%${termoBusca}%' OR preco_venda LIKE '%${termoBusca}%' OR data_validade LIKE '%${termoBusca}%' OR fornecedor LIKE '%${termoBusca}%' OR Observacoes LIKE '%${termoBusca}%'`;
+    const sql = `
+        SELECT 
+            e.id AS estoque_id,
+            p.nome AS produto_nome,
+            e.quantidade AS estoque_atual,
+            e.preco_compra,
+            e.preco_venda,
+            e.data_validade,
+            e.fornecedor,
+            e.Observacoes
+        FROM 
+            estoque e
+        JOIN 
+            produto p ON e.produto = p.id
+        WHERE 
+            p.nome LIKE '%${termoBusca}%' OR 
+            e.quantidade LIKE '%${termoBusca}%' OR 
+            e.preco_compra LIKE '%${termoBusca}%' OR 
+            e.preco_venda LIKE '%${termoBusca}%' OR 
+            e.data_validade LIKE '%${termoBusca}%' OR 
+            e.fornecedor LIKE '%${termoBusca}%' OR 
+            e.Observacoes LIKE '%${termoBusca}%'
+    `;
     db.query(sql, (err, results) => {
         if (err) {
             console.error('Erro ao recuperar dados:', err);
@@ -206,18 +241,46 @@ app.post("/filtrar-estoques", (req, res) => {
     });
 });
 
+// app.get("/listar-estoques", (req, res) => {
+//     const sql = 'SELECT * FROM estoque';
+//     db.query(sql, (err, results) => {
+//         if(err){
+//             console.error('Erro ao recuperar dados:', err);
+//             res.send('Erro ao recuperar dados do banco de dados');
+//         }else{
+//             console.log('Recuperação dos dados completa:');
+//             res.render('estoque', { estoque: results });
+//         }
+//     });
+// });
+
 app.get("/listar-estoques", (req, res) => {
-    const sql = 'SELECT * FROM estoque';
+    const sql = `
+        SELECT 
+            e.id AS estoque_id,
+            p.nome AS produto_nome,
+            e.quantidade AS estoque_atual,
+            e.preco_compra,
+            e.preco_venda,
+            e.data_validade,
+            e.fornecedor,
+            e.Observacoes
+        FROM 
+            estoque e
+        JOIN 
+            produto p ON e.produto = p.id
+    `;
     db.query(sql, (err, results) => {
-        if(err){
+        if (err) {
             console.error('Erro ao recuperar dados:', err);
             res.send('Erro ao recuperar dados do banco de dados');
-        }else{
+        } else {
             console.log('Recuperação dos dados completa:');
             res.render('estoque', { estoque: results });
         }
     });
 });
+
 
 app.post("/filtrar-taxas", (req, res) => {
     const termoBusca = req.body.filtroTaxas;
@@ -1182,6 +1245,7 @@ app.post("/processar-cadastro-cliente", (req, res) => {
 });
 
 app.post("/editar-cadastro-cliente", (req, res) => {
+    const data = `SELECT * FROM clientes WHERE status = "ATIVO"`;
     const clienteId = req.body.clienteId;
     const { novoNome, novoEmail, novoCpf, novoTelefone, 
         novoLogradouro, novaCidade, novoComplemento, 
@@ -1196,7 +1260,7 @@ app.post("/editar-cadastro-cliente", (req, res) => {
         res.sendStatus('Erro ao atualizar dados no banco de dados');
       }else{
         console.log('Dados atualizados com sucesso');
-
+        // res.render('telaPrincipal', { data: results });
         res.sendStatus(200);
       }
     });
