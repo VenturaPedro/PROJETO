@@ -1,1 +1,4 @@
 # PROJETO
+Para o projeto final do curso de Análise e Desenvolvimento de Sistema no Instituto Federal de São Paulo - Campus Campos do Jordão, desenvolvi o sistema CashWave, uma solução PDV, focada em lanchonetes, bares e restaurantes. 
+
+O sistema oferece funcionalidades como cadastro e gerenciamento de produtos, controle de estoque, processamento de vendas, registro de clientes e funcionários, além de módulos específicos para vendas em balcão e delivery, controle de caixa e geração de relatórios. O principal objetivo do CashWave é otimizar a administração de pequenas e médias empresas, integrando diferentes áreas operacionais em uma única plataforma eficiente. As tecnologias utilizadas neste projeto foram: NodeJS para o back-end, express para auxíliar no gerenciamento das rotas, MySQL no banco de dados e HTML, CSS e BootStrap para o front-end. 
